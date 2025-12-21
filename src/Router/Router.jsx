@@ -4,6 +4,7 @@ import SignIn from "../Pages/SignIn";
 
 
 export const appRouter = createBrowserRouter([
-    {path:'/home',element:<Home/>},
-    {path:'/',element:<SignIn />}
+    {path:'/',element:<Home/>},
+    {path:'/signin',element:<SignIn />},
+     {path:'/login',element:<SignIn />}
 ])
