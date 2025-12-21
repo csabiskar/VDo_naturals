@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* src/index.css (or wherever you import global styles) */
+
+/* Import Poppins weight 400 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
+:root {
+  --vdo-green: #00B207;
+}
+
+/* Apply Poppins as the base font */
+body {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* small utility to center star svg vertically with text baseline */
+.icon-align {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+}
