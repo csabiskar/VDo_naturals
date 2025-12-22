@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
+
 import {
   FiMenu,
   FiX,
   FiChevronDown,
-  FiPhone,
   FiSearch,
   FiHome,
   FiShoppingCart,
@@ -12,15 +12,24 @@ import {
   FiMail,
 } from "react-icons/fi";
 import { AiOutlineEye } from "react-icons/ai";
-import { MdOutlineAccountCircle, MdOutlineShoppingBag } from "react-icons/md";
+import {
+  MdOutlineAccountCircle,
+  MdOutlineShoppingBag,
+  MdOutlinePhoneInTalk,
+} from "react-icons/md";
+
 import logo from "../assets/Newlogo.png";
 import SignInFooter from "./SignInFooter";
 
 export default function SignInNavbar() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const isLogin = location.pathname === "/login";
+  const isSignup = location.pathname === "/signin";
+
   const closeMenu = () => setOpen(false);
-  let location = useLocation();
-  console.log(location);
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* ================= TOP NAVBAR ================= */}
@@ -28,30 +37,36 @@ export default function SignInNavbar() {
         <div
           className="
             max-w-[1760px] mx-auto
-            px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24
+            px-4 sm:px-6 lg:px-10 xl:px-20 2xl:px-24
             h-auto md:h-[104px]
             grid grid-cols-[auto_minmax(0,1fr)_auto]
             items-center gap-6 p-4
           "
         >
           {/* Logo */}
-          <img
-            src={logo}
-            alt="Logo"
-            className="
-              w-[140px] sm:w-[180px] md:w-[200px]
-              xl:w-[240px] 2xl:w-[280px]
-              object-contain
-            "
-          />
+          <Link to="/" aria-label="Go to home">
+            <img
+              src={logo}
+              alt="Company name logo"
+              className="
+                w-[140px] sm:w-[180px] md:w-[200px]
+                xl:w-[260px] 2xl:w-[280px]
+                object-contain
+              "
+            />
+          </Link>
 
           {/* Search */}
-          <div className="hidden md:flex items-center relative w-full max-w-[520px] justify-self-center">
+          <div className="hidden md:flex items-center relative w-full justify-self-center xl:left-40">
+            <label htmlFor="search" className="sr-only">
+              Search products
+            </label>
             <FiSearch size={20} className="absolute left-4 text-gray-400" />
             <input
-              type="text"
+              id="search"
+              type="search"
               placeholder="Search"
-              className="w-full h-[45px] pl-12 pr-4 border border-[#E6E6E6] rounded-l-md"
+              className="w-full h-[45px] xl:max-w-[300px] pl-12 pr-4 border border-[#E6E6E6] rounded-l-md"
             />
             <button className="h-[45px] px-6 bg-[#00B207] text-white rounded-r-md">
               Search
@@ -59,29 +74,38 @@ export default function SignInNavbar() {
           </div>
 
           {/* Right Actions */}
-          <div className="hidden lg:flex items-center gap-5 justify-self-end">
+          <div className="hidden lg:flex items-center gap-3.5 justify-self-end">
             <div className="flex items-center gap-2 cursor-pointer">
-              <MdOutlineAccountCircle size={32} />
+              <MdOutlineAccountCircle size={33} />
               <span className="text-sm font-medium max-w-[100px] truncate">
                 Aravind
               </span>
-              <FiChevronDown className="transition-transform duration-300" />
+              <FiChevronDown />
             </div>
 
             <span className="h-6 w-px bg-[#D9D9D9]" />
 
             <MdOutlineShoppingBag size={30} />
 
-            <button className="h-[44px] px-6 bg-[#00B207] text-white rounded-md font-medium">
+            <Link
+              to="/signin"
+              className="h-[44px] px-6 bg-[#00B207] text-white rounded-md font-medium flex items-center"
+            >
               Sign Up
-            </button>
-            <button className="h-[44px] px-4 text-sm font-medium">
+            </Link>
+
+            <Link
+              to="/login"
+              className="h-[44px] px-4 text-sm font-medium flex items-center"
+            >
               Log In
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Toggle */}
           <button
+            aria-label="Toggle navigation menu"
+            aria-expanded={open}
             className="lg:hidden justify-self-end relative w-10 h-10"
             onClick={() => setOpen(!open)}
           >
@@ -107,7 +131,7 @@ export default function SignInNavbar() {
         </div>
 
         {/* ================= MOBILE MENU ================= */}
-        <div
+        <nav
           className={`
             lg:hidden absolute top-full left-0 w-full bg-white
             border-t border-[#E6E6E6]
@@ -120,92 +144,75 @@ export default function SignInNavbar() {
           `}
         >
           <div className="px-6 py-6 flex flex-col gap-6 text-sm">
-            <nav className="flex flex-col gap-4">
-              <span
-                onClick={closeMenu}
-                className="flex items-center gap-3 cursor-pointer"
-              >
-                <FiHome /> Home
-              </span>
-              <span
-                onClick={closeMenu}
-                className="flex items-center gap-3 cursor-pointer"
-              >
-                <FiShoppingCart /> Shop All
-              </span>
-              <span
-                onClick={closeMenu}
-                className="flex items-center gap-3 cursor-pointer"
-              >
-                <FiBookOpen /> Blog
-              </span>
-              <span
-                onClick={closeMenu}
-                className="flex items-center gap-3 cursor-pointer"
-              >
-                <FiMail /> Contact Us
-              </span>
-            </nav>
+            <Link onClick={closeMenu} to="/" className="flex items-center gap-3">
+              <FiHome /> Home
+            </Link>
+            <Link onClick={closeMenu} to="/shop" className="flex items-center gap-3">
+              <FiShoppingCart /> Shop All
+            </Link>
+            <Link onClick={closeMenu} to="/blog" className="flex items-center gap-3">
+              <FiBookOpen /> Blog
+            </Link>
+            <Link onClick={closeMenu} to="/contact" className="flex items-center gap-3">
+              <FiMail /> Contact Us
+            </Link>
 
             <hr />
 
             <div className="flex items-center gap-3">
-              <FiPhone /> +91 94980 88000
+              <MdOutlinePhoneInTalk size={32} /> +91 94980 88000
             </div>
 
             <hr />
 
-            <button
+            <Link
+              to="/signin"
               onClick={closeMenu}
-              className="w-full h-[46px] bg-[#00B207] text-white rounded-md font-medium"
+              className="w-full h-[46px] bg-[#00B207] text-white rounded-md font-medium flex items-center justify-center"
             >
               Sign Up
-            </button>
-            <button
+            </Link>
+            <Link
+              to="/login"
               onClick={closeMenu}
-              className="w-full h-[46px] border rounded-md font-medium"
+              className="w-full h-[46px] border rounded-md font-medium flex items-center justify-center"
             >
               Log In
-            </button>
+            </Link>
           </div>
-        </div>
+        </nav>
       </header>
 
-      {/* ================= GRAY NAV BANNER (RESTORED) ================= */}
+      {/* ================= GRAY NAV ================= */}
       <div className="hidden lg:block w-full bg-[#333333]">
-        <div
+        <nav
           className="
             max-w-[1760px] mx-auto
-            px-10 xl:px-16 2xl:px-24
+            px-10 xl:px-20 2xl:px-24
             h-[55px]
             flex items-center justify-between text-sm
           "
         >
-          <nav className="flex gap-8 text-[#B3B3B3]">
-            <span className="cursor-pointer hover:text-white">Home</span>
-            <span className="flex items-center gap-1 cursor-pointer hover:text-white">
+          <div className="flex gap-8 text-[#B3B3B3]">
+            <Link to="/" className="hover:text-white">Home</Link>
+            <span className="flex items-center gap-1 hover:text-white">
               Shop all <FiChevronDown />
             </span>
-            <span className="cursor-pointer hover:text-white">Blog</span>
-            <span className="cursor-pointer hover:text-white">Contact Us</span>
-          </nav>
+            <Link to="/blog" className="hover:text-white">Blog</Link>
+            <Link to="/contact" className="hover:text-white">Contact Us</Link>
+          </div>
 
           <div className="flex items-center gap-2 text-white">
-            <FiPhone size={18} />
+            <MdOutlinePhoneInTalk size={24} />
             +91 94980 88000
           </div>
-        </div>
+        </nav>
       </div>
 
-      {/* ================= LOGIN CARD ================= */}
-      <main
-        className="
-          flex-1 flex items-center justify-center
-          px-4 sm:px-6 py-16 md:py-24
-          min-h-[600px] md:pb-60
-        "
-      >
-        <div
+      {/* ================= LOGIN / SIGNUP CARD ================= */}
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-16 md:py-24">
+        <section
+          aria-labelledby="auth-title"
           className="
             w-full max-w-[360px] sm:max-w-[420px] md:max-w-[520px]
             bg-white border border-[#F2F2F2] rounded-lg
@@ -213,76 +220,111 @@ export default function SignInNavbar() {
             p-5 sm:p-6
           "
         >
-          <h1 className="text-center text-2xl font-semibold mb-8">{location.pathname==='/login'?"Create Account":"Log in"}</h1>
+          <h1
+            id="auth-title"
+            className="text-center text-[32px] font-semibold mb-8"
+          >
+            {isLogin ? "Log in" : "Create Account"}
+          </h1>
 
-          <div className="flex flex-col gap-5">
+          <form className="flex flex-col gap-5">
+            <label htmlFor="email" className="sr-only">Email</label>
             <input
+              id="email"
               type="email"
               placeholder="Email"
+              required
               className="h-12 px-4 border border-[#E6E6E6] rounded-md"
             />
 
             <div className="relative">
+              <label htmlFor="password" className="sr-only">Password</label>
               <input
+                id="password"
                 type="password"
                 placeholder="Password"
+                required
                 className="h-12 px-4 pr-10 border border-[#E6E6E6] rounded-md w-full"
               />
               <AiOutlineEye
+                aria-hidden
                 size={20}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
               />
             </div>
-            {
-              location.pathname==='/login' ? (  <div className="relative">
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                className="h-12 px-4 pr-10 border border-[#E6E6E6] rounded-md w-full"
-              />
-              <AiOutlineEye
-                size={20}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-              />
-            </div>):null
-            }
-          </div>
 
-         {
-          location.pathname==='/login' ?  <div className="flex justify-between items-center mt-4 text-sm text-[#666666]">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="accent-[#00B207]" />
-              Accept all terms & Conditions
-            </label>
-          </div> : <div className="flex justify-between items-center mt-4 text-sm text-[#666666]">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" className="accent-[#00B207]" />
-              Remember me
-            </label>
-            <span className="cursor-pointer hover:text-black">
-              Forgot Password
-            </span>
-          </div>
-         }
+            {isSignup && (
+              <div className="relative">
+                <label htmlFor="confirm" className="sr-only">
+                  Confirm Password
+                </label>
+                <input
+                  id="confirm"
+                  type="password"
+                  placeholder="Confirm Password"
+                  required
+                  className="h-12 px-4 pr-10 border border-[#E6E6E6] rounded-md w-full"
+                />
+                <AiOutlineEye
+                  aria-hidden
+                  size={20}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                />
+              </div>
+            )}
+          </form>
+
+          {isSignup ? (
+            <div className="flex items-center mt-4 text-sm text-[#666666]">
+              <input
+                id="terms"
+                type="checkbox"
+                className="accent-[#00B207] scale-150"
+              />
+              <label htmlFor="terms" className="ml-2">
+                Accept all terms & Conditions
+              </label>
+            </div>
+          ) : (
+            <div className="flex justify-between items-center mt-4 text-sm text-[#666666]">
+              <div className="flex items-center">
+                <input
+                  id="remember"
+                  type="checkbox"
+                  className="accent-[#00B207] scale-150"
+                />
+                <label htmlFor="remember" className="ml-2">
+                  Remember me
+                </label>
+              </div>
+              <Link to="/forgot-password" className="hover:text-black">
+                Forgot Password
+              </Link>
+            </div>
+          )}
 
           <button className="mt-6 w-full h-[48px] bg-[#00B207] text-white rounded-md font-semibold">
-           {location.pathname==='/login'?"Create Aacount":"Log in"}
+            {isLogin ? "Log in" : "Create Account"}
           </button>
 
-          {
-            location.pathname==='/login'?<p className="mt-6 text-center text-sm text-[#666666]">
-            Already have account?{" "}
-            <span className="font-medium text-black cursor-pointer">
-              Login
-            </span>
-          </p>:<p className="mt-6 text-center text-sm text-[#666666]">
-            Don’t have account?{" "}
-            <span className="font-medium text-black cursor-pointer">
-              Register
-            </span>
+          <p className="mt-6 text-center text-sm text-[#666666]">
+            {isLogin ? (
+              <>
+                Don’t have account?{" "}
+                <Link to="/signin" className="font-medium text-black">
+                  Register
+                </Link>
+              </>
+            ) : (
+              <>
+                Already have account?{" "}
+                <Link to="/login" className="font-medium text-black">
+                  Login
+                </Link>
+              </>
+            )}
           </p>
-          }
-        </div>
+        </section>
       </main>
 
       <SignInFooter />
