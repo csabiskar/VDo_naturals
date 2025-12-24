@@ -64,7 +64,7 @@ export default function BestSeller() {
 
                   {/* Product image */}
                   <div className="mb-3 mt-6 flex items-center justify-center">
-                    <img src={p.image} alt={p.name} className="max-h-[160px] object-contain" />
+                    <img src={p.image} alt={p.name} className="max-h-40 object-contain" />
                   </div>
 
                   {/* Product info */}

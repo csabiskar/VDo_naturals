@@ -6,6 +6,7 @@ import { FaRegHeart } from 'react-icons/fa';
 import { MdOutlineShoppingBag } from 'react-icons/md';
 import { FiPhoneCall } from 'react-icons/fi';
 import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function Navbar() {
             </button>
 
             <div className="flex items-center">
-              <img src={Logo} alt="Logo" className="h-[44px] md:h-[56px] object-contain" />
+              <img src={Logo} alt="Logo" className="h-11 md:h-14 object-contain" />
             </div>
           </div>
 
@@ -81,7 +82,7 @@ export default function Navbar() {
               </div>
 
               <button className="w-20 h-[38px] bg-[#00B207] text-white text-xs font-medium rounded-md">
-                Sign Up
+              <a href="/signin">Sign UP</a>
               </button>
               <button className="w-20 h-[38px] text-black text-xs font-medium rounded-md ">
                 Log In
@@ -108,9 +109,9 @@ export default function Navbar() {
               <input
                 type="text"
                 placeholder="Search"
-                className="h-[40px] w-full px-3 text-sm rounded-l-md border border-gray-200 bg-gray-50"
+                className="h-10 w-full px-3 text-sm rounded-l-md border border-gray-200 bg-gray-50"
               />
-              <button className="h-[40px] w-20 rounded-r-md bg-[#00B207] text-sm font-medium text-white">
+              <button className="h-10 w-20 rounded-r-md bg-[#00B207] text-sm font-medium text-white">
                 Go
               </button>
             </div>

@@ -75,7 +75,7 @@ export default function Footer() {
         <div className="mt-6 flex flex-col items-center justify-between gap-6 md:flex-row">
           {/* social icons */}
           <div className="flex items-center gap-6">
-            <div className="rounded-full bg-[#00B207] p-3 text-black">
+            <div className="rounded-full bg-[#00B207] p-3 text-white">
               <FaFacebookF />
             </div>
             <button
