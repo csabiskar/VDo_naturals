@@ -4,10 +4,7 @@ import SignInNavbar from '../components/SignInNAvbar'
 function SignIn() {
   return (
     <div>
-
-
     <SignInNavbar />
-
     </div>
   )
 }

@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <>
       {/* Top header */}
-      <header className="w-full bg-white shadow-sm h-[104px]">
+      <header className="w-full bg-white shadow-sm h-20">
         <div className="mx-6 md:mx-20 flex items-center gap-4 py-3 lg:py-4">
           {/* Left: logo + mobile menu button */}
           <div className="flex items-center gap-3 w-full md:w-auto">
@@ -32,7 +32,10 @@ export default function Navbar() {
             </button>
 
             <div className="flex items-center">
+              <Link to='/' aria-label="Go to home">
+              
               <img src={Logo} alt="Logo" className="h-11 md:h-14 object-contain" />
+              </Link>
             </div>
           </div>
 

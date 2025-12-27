@@ -1,13 +1,28 @@
 import { createBrowserRouter } from "react-router-dom";
-import  Home from '../Pages/Home'
-import SignIn from "../Pages/SignIn";
-import Wishlist from "../components/Whishlist";
-import Error from "../components/Error";
 
+import MainLayout from "../Layout/MainLayout";
+import Wishlist from "../Pages/Wishlist";
+import Home from "../Pages/Home";
+import SignIn from "../Pages/SignIn";
+import Error from "../components/Error";
+import ShoppingCart from "../Pages/ShoppingCart";
 
 export const appRouter = createBrowserRouter([
-    {path:'/',element:<Home/> , errorElement:<Error/>},
-    {path:'/signin',element:<SignIn />},
-     {path:'/login',element:<SignIn />},
-     {path:'/whishlist',element:<Wishlist/>}
-])
+  {
+    element: <MainLayout />,
+    errorElement: <Error />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/wishlist", element: <Wishlist /> },
+      {path:"/shoppingcart", element:<ShoppingCart/>},
+    ],
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+  },
+  {
+    path: "/login",
+    element: <SignIn />,
+  },
+]);

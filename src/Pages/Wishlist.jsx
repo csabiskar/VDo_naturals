@@ -1,15 +1,8 @@
 import cookie from "../assets/Cookies.png";
 import HairOil from "../assets/HairOil.png";
 import PongalMix from "../assets/PongalMix.png";
-import Breadcrumbs from "../assets/Breadcrumbs.png";
-
-import { IoIosArrowForward } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { GoHome } from "react-icons/go";
 
-import Footer from "./Footer";
-import Navbar from "./Navbar";
-import Breadcrumb from "./Breadcrumb";
 
 /* ===== SHIFT CONTROL ===== */
 const PRICE_SHIFT = "lg:pl-[26px]";
@@ -47,12 +40,7 @@ const wishlist = [
 export default function Wishlist() {
   return (
     <>
-      <Navbar />
-
-      {/* ===== BREADCRUMB ===== */}
-        <Breadcrumb/>
-
-      <div className="max-w-7xl mx-auto px-3 pt-24">
+      <div className=" min-w-screen mx-auto px-20 pt-24">
         <h1 className="text-[32px] font-semibold text-gray-900 mb-7">
           My Wishlist
         </h1>
@@ -280,7 +268,6 @@ export default function Wishlist() {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 }

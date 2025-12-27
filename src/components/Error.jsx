@@ -24,7 +24,7 @@ function Error() {
           <GoHome className="text-gray-400" size={22} />
           <IoIosArrowForward className="text-gray-400" />
           <span className="text-[#00B207] text-[16px] font-light">
-            Wishlist
+            404 Error Page 
           </span>
         </div>
       </div>
