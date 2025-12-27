@@ -1,8 +1,8 @@
 // src/components/Footer.jsx
 import React from "react";
 import { FaFacebookF, FaTwitter, FaPinterestP, FaInstagram } from "react-icons/fa";
-import Logo from "../assets/logo.png"; // replace with your white logo
-import ApplePay from "../assets/ApplePay.png"; // replace with your payment icons
+import Logo from "../assets/logo.png";
+import ApplePay from "../assets/ApplePay.png";
 import Visa from "../assets/visa.png";
 import Discover from "../assets/discover.png";
 import Mastercard from "../assets/mastercard.png";
@@ -11,42 +11,41 @@ import Secure from "../assets/secure-payment.png";
 export default function Footer() {
   return (
     <footer
-      className="w-full bg-black text-white "
+      className="w-full bg-black text-white"
       style={{ fontFamily: "Poppins, system-ui, sans-serif", fontWeight: 400 }}
     >
-      {/* Top area: large dark block with content columns */}
-      <div className="mx-auto max-w-7xl px-8 py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-          {/* Left block: logo + address + contact */}
-          <div className="space-y-6">
-            <div className="flex items-center">
+          {/* Left block */}
+          <div className="space-y-6 text-center md:text-left">
+            <div className="flex justify-center md:justify-start">
               <img src={Logo} alt="VDO Naturals logo" className="h-10 object-contain" />
             </div>
 
-            <p className="max-w-md text-sm text-[#999999] leading-relaxed">
+            <p className="text-sm text-[#999999] leading-relaxed">
               No.34, 3RD Street, Chandrasekarapuram,
               <br /> Ambattur, Chennai- 600053.
             </p>
 
-            <div className="flex items-center gap-6">
-              <div>
-                <div className="text-white font-normal text-sm ">+91 9498088000</div>
-                <div className="mt-1 h-0.5 w-28 bg-[#00B207]" />
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center md:justify-start">
+              <div className="text-center sm:text-left">
+                <div className="text-white text-sm">+91 9498088000</div>
+                <div className="mt-1 h-0.5 w-28 bg-[#00B207] mx-auto sm:mx-0" />
               </div>
-              <span className="text-[#999999]">or</span>
-              <div>
-                <div className="text-white font-normal text-sm">shop@vdonaturals.com</div>
-                <div className="mt-1 h-0.5 w-40 bg-[#00B207]" />
+              <span className="text-[#999999] hidden sm:inline">or</span>
+              <div className="text-center sm:text-left">
+                <div className="text-white text-sm">shop@vdonaturals.com</div>
+                <div className="mt-1 h-0.5 w-40 bg-[#00B207] mx-auto sm:mx-0" />
               </div>
             </div>
           </div>
 
-          {/* Middle block: spacer (can be used for newsletter or empty) */}
+          {/* Middle spacer */}
           <div className="hidden md:block" />
 
-          {/* Right block: columns My Account & Helps */}
-          <div className="flex flex-col md:flex-row md:justify-end md:space-x-12">
-            <div className="mb-6 md:mb-0">
+          {/* Right block */}
+          <div className="flex flex-col sm:flex-row md:justify-end gap-10 sm:gap-12 text-center sm:text-left">
+            <div>
               <h4 className="text-white text-lg font-medium mb-4">My Account</h4>
               <ul className="space-y-3 text-[#999999] text-sm">
                 <li className="hover:text-white cursor-pointer">My Account</li>
@@ -68,43 +67,28 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Horizontal rule (thin subtle separation) */}
+        {/* Divider */}
         <div className="mt-10 border-t border-gray-800 pt-8" />
 
-        {/* Bottom row: social icons left, copyright center, payments right */}
-        <div className="mt-6 flex flex-col items-center justify-between gap-6 md:flex-row">
-          {/* social icons */}
-          <div className="flex items-center gap-6">
+        {/* Bottom row */}
+        <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          {/* Social */}
+          <div className="flex justify-center md:justify-start items-center gap-5">
             <div className="rounded-full bg-[#00B207] p-3 text-white">
               <FaFacebookF />
             </div>
-            <button
-              aria-label="Twitter"
-              className="text-[#999999] hover:text-white transition-colors"
-            >
-              <FaTwitter />
-            </button>
-            <button
-              aria-label="Pinterest"
-              className="text-[#999999] hover:text-white transition-colors"
-            >
-              <FaPinterestP />
-            </button>
-            <button
-              aria-label="Instagram"
-              className="text-[#999999] hover:text-white transition-colors"
-            >
-              <FaInstagram />
-            </button>
+            <FaTwitter className="text-[#999999] hover:text-white cursor-pointer" />
+            <FaPinterestP className="text-[#999999] hover:text-white cursor-pointer" />
+            <FaInstagram className="text-[#999999] hover:text-white cursor-pointer" />
           </div>
 
-          {/* copyright */}
-          <div className="text-center text-sm font-normal text-[#999999]">
+          {/* Copyright */}
+          <div className="text-center text-sm text-[#999999]">
             V DO Naturalss © 2025. All Rights Reserved
           </div>
 
-          {/* payment icons */}
-          <div className="flex items-center gap-3">
+          {/* Payments */}
+          <div className="flex flex-wrap justify-center md:justify-end items-center gap-3">
             <img src={ApplePay} alt="Apple Pay" className="h-8 object-contain" />
             <img src={Visa} alt="Visa" className="h-8 object-contain" />
             <img src={Discover} alt="Discover" className="h-8 object-contain" />

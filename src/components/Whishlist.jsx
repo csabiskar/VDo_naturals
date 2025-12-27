@@ -69,7 +69,7 @@ export default function Wishlist() {
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-[80px] h-[80px] object-contain"
+                className="w-20 h-20 object-contain"
               />
 
               <div className="flex-1 space-y-2">
@@ -246,7 +246,7 @@ export default function Wishlist() {
                       In Stock
                     </span>
                   ) : (
-                    <span className="bg-red-100 text-red-500 px-2 py-1.5 rounded-sm text-sm">
+                    <span className="bg-red-100 text-red-500 p-1 py-1.5 rounded-sm text-sm">
                       Out of Stock
                     </span>
                   )}

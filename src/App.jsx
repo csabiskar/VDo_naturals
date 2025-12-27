@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { increment , incrementByAmount} from "./redux/features/counterSlice";
 import { RouterProvider } from "react-router-dom";
 import { appRouter } from "./Router/Router";
+import ProductContextProvider from "./Context/ProductContext";
 
 
 
@@ -16,10 +17,10 @@ const test = ()=>{
 }
   return (
     <>
-    {/* <Home/> */}
 
-
+    <ProductContextProvider>
     <RouterProvider router={appRouter}/>
+    </ProductContextProvider>
 
 
 
