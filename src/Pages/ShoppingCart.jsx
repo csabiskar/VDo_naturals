@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { FiX } from "react-icons/fi";
 import cookie from "../assets/Cookies.png";
 import HairOil from "../assets/HairOil.png";
+import { useNavigate } from "react-router-dom";
 
 const initialCart = [
   {
@@ -23,6 +24,7 @@ const initialCart = [
 function ShoppingCart() {
   const [cart, setCart] = useState(initialCart);
   const [coupon, setCoupon] = useState("");
+  const navigate = useNavigate()
 
   /* ----------------- ACTIONS ----------------- */
   const updateQty = (id, type) => {
@@ -227,20 +229,20 @@ function ShoppingCart() {
               <button
                 //   disabled={!coupon}
                 className="
-        absolute -right-1
-        px-5
-        md:h-full
-        w-28
-        md:w-fit
-        h-full
-        lg:w-40
-        lg:h-[52px]
-        bg-[#2F2F2F]
-        text-white
-        text-[16px] font-medium
-        rounded-full
-        disabled:opacity-50
-      "
+                            absolute -right-1
+                            px-5
+                            md:h-full
+                            w-28
+                            md:w-fit
+                            h-full
+                            lg:w-40
+                            lg:h-[52px]
+                            bg-[#2F2F2F]
+                            text-white
+                            text-[16px] font-medium
+                            rounded-full
+                            disabled:opacity-50
+                          "
               >
                 Apply Coupon
               </button>
@@ -249,7 +251,8 @@ function ShoppingCart() {
 
           <button
             disabled={cart.length === 0}
-            className="mt-6 w-full bg-[#00B207] disabled:opacity-50 text-white py-3 rounded-full text-lg"
+            onClick={()=> navigate('/checkout')}
+            className="mt-6 w-full bg-[#00B207] disabled:opacity-50 text-white py-3 rounded-full text-lg cursor-pointer"
           >
             Proceed to checkout
           </button>

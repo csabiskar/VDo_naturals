@@ -40,7 +40,7 @@ const wishlist = [
 export default function Wishlist() {
   return (
     <>
-      <div className=" min-w-screen mx-auto px-20 pt-24">
+      <div className=" min-w-screen mx-auto lg:px-20 px-4 pt-24 pb-23">
         <h1 className="text-[32px] font-semibold text-gray-900 mb-7">
           My Wishlist
         </h1>
@@ -234,7 +234,7 @@ export default function Wishlist() {
                       In Stock
                     </span>
                   ) : (
-                    <span className="bg-red-100 text-red-500 p-1 py-1.5 rounded-sm text-sm">
+                    <span className="bg-red-100 text-red-500 p-2 px-1 py-1.5  rounded-sm text-sm">
                       Out of Stock
                     </span>
                   )}
