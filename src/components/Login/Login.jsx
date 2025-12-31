@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import OTPInput from "./OTPInput";
 import { detectContactType } from "../../utils/auth";
-import { sendOTP, verifyOTP } from "../../services/Auth";
+import { sendOTP, verifyOTP } from "../../services/service";
 
 export default function Login() {
   const location = useLocation();
