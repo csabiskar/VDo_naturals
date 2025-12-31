@@ -1,10 +1,8 @@
 // src/components/WhyNaturals.jsx
 import React from "react";
 
-/* Background image (merged leaves + note + arrow) */
-import WhyNaturalsBg from "../assets/WhynaturalsBg.png";
-
-/* Sample video */
+/* Assets — filename must match EXACTLY */
+import whyNaturalsBg from "../assets/WhyNaturalsBg.png";
 import sampleVideo from "../assets/sample-video.mp4";
 
 /* Icons */
@@ -24,27 +22,25 @@ export default function WhyNaturals() {
     >
       {/* Background image */}
       <img
-        src={WhyNaturalsBg}
+        src={whyNaturalsBg}
         alt="Why Vdo Naturals background"
         className="absolute inset-0 h-full w-full object-cover pointer-events-none"
       />
 
       {/* Content */}
-      <div className="relative z-10 mx-12 h-full max-w-[1280px] px-8 pt-12">
+      <div className="relative z-10 mx-12 h-full max-w-7xl px-8 pt-12">
         {/* Title */}
         <h2 className="text-3xl font-semibold text-[#0f1720]">
-          Why Vdo Naturalss?
+          Why Vdo Naturals?
         </h2>
 
         {/* Video Section */}
         <div className="mt-48 flex justify-center">
           <div
-            className="rounded-xl border-2 border-white p-1 bg-transparent shadow-sm"
+            className="rounded-xl border-2 border-white bg-transparent p-1 shadow-sm"
             style={{ width: "560px", height: "320px" }}
           >
             <video
-              width="560"
-              height="320"
               controls
               className="h-full w-full rounded-lg object-cover"
             >
