@@ -19,6 +19,10 @@ const breadcrumbConfig = {
     { label: "Home", path: "/" },
     { label: "Wishlist", path: "/wishlist" },
   ],
+  "/categories":[
+    { label: "Home", path: "/" },
+    { label: "Categories", path: "/categories" }
+  ]
 };
 
 

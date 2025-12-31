@@ -1,7 +1,9 @@
 function InputField({ label, error, className = "", width, ...props }) {
   return (
     <div className={className} style={{ width }}>
-      <label className="text-sm font-light text-gray-900">{label}</label>
+<label className="text-sm font-normal text-gray-700 whitespace-nowrap">
+  {label}
+</label>
 
       <input
         {...props}

@@ -1,203 +1,244 @@
-import React, { useState } from 'react';
-import Logo from '../assets/logo.png';
-import { TbWorld, TbSearch } from 'react-icons/tb';
-import { GoChevronDown } from 'react-icons/go';
-import { FaRegHeart } from 'react-icons/fa';
-import { MdOutlineShoppingBag } from 'react-icons/md';
-import { FiPhoneCall } from 'react-icons/fi';
-import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
+import {
+  FiMenu,
+  FiX,
+  FiChevronDown,
+  FiSearch,
+  FiHome,
+  FiShoppingCart,
+  FiBookOpen,
+  FiMail,
+} from "react-icons/fi";
+import { IoIosArrowDown } from "react-icons/io";
+import {
+  MdOutlineAccountCircle,
+  MdOutlineShoppingBag,
+  MdOutlinePhoneInTalk,
+} from "react-icons/md";
+
+import logo from "../assets/Newlogo.png";
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const isSignup = location.pathname === "/signup";
+  const isLogin = location.pathname === "/login";
+
+  const closeMenu = () => setOpen(false);
 
   return (
-    <>
-      {/* Top header */}
-      <header className="w-full bg-white shadow-sm h-20">
-        <div className="mx-6 md:mx-20 flex items-center gap-4 py-3 lg:py-4">
-          {/* Left: logo + mobile menu button */}
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <button
-              className="md:hidden p-2 rounded-md hover:bg-gray-100"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? (
-                <HiOutlineX className="text-2xl" />
-              ) : (
-                <HiOutlineMenu className="text-2xl" />
-              )}
+    <div className=" bg-white flex flex-col">
+      {/* ================= TOP NAVBAR ================= */}
+      <header className="w-full border-b border-[#E6E6E6]  relative z-50 bg-white">
+        <div
+          className="
+            max-w-[1760px] mx-auto
+            px-4 sm:px-6 lg:px-10 xl:px-20 2xl:px-24
+            h-auto md:h-[104px]
+            grid grid-cols-[auto_minmax(0,1fr)_auto]
+            items-center gap-5 p-3
+          "
+        >
+          {/* Logo */}
+          <Link to="/" aria-label="Go to home">
+            <img
+              src={logo}
+              alt="Company name logo"
+              className="
+                w-[140px] sm:w-[180px] md:w-[200px]
+                xl:w-[260px] 2xl:w-[280px]
+                object-contain
+              "
+            />
+          </Link>
+
+          {/* Search */}
+          <div className="hidden md:flex items-center relative w-full justify-self-center xl:left-40">
+            <label htmlFor="search" className="sr-only">
+              Search products
+            </label>
+            <FiSearch size={20} className="absolute left-4 text-black" />
+            <input
+              id="search"
+              type="search"
+              placeholder="Search"
+              className="w-full h-[45px] placeholder:font-light xl:max-w-[300px] pl-12 pr-4 border border-[#E6E6E6] rounded-l-md"
+            />
+            <button className="h-[45px] px-5 bg-[#00B207] text-white rounded-r-md">
+              Search
             </button>
-
-            <div className="flex items-center">
-              <Link to='/' aria-label="Go to home">
-              
-              <img src={Logo} alt="Logo" className="h-11 md:h-14 object-contain" />
-              </Link>
-            </div>
           </div>
 
-          {/* Search – center on md+, compact on sm */}
-          <div className="flex-1 flex justify-center md:justify-start">
-            <div className="hidden sm:flex w-full max-w-md px-3">
-              <input
-                type="text"
-                placeholder="Search"
-                className="h-[45px] w-full px-3 text-sm rounded-l-md border border-gray-200 bg-gray-50"
-              />
-              <button className="h-[45px] w-24 rounded-r-md bg-[#00B207] text-sm font-medium text-white">
-                Search
-              </button>
-            </div>
+          {/* Right Actions */}
+          <div className="hidden lg:flex items-center gap-4 justify-self-end">
+            {/* profile  */}
 
-            {/* small screens: search icon toggles a small input */}
-            <div className="flex items-center sm:hidden gap-2">
-              <button
-                onClick={() => setShowSearch((s) => !s)}
-                className="p-2 rounded-md hover:bg-gray-100"
-                aria-label="Toggle search"
+            {/* rendering in login page */}
+            {isLogin ? null : (
+              <>
+                <div className="flex items-center gap-2 cursor-pointer">
+                  <MdOutlineAccountCircle size={33} />
+                  <span className="text-sm font-medium max-w-[100px] truncate">
+                    Abiskar
+                  </span>
+                  <FiChevronDown />
+                </div>
+
+                {/* line */}
+                <span className="h-6 w-px bg-[#D9D9D9]" />
+              </>
+            )}
+
+            <MdOutlineShoppingBag className="h-8 w-8 " />
+
+            {isLogin ? null : (
+              <Link
+                to="/signup"
+                className="h-10 px-4 bg-[#00B207] text-white text-sm w-[87px] rounded-md font-medium flex items-center"
               >
-                <TbSearch className="text-xl" />
-              </button>
-            </div>
+                Sign Up
+              </Link>
+            )}
+
+            <Link
+              to="/login"
+              className="h-11 w-20  border-[1.5px] border-[#00000080]/50 rounded-md px-4 text-sm font-medium flex items-center"
+            >
+              Log In
+            </Link>
           </div>
 
-          {/* Right side */}
-          <div className="ml-auto mr-0 md:mr-6 flex items-center gap-4">
-            {/* Language */}
-            <div className="hidden sm:flex items-center gap-1 cursor-pointer hover:text-[#00B207] text-sm">
-              <TbWorld className="text-[22px]" />
-              <span>Eng</span>
-              <GoChevronDown />
-            </div>
-
-            {/* Icons */}
-            <div className="hidden sm:flex items-center gap-4">
-              <FaRegHeart className="text-[22px] cursor-pointer hover:text-[#00B207]" />
-
-              <div className="relative cursor-pointer hover:text-[#00B207]">
-                <MdOutlineShoppingBag className="text-[22px]" />
-                <span className="absolute -right-1 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#2C742F] text-[10px] text-white">
-                  2
-                </span>
-              </div>
-
-              <button className="w-20 h-[38px] bg-[#00B207] text-white text-xs font-medium rounded-md">
-              <a href="/signin">Sign UP</a>
-              </button>
-              <button className="w-20 h-[38px] text-black text-xs font-medium rounded-md ">
-                Log In
-              </button>
-            </div>
-
-            {/* On xs show condensed icons */}
-            <div className="flex sm:hidden items-center gap-3">
-              <FaRegHeart className="text-[20px]" />
-              <div className="relative">
-                <MdOutlineShoppingBag className="text-[20px]" />
-                <span className="absolute -right-1 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#2C742F] text-[10px] text-white">
-                  2
-                </span>
-              </div>
-            </div>
-          </div>
+          {/* Mobile Toggle */}
+          <button
+            aria-label="Toggle navigation menu"
+            aria-expanded={open}
+            className="lg:hidden justify-self-end relative w-10 h-10"
+            onClick={() => setOpen(!open)}
+          >
+            <span
+              className={`
+                absolute inset-0 flex items-center justify-center
+                transition-all duration-300
+                ${open ? "opacity-0 scale-75" : "opacity-100 scale-100"}
+              `}
+            >
+              <FiMenu size={26} />
+            </span>
+            <span
+              className={`
+                absolute inset-0 flex items-center justify-center
+                transition-all duration-300
+                ${open ? "opacity-100 scale-100" : "opacity-0 scale-75"}
+              `}
+            >
+              <FiX size={26} />
+            </span>
+          </button>
         </div>
 
-        {/* Small-screen search bar (overlay below header) */}
-        {showSearch && (
-          <div className="sm:hidden px-4 pb-3">
-            <div className="flex w-full">
-              <input
-                type="text"
-                placeholder="Search"
-                className="h-10 w-full px-3 text-sm rounded-l-md border border-gray-200 bg-gray-50"
-              />
-              <button className="h-10 w-20 rounded-r-md bg-[#00B207] text-sm font-medium text-white">
-                Go
-              </button>
+        {/* ================= MOBILE MENU ================= */}
+        <nav
+          className={`
+            lg:hidden absolute top-full left-0 w-full bg-white
+            border-t border-[#E6E6E6]
+            transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+            ${
+              open
+                ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
+                : "opacity-0 -translate-y-4 scale-95 pointer-events-none"
+            }
+          `}
+        >
+          <div className="px-6 py-6 flex flex-col gap-6 text-sm">
+            <Link
+              onClick={closeMenu}
+              to="/"
+              className="flex items-center gap-3"
+            >
+              <FiHome /> Home
+            </Link>
+            <Link
+              onClick={closeMenu}
+              to="/shop"
+              className="flex items-center gap-3"
+            >
+              <FiShoppingCart /> Shop All
+            </Link>
+            <Link
+              onClick={closeMenu}
+              to="/blog"
+              className="flex items-center gap-3"
+            >
+              <FiBookOpen /> Blog
+            </Link>
+            <Link
+              onClick={closeMenu}
+              to="/contact"
+              className="flex items-center gap-3"
+            >
+              <FiMail /> Contact Us
+            </Link>
+
+            <hr />
+
+            <div className="flex items-center gap-3">
+              <MdOutlinePhoneInTalk size={32} /> +91 94980 88000
             </div>
+
+            <hr />
+
+            <Link
+              to="/signup"
+              onClick={closeMenu}
+              className="w-full h-[46px] bg-[#00B207] text-white rounded-md font-medium flex items-center justify-center"
+            >
+              Sign Up
+            </Link>
+            <Link
+              to="/login"
+              onClick={closeMenu}
+              className="w-full h-[46px] border rounded-md font-medium flex items-center justify-center"
+            >
+              Log In
+            </Link>
           </div>
-        )}
+        </nav>
       </header>
 
-      {/* Second dark navbar */}
-      <div className="w-full bg-[#333333] h-[55px]">
-        <div className="mx-6 md:mx-20 flex items-center justify-between h-14">
-          {/* Left links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm text-white">
-            <a href="#home" className="flex items-center gap-2 hover:text-gray-300">
-              Home <GoChevronDown />
-            </a>
-            <a href="#shop" className="flex items-center text-[#999999] gap-2 hover:text-gray-300">
-              Shop <GoChevronDown />
-            </a>
-            <a href="#blog" className="flex items-center text-[#999999] gap-2 hover:text-gray-300">
-              Blog <GoChevronDown />
-            </a>
-            <a href="#contact" className="text-[#999999] hover:text-gray-300">
+      {/* ================= GRAY NAV ================= */}
+      <div className="hidden lg:block w-full bg-[#333333]">
+        <nav
+          className="
+            max-w-[1760px] mx-auto
+            px-10 xl:px-20 2xl:px-24
+            h-[55px]
+            flex items-center justify-between text-sm
+          "
+        >
+          <div className="flex gap-8 text-[#999999]">
+            <Link to="/" className="hover:text-white">
+              Home
+            </Link>
+            <span className="flex items-center gap-1.5 hover:text-white">
+              Shop all <IoIosArrowDown size={16} />
+            </span>
+            <Link to="/blog" className="hover:text-white">
+              Blogs
+            </Link>
+            <Link to="/contact" className="hover:text-white">
               Contact Us
-            </a>
-          </nav>
-
-          {/* Phone on md+ */}
-          <div className="hidden md:flex items-center gap-3 text-white text-sm">
-            <span className="text-xl"><FiPhoneCall/></span>
-            <span>+91 94980 88000</span>
+            </Link>
           </div>
 
-          {/* Mobile menu (dropdown) */}
-          <div className={`md:hidden transition-all ${mobileOpen ? 'max-h-screen' : 'max-h-0 overflow-hidden'}`}>
-            {mobileOpen && (
-              <div className="bg-[#333333] text-white rounded-b-md mt-0 shadow-lg">
-                <div className="flex flex-col px-4 pt-3 pb-4 gap-3">
-                  <a href="#home" className="flex items-center justify-between py-2 border-b border-gray-700">
-                    <span>Home</span>
-                    <GoChevronDown />
-                  </a>
-
-                  <a href="#shop" className="flex items-center justify-between py-2 border-b border-gray-700 text-[#d1d1d1]">
-                    <span>Shop</span>
-                    <GoChevronDown />
-                  </a>
-
-                  <a href="#blog" className="flex items-center justify-between py-2 border-b border-gray-700 text-[#d1d1d1]">
-                    <span>Blog</span>
-                    <GoChevronDown />
-                  </a>
-
-                  <a href="#contact" className="py-2 border-b border-gray-700 text-[#d1d1d1]">Contact Us</a>
-
-                  <div className="flex items-center gap-3 pt-2">
-                    <button className="flex-1 h-10 bg-[#00B207] text-white rounded-md">Sign Up</button>
-                    <button className="flex-1 h-10 border border-gray-500 rounded-md">Log In</button>
-                  </div>
-
-                  <div className="flex items-center gap-3 pt-3 text-sm">
-                    <TbWorld />
-                    <span>Eng</span>
-                  </div>
-
-                  <div className="flex items-center gap-4 pt-3">
-                    <FaRegHeart />
-                    <div className="relative">
-                      <MdOutlineShoppingBag />
-                      <span className="absolute -right-1 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#2C742F] text-[10px] text-white">
-                        2
-                      </span>
-                    </div>
-                    <div className="ml-auto flex items-center gap-2">
-                      <FiPhoneCall />
-                      <span className="text-sm">+91 94980 88000</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="flex items-center gap-2 text-white">
+            <MdOutlinePhoneInTalk size={24} />
+            +91 94980 88000
           </div>
-        </div>
+        </nav>
       </div>
-    </>
+    </div>
   );
 }
