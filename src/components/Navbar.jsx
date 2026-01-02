@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import { useAuth } from "../Context/AuthContext"; // import auth
+import { IoIosArrowDown } from "react-icons/io";
 import {
   FiMenu,
   FiX,
@@ -11,7 +12,7 @@ import {
   FiBookOpen,
   FiMail,
 } from "react-icons/fi";
-import { IoIosArrowDown } from "react-icons/io";
+
 import {
   MdOutlineAccountCircle,
   MdOutlineShoppingBag,
@@ -23,6 +24,7 @@ import logo from "../assets/Newlogo.png";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { user, isAuth, logout } = useAuth();
 
   const isSignup = location.pathname === "/signup";
   const isLogin = location.pathname === "/login";
@@ -30,9 +32,9 @@ export default function Navbar() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <div className=" bg-white flex flex-col">
+    <div className="bg-white flex flex-col">
       {/* ================= TOP NAVBAR ================= */}
-      <header className="w-full border-b border-[#E6E6E6]  relative z-50 bg-white">
+      <header className="w-full border-b border-[#E6E6E6] relative z-50 bg-white">
         <div
           className="
             max-w-[1760px] mx-auto
@@ -74,41 +76,31 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="hidden lg:flex items-center gap-4 justify-self-end">
-            {/* profile  */}
-
-            {/* rendering in login page */}
-            {isLogin ? null : (
+            {/* Profile - only if authenticated */}
+            {isAuth && (
               <>
                 <div className="flex items-center gap-2 cursor-pointer">
                   <MdOutlineAccountCircle size={33} />
                   <span className="text-sm font-medium max-w-[100px] truncate">
-                    Abiskar
+                    {user?.name || "User"}
                   </span>
                   <FiChevronDown />
                 </div>
-
-                {/* line */}
                 <span className="h-6 w-px bg-[#D9D9D9]" />
               </>
             )}
 
             <MdOutlineShoppingBag className="h-8 w-8 " />
 
-            {isLogin ? null : (
+            {/* LogIn - only if NOT authenticated */}
+            {!isAuth && (
               <Link
-                to="/signup"
-                className="h-10 px-4 bg-[#00B207] text-white text-sm w-[87px] rounded-md font-medium flex items-center"
+                to="/login"
+                className="h-11 w-20 border-[1.5px] border-[#00000080]/50 rounded-md px-4 text-sm font-medium flex items-center justify-center"
               >
-                Sign Up
+                Log In
               </Link>
             )}
-
-            <Link
-              to="/login"
-              className="h-11 w-20  border-[1.5px] border-[#00000080]/50 rounded-md px-4 text-sm font-medium flex items-center"
-            >
-              Log In
-            </Link>
           </div>
 
           {/* Mobile Toggle */}
@@ -190,20 +182,36 @@ export default function Navbar() {
 
             <hr />
 
-            <Link
-              to="/signup"
-              onClick={closeMenu}
-              className="w-full h-[46px] bg-[#00B207] text-white rounded-md font-medium flex items-center justify-center"
-            >
-              Sign Up
-            </Link>
-            <Link
-              to="/login"
-              onClick={closeMenu}
-              className="w-full h-[46px] border rounded-md font-medium flex items-center justify-center"
-            >
-              Log In
-            </Link>
+            {/* Auth buttons */}
+            {!isAuth && (
+              <>
+                <Link
+                  to="/signup"
+                  onClick={closeMenu}
+                  className="w-full h-[46px] bg-[#00B207] text-white rounded-md font-medium flex items-center justify-center"
+                >
+                  Sign Up
+                </Link>
+                <Link
+                  to="/login"
+                  onClick={closeMenu}
+                  className="w-full h-[46px] border rounded-md font-medium flex items-center justify-center"
+                >
+                  Log In
+                </Link>
+              </>
+            )}
+            {isAuth && (
+              <button
+                onClick={() => {
+                  logout();
+                  closeMenu();
+                }}
+                className="w-full h-[46px] border rounded-md font-medium flex items-center justify-center"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </nav>
       </header>

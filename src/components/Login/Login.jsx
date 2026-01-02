@@ -3,21 +3,22 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import OTPInput from "./OTPInput";
 import { detectContactType } from "../../utils/auth";
 import { sendOTP, verifyOTP } from "../../services/service";
+import { useAuth } from "../../Context/AuthContext";
 
 export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { login } = useAuth(); // ✅ use context
   const isLogin = location.pathname === "/login";
 
   const [step, setStep] = useState("input");
   const [contact, setContact] = useState("");
   const [otp, setOtp] = useState("");
-  const [type, setType] = useState(null);
   const [timer, setTimer] = useState(30);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Reset on route change
+  /* ✅ reset when switching login/signup */
   useEffect(() => {
     setStep("input");
     setContact("");
@@ -26,48 +27,77 @@ export default function Login() {
     setTimer(30);
   }, [location.pathname]);
 
+  /* ✅ OTP countdown */
   useEffect(() => {
     if (step !== "otp" || timer === 0) return;
-    const interval = setInterval(() => setTimer((t) => t - 1), 1000);
+    const interval = setInterval(() => {
+      setTimer((t) => t - 1);
+    }, 1000);
     return () => clearInterval(interval);
   }, [step, timer]);
 
+  /* ---------- GET OTP ---------- */
   const handleGetOtp = async (e) => {
     e.preventDefault();
+
     const detected = detectContactType(contact);
     if (!detected) {
       setError("Enter a valid phone number or email");
       return;
     }
-    setError("");
-    setLoading(true);
-    await sendOTP(contact);
-    setType(detected);
-    setStep("otp");
-    setTimer(30);
-    setLoading(false);
+
+    try {
+      setLoading(true);
+      setError("");
+      await sendOTP(contact); // API
+      setStep("otp");
+      setTimer(30);
+    } catch (err) {
+      setError(err.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  /* ---------- VERIFY OTP ---------- */
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
+
     if (otp.length !== 6) {
       setError("Enter valid 6-digit OTP");
       return;
     }
-    setError("");
-    setLoading(true);
-    const res = await verifyOTP(otp);
-    localStorage.setItem("authToken", res.token);
-    setLoading(false);
-    navigate("/");
+
+    try {
+      setLoading(true);
+      setError("");
+
+      const res = await verifyOTP({
+        contact,
+        otp,
+      });
+
+      login(res.token); // ✅ context handles localStorage
+      navigate("/", { replace: true });
+    } catch (err) {
+      setError(err.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  /* ---------- RESEND ---------- */
   const handleResendOtp = async () => {
-    setTimer(30);
-    setOtp("");
-    await sendOTP(contact);
+    try {
+      setTimer(30);
+      setOtp("");
+      await sendOTP(contact);
+    } catch {
+      setError("Failed to resend OTP");
+    }
   };
 
+  /* ---------- CHANGE CONTACT ---------- */
   const handleChangeContact = () => {
     setStep("input");
     setOtp("");
@@ -85,10 +115,7 @@ export default function Login() {
           px-5 sm:px-6 py-20
         "
       >
-        <h1
-          id="auth-title"
-          className="text-center text-[32px] font-semibold -mt-2.5 mb-9"
-        >
+        <h1 className="text-center text-[32px] font-semibold -mt-2.5 mb-9">
           {isLogin ? "Log In" : "Create Account"}
         </h1>
 
@@ -102,7 +129,11 @@ export default function Login() {
               className="h-12 px-4 border border-[#E6E6E6] rounded-md"
               required
             />
-            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
+            {error && (
+              <p className="text-sm text-red-500 text-center">{error}</p>
+            )}
+
             <button
               disabled={loading}
               className="mt-2.5 w-full h-12 bg-[#00B207] text-white rounded-md font-medium text-sm"
@@ -115,22 +146,38 @@ export default function Login() {
         {step === "otp" && (
           <form onSubmit={handleVerifyOtp} className="flex flex-col gap-6">
             <OTPInput value={otp} onChange={setOtp} autoFocus />
-            {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
+            {error && (
+              <p className="text-sm text-red-500 text-center">{error}</p>
+            )}
+
             <button
               disabled={loading}
               className="w-full h-12 bg-[#00B207] text-white rounded-md font-medium text-sm"
             >
               {loading ? "Verifying..." : "Verify OTP"}
             </button>
+
             <div className="flex justify-between text-sm">
               {timer > 0 ? (
-                <span className="text-gray-400">Resend OTP in {timer}s</span>
+                <span className="text-gray-400">
+                  Resend OTP in {timer}s
+                </span>
               ) : (
-                <button type="button" onClick={handleResendOtp} className="text-[#00B207] font-medium">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  className="text-[#00B207] font-medium"
+                >
                   Resend OTP
                 </button>
               )}
-              <button type="button" onClick={handleChangeContact} className="underline text-gray-600">
+
+              <button
+                type="button"
+                onClick={handleChangeContact}
+                className="underline text-gray-600"
+              >
                 Change number/email
               </button>
             </div>
@@ -140,11 +187,17 @@ export default function Login() {
         <p className="mt-6 text-center text-sm text-[#666666]">
           {isLogin ? (
             <>
-              Don’t have account? <Link to="/signup" className="font-medium text-black">Register</Link>
+              Don’t have account?{" "}
+              <Link to="/signup" className="font-medium text-black">
+                Register
+              </Link>
             </>
           ) : (
             <>
-              Already have account? <Link to="/login" className="font-medium text-black">Login</Link>
+              Already have account?{" "}
+              <Link to="/login" className="font-medium text-black">
+                Login
+              </Link>
             </>
           )}
         </p>

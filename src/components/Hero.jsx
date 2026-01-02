@@ -6,6 +6,7 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { MdOutlineMilitaryTech } from "react-icons/md";
 import { MdCreditScore } from "react-icons/md";
 import { MdOutlineMacroOff } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
@@ -51,10 +52,10 @@ function Hero() {
 
             {/* Button */}
             <div className="pt-3">
-              <button className="flex h-[42px] w-40 items-center justify-center gap-2 rounded-full bg-[#00B207] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#0f8a11]">
+              <Link to='/shoppingcart' className="flex h-[42px] w-40 items-center justify-center gap-2 rounded-full bg-[#00B207] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#0f8a11]">
                 Shop now
                 <IoIosArrowRoundForward size={20} />
-              </button>
+              </Link>
             </div>
           </div>
 

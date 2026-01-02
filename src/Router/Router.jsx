@@ -1,14 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
-
 import MainLayout from "../Layout/MainLayout";
-import Wishlist from "../Pages/Wishlist";
 import Home from "../Pages/Home";
-import Auth from "../Pages/Auth";
-import Error from "../components/Error";
+import Wishlist from "../Pages/Wishlist";
 import ShoppingCart from "../Pages/ShoppingCart";
 import Checkout from "../Pages/Checkout";
 import CategoryPage from "../Pages/CategoryPage";
-import { BigProducts } from "../components/Sample";
+import Auth from "../Pages/Auth";
+import Error from "../components/Error";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const appRouter = createBrowserRouter([
   {
@@ -16,20 +15,18 @@ export const appRouter = createBrowserRouter([
     errorElement: <Error />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/wishlist", element: <Wishlist /> },
-      { path: "/shoppingcart", element: <ShoppingCart /> },
-      { path: "/checkout", element: <Checkout /> },
-      {path:'/categories',element:<CategoryPage/>},
-      {path:"/cookie",element:<BigProducts/>}
       
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "/categories", element: <CategoryPage /> },
+          { path: "/wishlist", element: <Wishlist /> },
+          { path: "/shoppingcart", element: <ShoppingCart /> },
+          { path: "/checkout", element: <Checkout /> },
+        ],
+      },
     ],
   },
-  {
-    path: "/signup",
-    element: <Auth />,
-  },
-  {
-    path: "/login",
-    element: <Auth />,
-  },
+  { path: "/login", element: <Auth /> },
+  { path: "/signup", element: <Auth /> },
 ]);
