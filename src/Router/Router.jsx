@@ -8,10 +8,15 @@ import CategoryPage from "../Pages/CategoryPage";
 import Auth from "../Pages/Auth";
 import Error from "../components/Error";
 import ProtectedRoute from "./ProtectedRoute";
+import ProductContextProvider from "../Context/ProductContext";
 
 export const appRouter = createBrowserRouter([
   {
-    element: <MainLayout />,
+    element: (
+      <ProductContextProvider>
+        <MainLayout />
+      </ProductContextProvider>
+    ),
     errorElement: <Error />,
     children: [
       { path: "/", element: <Home /> },

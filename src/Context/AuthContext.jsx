@@ -8,10 +8,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (token) {
-      setUser({ name: "User" }); // later replace with API user
-    }
-     setLoading(false); // done initializing
+    if (token) setUser({ name: "User" });
+    setLoading(false);
   }, []);
 
   const login = (token) => {
@@ -25,7 +23,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuth: !!user, login, logout ,loading}}>
+    <AuthContext.Provider value={{ user, isAuth: !!user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
