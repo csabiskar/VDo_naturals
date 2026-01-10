@@ -18,7 +18,7 @@ import VideoReview from "../assets/product/imgVideo.png";
 
 //product
 
-import { useProducts } from "../Context/ProductContext";
+import { useProducts } from "../context/ProductContext";
 
 export default function ProductPage() {
   const images = [cookies, ccokiesmockup, Cookiesbiscut, pricing];

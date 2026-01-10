@@ -8,8 +8,8 @@ import CategoryPage from "../Pages/CategoryPage";
 import Auth from "../Pages/Auth";
 import Error from "../components/Error";
 import ProtectedRoute from "./ProtectedRoute";
-import { ProductProvider } from "../Context/ProductContext";
-import ProductPage from "../components/Product1";
+import { ProductProvider } from "../context/ProductContext";
+import ProductPage from "../components/ProductPage";
 import Productsssss from "../components/Sample";
 export const appRouter = createBrowserRouter([
   {

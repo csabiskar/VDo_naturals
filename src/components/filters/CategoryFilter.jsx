@@ -1,6 +1,6 @@
 import { IoIosArrowUp } from "react-icons/io";
 import { categories } from "../../data/categories";
-import { useProducts } from "../../Context/ProductContext";
+import { useProducts } from "../../context/ProductContext";
 import { memo } from "react";
 
 const CategoryFilter = memo(() => {
