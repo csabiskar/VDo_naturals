@@ -14,7 +14,7 @@ import logo from "../assets/Newlogo.png";
 import Avatar from "../assets/product/avtar.png";
 import Audio from "../assets/product/audio.png";
 import cookieReview from "../assets/product/cookiereview.png";
-import VideoReview from "../assets/product/imgVideo.png";
+import VideoReview from "../assets/product/ImgVideo.png";
 
 //product
 
