@@ -3,7 +3,7 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import OTPInput from "./OTPInput";
 import { detectContactType } from "../../utils/auth";
 import { sendOTP, verifyOTP } from "../../services/service";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const location = useLocation();

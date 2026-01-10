@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, NavLink } from "react-router-dom";
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import {
   FiMenu,
   FiX,

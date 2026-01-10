@@ -99,7 +99,7 @@ const PriceFilter = memo(() => {
           aria-label="Minimum Price"
           className="
             absolute top-1/2 -translate-y-1/2 w-full
-            appearance-none bg-transparent pointer-events-none z-[3]
+            appearance-none bg-transparent pointer-events-none z-3
 
             [&::-webkit-slider-thumb]:appearance-none
             [&::-webkit-slider-thumb]:pointer-events-auto
@@ -134,7 +134,7 @@ const PriceFilter = memo(() => {
           aria-label="Maximum Price"
           className="
             absolute top-1/2 -translate-y-1/2 w-full
-            appearance-none bg-transparent pointer-events-none z-[4]
+            appearance-none bg-transparent pointer-events-none z-4
 
             [&::-webkit-slider-thumb]:appearance-none
             [&::-webkit-slider-thumb]:pointer-events-auto
