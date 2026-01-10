@@ -22,6 +22,13 @@ const breadcrumbConfig = {
   "/categories":[
     { label: "Home", path: "/" },
     { label: "Categories", path: "/categories" }
+  ],
+  "/product":[
+     { label: "Home", path: "/" },
+    { label: "Categories", path: "/categories" },
+    {
+      label:"product",path:"/product"
+    }
   ]
 };
 
@@ -36,12 +43,7 @@ function Breadcrumb() {
 
   return (
     <div
-      className="h-[120px] flex items-center"
-      style={{
-        backgroundImage: `url(${BreadcrumbsBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+      className=" flex items-center"
     >
       <div className="sm:px-10 px-4 lg:px-20 flex items-center gap-2 text-sm">
         {breadcrumbs.map((item, index) => {

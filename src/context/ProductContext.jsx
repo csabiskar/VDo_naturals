@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { getAllProducts } from "../api/products.api";
+import { getAllProducts ,getSingleProduct} from "../api/products.api";
 
 const ProductContext = createContext();
 
@@ -13,7 +13,7 @@ export function ProductProvider({ children }) {
     async function fetchProducts() {
       try {
         const data = await getAllProducts();
-        setAllProducts(data.products); // 👈 IMPORTANT
+        setAllProducts(data.products); 
       } catch (e) {
         console.error(e);
       } finally {
@@ -22,6 +22,16 @@ export function ProductProvider({ children }) {
     }
     fetchProducts();
   }, []);
+
+  const fetchProductById =async (id) =>{
+    try {
+        const product = await getSingleProduct(id)
+    return product
+    } catch (error) {
+      throw error;
+    }
+  }
+
 
   // Filter logic (industry standard)
   const filteredProducts = useMemo(() => {
@@ -37,6 +47,7 @@ export function ProductProvider({ children }) {
     totalCount: filteredProducts.length,
     activeCategory,
     setActiveCategory,
+    fetchProductById,
     loading,
   };
 

@@ -7,3 +7,4 @@ export const detectContactType = (value) => {
   if (emailRegex.test(value)) return "email";
   return null;
 };
+

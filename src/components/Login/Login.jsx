@@ -105,7 +105,7 @@ export default function Login() {
   };
 
   return (
-    <main className="flex-1 -mt-4 flex items-center justify-center px-4 sm:px-6 pt-24 pb-36">
+    <main className="flex-1 -mt-4  flex items-center justify-center px-4 sm:px-6 pt-24 pb-36">
       <section
         aria-labelledby="auth-title"
         className="

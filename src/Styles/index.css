@@ -42,3 +42,35 @@ body{
 .ischecked{
   text-decoration: line-through;
 }
+
+.range-input {
+  position: absolute;
+  width: 100%;
+  height: 5.81px;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Chrome / Safari */
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border: 2px solid #00b207;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Firefox */
+.range-input::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border: 2px solid #00b207;
+  border-radius: 50%;
+  cursor: pointer;
+}

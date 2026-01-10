@@ -5,10 +5,12 @@ import Navbar from "./Navbar";
 export default function SignInNavbar() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
-  
-      <Navbar/>
-      {/* ================= LOGIN / SIGNUP CARD ================= */}
-            <Login/>
+      <Navbar />
+
+      {/* OFFSET for fixed navbar */}
+      <div className="pt-[104px] lg:pt-[159px] flex-1">
+        <Login />
+      </div>
 
       <SignInFooter />
     </div>

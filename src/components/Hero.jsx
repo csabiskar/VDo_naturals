@@ -1,6 +1,9 @@
 import React from "react";
-import HeroImg from "../assets/HeroImg.png";
+import HeroImg from "../assets/Img.png";
 import Design from "../assets/Vector.png";
+import Leaf1 from "../assets/heroleaf1.png";
+import Leaf2 from "../assets/leaf2.png";
+import Leaf3 from "../assets/leaf3.png";
 import { FaTruck } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { MdOutlineMilitaryTech } from "react-icons/md";
@@ -10,9 +13,9 @@ import { Link } from "react-router-dom";
 
 function Hero() {
   return (
-    <section className="bg-white pt-5 pb-16">
+    <section className="bg-white pt-4 pb-16 relative">
       {/* Pale hero container */}
-      <div className="mx-20 relative h-[620px] rounded-xl bg-[#EDF2EE] pb-24 overflow-visible">
+      <div className="mx-20 relative h-[620px]  bg-[#EDF2EE] pb-24 overflow-visible">
         {/* Main content */}
         <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-10 lg:flex-row lg:items-center lg:py-[102px]">
           {/* Left section */}
@@ -27,12 +30,12 @@ function Hero() {
               <span className="block mt-3">
                 {/* Natural with centered design */}
                 <span className="relative inline-flex items-center">
-                  <img
+                  {/* <img
                     src={Design}
                     alt="outline"
                     className="pointer-events-none absolute left-1/2 -top-8 -translate-x-1/2 z-0 w-[360px] h-[126px] object-contain"
                     style={{ transform: "skewY(1deg)" }}
-                  />
+                  /> */}
                   <span className="relative z-10 inline-block px-2 py-1 -skew-y-1">
                     Natural
                   </span>

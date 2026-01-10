@@ -24,3 +24,4 @@ export const verifyOTP = async ({ contact, otp }) => {
     }, 800);
   });
 };
+

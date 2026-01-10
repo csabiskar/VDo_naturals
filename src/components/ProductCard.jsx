@@ -2,20 +2,36 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useState } from "react";
 import OfferBadge from "../assets/Offerbookmark.png";
+import MilletNoodlesProduct from "../assets/MilletNoodlesProduct.png"
+import { useNavigate } from "react-router-dom";
+
 
 export default function ProductCard({ product }) {
   const [liked, setLiked] = useState(false);
-  const [qty, setQty] = useState(0); // ✅ quantity state
+  const [qty, setQty] = useState(0);
+  const navigate = useNavigate()
 
   return (
-    <div className="w-[303px] h-[400px] bg-white border border-gray-200 rounded-[10px] relative font-poppins text-[13.57px] text-dimgray overflow-hidden">
-    
-      {/* Offer badge */}
-      {product.offer && (
+    <div
+      className="
+      w-full sm:w-full md:w-full lg:w-[283px] xl:w-[303px]
+      h-[400px] bg-white border border-gray-200 rounded-[10px] 
+      relative font-poppins text-[13.57px] text-dimgray overflow-hidden cursor-pointer
+    "
+    onClick={()=> navigate(`/product/${product._id}`)}
+    >
+      {/* Offer Badge */}
+      {((product.variants?.length > 0 &&
+        product.variants[0]?.discountPercent > 0) ||
+        product.discountPercent > 0) && (
         <div className="absolute top-0 left-4 z-10 w-[33px] h-8">
           <img src={OfferBadge} alt="offer" className="w-full h-full" />
           <div className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold text-white leading-[11px] text-center">
-            {product.offer}% <br /> Off
+            {product.variants?.length > 0 &&
+            product.variants[0]?.discountPercent > 0
+              ? product.variants[0].discountPercent
+              : product.discountPercent}
+            % <br /> Off
           </div>
         </div>
       )}
@@ -40,7 +56,7 @@ export default function ProductCard({ product }) {
       {/* Image */}
       <div className="h-[300px] w-full">
         <img
-          src={product.image}
+          src={product?.variants?.[0]?.images?.[0]}
           alt={product.name}
           className="h-full w-full object-cover"
         />
@@ -48,28 +64,8 @@ export default function ProductCard({ product }) {
 
       {/* Bottom content */}
       <div className="absolute bottom-0 left-0 w-full px-3 py-2 bg-white">
-        
-        {/* NAME + ADD / QTY */}
         <div className="flex items-center justify-between gap-2">
-          <div className="leading-[150%] truncate">
-            {product.name}
-          </div>
-
-          {/* ADD / COUNTER */}
-          {qty === 0 ? (
-            <button
-              onClick={() => setQty(1)}
-              className="px-4 py-1 text-[13px] font-semibold rounded-[5px] border border-[#00B207] text-[#00B207] bg-[#E7F7E8] hover:bg-[#00B207] hover:text-white transition"
-            >
-              ADD
-            </button>
-          ) : (
-            <div className="flex items-center gap-3 bg-[#00B207] text-white px-3 py-1 rounded-[5px]">
-              <button onClick={() => setQty(qty - 1)} className="text-lg">−</button>
-              <span className="text-sm font-semibold">{qty}</span>
-              <button onClick={() => setQty(qty + 1)} className="text-lg">+</button>
-            </div>
-          )}
+          <div className="leading-[150%] truncate">{product.name}</div>
         </div>
 
         {/* Rating */}
@@ -88,13 +84,28 @@ export default function ProductCard({ product }) {
 
         {/* Price */}
         <div className="flex items-center gap-1 mt-1 text-[15.5px]">
-          <span className="font-medium text-gray-800">
-            ₹{product.price}.00
-          </span>
-          {product.oldPrice && (
-            <span className="text-darkgray line-through text-[13px]">
-              ₹{product.oldPrice}.00
+          {product.variants.length > 0 &&
+          product.variants[0].discountPercent > 0 ? (
+            <span className="font-medium text-gray-800">
+              ₹{product.variants[0].discountPrice.toFixed()}.00
             </span>
+          ) : (
+            <span className="font-medium text-gray-800">
+              ₹
+              {product.variants.length > 0
+                ? product.variants[0].price
+                : product.price}
+              .00
+            </span>
+          )}
+
+          {product.variants.length > 0 &&
+          product.variants[0].discountPercent > 0 ? (
+            <span className="text-darkgray line-through text-[13px]">
+              ₹{product.variants[0].price}.00
+            </span>
+          ) : (
+            ""
           )}
         </div>
       </div>

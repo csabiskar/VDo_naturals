@@ -1,43 +1,47 @@
-import { BiUpArrow } from "react-icons/bi";
-import { categories } from "../data/categories";
-import { useProducts } from "../Context/ProductContext";
+import CategoryFilter from "./filters/CategoryFilter";
+import PriceFilter from "./filters/PriceFilter";
+import RatingFilter from "./filters/RatingFilter";
 
 export default function Sidebar() {
-  const { activeCategory, setActiveCategory } = useProducts();
-
   return (
-    <aside className="w-full lg:w-[302px] lg:sticky lg:top-[142px] px-4 lg:pl-16 pt-6 lg:pt-36">
-      <div className="flex justify-between">
-        <h3 className="font-normal text-[20px]">All Categories</h3>
-        <BiUpArrow />
+    <aside
+      className="
+        w-full
+        px-4
+        pt-6
+        space-y-10
+
+        md:px-6
+        md:pt-8
+
+        /* LG */
+        lg:w-[260px]
+        lg:px-0
+        lg:pl-10
+        lg:pt-36
+        lg:pb-36
+        lg:sticky
+        lg:top-[142px]
+
+        /* XL */
+        xl:w-[280px]
+        xl:pl-12
+
+        /* 2XL */
+        2xl:w-[302px]
+      "
+    >
+      <div className="w-full">
+        <CategoryFilter />
       </div>
 
-      <ul className="space-y-5 text-sm mt-[21px]">
-        {categories.map((cat) => (
-          <li
-            key={cat.id}
-            onClick={() => setActiveCategory(cat.label)} // 👈 IMPORTANT
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            <span
-              className={`w-5 h-5 rounded-full border flex items-center justify-center
-                ${
-                  activeCategory === cat.label
-                    ? "border-[#00B207]"
-                    : "border-gray-300"
-                }`}
-            >
-              {activeCategory === cat.label && (
-                <span className="w-3 h-3 bg-[#00B207] rounded-full" />
-              )}
-            </span>
+      <div className="w-full">
+        <PriceFilter />
+      </div>
 
-            <span className="text-gray-900 font-light">
-              {cat.label}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <div className="w-full">
+        <RatingFilter />
+      </div>
     </aside>
   );
 }

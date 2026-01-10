@@ -9,8 +9,11 @@ import Auth from "../Pages/Auth";
 import Error from "../components/Error";
 import ProtectedRoute from "./ProtectedRoute";
 import { ProductProvider } from "../Context/ProductContext";
+import ProductPage from "../components/Product1";
+import Productsssss from "../components/Sample";
 export const appRouter = createBrowserRouter([
   {
+    path: "/",
     element: (
       <ProductProvider>
         <MainLayout />
@@ -18,19 +21,23 @@ export const appRouter = createBrowserRouter([
     ),
     errorElement: <Error />,
     children: [
-      { path: "/", element: <Home /> },
-      
+      { index: true, element: <Home /> }, 
+
       {
         element: <ProtectedRoute />,
         children: [
-          { path: "/categories", element: <CategoryPage /> },
-          { path: "/wishlist", element: <Wishlist /> },
-          { path: "/shoppingcart", element: <ShoppingCart /> },
-          { path: "/checkout", element: <Checkout /> },
+          { path: "categories", element: <CategoryPage /> },
+          { path: "wishlist", element: <Wishlist /> },
+          { path: "shoppingcart", element: <ShoppingCart /> },
+          { path: "checkout", element: <Checkout /> },
+          { path: "product/:id", element: <ProductPage /> },
         ],
       },
     ],
   },
-  { path: "/login", element: <Auth /> },
-  { path: "/signup", element: <Auth /> },
+
+  { path: "login", element: <Auth /> },
+  { path: "signup", element: <Auth /> },
+  {path:'test',element :<Productsssss/>}
 ]);
+

@@ -7,8 +7,13 @@ export default function MainLayout() {
   return (
     <div className="min-h-screen bg-[#FFFFFF]">
       <Navbar />
-      <Breadcrumb/>
-      <Outlet />
+
+      {/* Content offset for fixed navbar */}
+      <div className="pt-[104px] lg:pt-[159px]">
+        {/* <Breadcrumb /> */}
+        <Outlet />
+      </div>
+
       <Footer />
     </div>
   );

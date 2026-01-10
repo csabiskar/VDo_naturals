@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, NavLink } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import {
   FiMenu,
@@ -27,7 +27,7 @@ export default function Navbar() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <div className="bg-white flex flex-col">
+    <div className="bg-white flex flex-col fixed top-0 left-0 w-full z-50">
       {/* ===== TOP NAVBAR ===== */}
       <header className="w-full border-b border-[#E6E6E6] relative z-50 bg-white">
         <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-20 2xl:px-24 h-auto md:h-[104px] grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 p-3">
@@ -110,16 +110,32 @@ export default function Navbar() {
         {open && (
           <nav className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-[#E6E6E6] z-40">
             <div className="px-6 py-6 flex flex-col gap-6 text-sm">
-              <Link to="/" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiHome /> Home
               </Link>
-              <Link to="/shop" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/shop"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiShoppingCart /> Shop All
               </Link>
-              <Link to="/blog" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/blog"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiBookOpen /> Blog
               </Link>
-              <Link to="/contact" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/contact"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiMail /> Contact Us
               </Link>
 
@@ -168,18 +184,39 @@ export default function Navbar() {
       <div className="hidden lg:block w-full bg-[#333333]">
         <nav className="max-w-[1760px] mx-auto px-10 xl:px-20 2xl:px-24 h-[55px] flex items-center justify-between text-sm">
           <div className="flex gap-8 text-[#999999]">
-            <Link to="/" className="hover:text-white">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `hover:text-white transition-colors ${
+                  isActive ? "text-white" : ""
+                }`
+              }
+            >
               Home
-            </Link>
+            </NavLink>
             <span className="flex items-center gap-1.5 hover:text-white">
               Shop all <IoIosArrowDown size={16} />
             </span>
-            <Link to="/blog" className="hover:text-white">
+            <NavLink
+              to="/blog"
+              className={({ isActive }) =>
+                `hover:text-white transition-colors ${
+                  isActive ? "text-white" : ""
+                }`
+              }
+            >
               Blogs
-            </Link>
-            <Link to="/contact" className="hover:text-white">
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                `hover:text-white transition-colors ${
+                  isActive ? "text-white" : ""
+                }`
+              }
+            >
               Contact Us
-            </Link>
+            </NavLink>
           </div>
 
           <div className="flex items-center gap-2 text-white">
