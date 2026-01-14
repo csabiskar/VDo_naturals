@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { FaStar, FaFacebookF, FaPinterestP, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -19,6 +19,7 @@ import VideoReview from "../assets/product/ImgVideo.png";
 //product
 
 import { useProducts } from "../context/ProductContext";
+import { CartContext } from "../context/CartContext";
 
 export default function ProductPage() {
   const images = [cookies, ccokiesmockup, Cookiesbiscut, pricing];
@@ -34,11 +35,10 @@ export default function ProductPage() {
     fetchData(id);
   }, [id, fetchProductById]);
 
-  async function fetchData() {
+  async function fetchData(productId) {
     try {
-      const data = await fetchProductById(id);
+      const data = await fetchProductById(productId);
       setProduct(data.product);
-      console.log(data.product);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -46,6 +46,32 @@ export default function ProductPage() {
     }
   }
 
+  useEffect(() => {
+    if (product?.variants?.length) {
+      setSelectedVariant(product.variants[0]);
+    }
+  }, [product]);
+
+  // add to cart
+
+  const { addToCart } = useContext(CartContext);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    const hasVariants = product.variants?.length > 0;
+
+    addToCart({
+      productId: product._id,
+      quantity,
+      hasVariants,
+      variantSku: hasVariants ? selectedVariant?.sku : undefined,
+    });
+  };
+
+  console.log(product);
 
   if (loading) return <p>Loading product...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -53,7 +79,7 @@ export default function ProductPage() {
   return (
     <div className="bg-white">
       {/* MAIN GRID */}
-      <div className="max-w-[1440px] mx-auto px-4 lg:px-10 xl:px-20 lg:pt-[82px] ">
+      <div className="max-w-[1440px] mx-auto px-4 lg:px-10 xl:px-20 lg:pt-[82px] min-h-screen ">
         <div className="grid grid-cols-1 lg:grid-cols-[540px_648px] xl:grid-cols-[540px_648px] lg:gap-x-0 xl:gap-x-[92px]">
           {/* LEFT COLUMN – IMAGES */}
           <div className="self-start pt-24 lg:sticky top-12">
@@ -78,7 +104,7 @@ export default function ProductPage() {
               </div>
               <button className="absolute lg:left-[433px] lg:-top-0.5 lg:size-12 xl:-top-0.5 xl:left-[490px] xl:size-[50px]  border-gray-300 bg-white p-2 rounded-full border">
                 <AiOutlineHeart size={22} className="size-8" />
-              </button> 
+              </button>
             </div>
           </div>
 
@@ -104,40 +130,72 @@ export default function ProductPage() {
                   133 Reviews
                 </span>
               </div>
-
+              {/* price */}
               <div className="flex gap-3 items-center">
                 <span className="text-2xl text-[#2C742F] font-normal">
-                  ₹42.00
+                  ₹
+                  {selectedVariant
+                    ? selectedVariant.discountPercent > 0
+                      ? Math.round(selectedVariant.discountPrice)
+                      : Math.round(selectedVariant.price)
+                    : product.discountPercent > 0
+                    ? Math.round(product.discountPrice)
+                    : Math.round(product.price)}
+                  .00
                 </span>
-                <span className="line-through font-light text-zinc-400 text-xl">
-                  ₹70.00
-                </span>
+
+                {(product.variants?.length > 0 &&
+                  product.variants[0]?.discountPercent > 0) ||
+                product.discountPercent > 0 ? (
+                  <span className="line-through font-light text-zinc-400 text-xl">
+                    {selectedVariant?.discountPercent > 0 && (
+                      <span className="line-through font-light text-zinc-400 text-xl">
+                        ₹{Math.round(selectedVariant.price)}.00
+                      </span>
+                    )}
+                  </span>
+                ) : null}
               </div>
 
               {/* VARIANTS */}
-              <div className="flex gap-4 mt-3.5">
-                {[
-                  { w: "70gm", p: "₹42" },
-                  { w: "20gm", p: "₹20" },
-                ].map((item, i) => (
-                  <div key={i} className="relative h-20">
-                    <div
-                      className={`w-[90px] h-20 bg-green-600/5 border border-green-600 rounded-lg flex flex-col justify-center items-center  ${
-                        i > 0 ? "bg-white" : ""
-                      }`}
-                    >
-                      <span className="text-sm font-normal">{item.w}</span>
-                      <span className="text-xl font-medium">{item.p}</span>
+
+              {product.variants?.length > 0 && (
+                <div className="flex gap-4 mt-3.5">
+                  {product.variants.map((item, i) => (
+                    <div key={i} className="relative h-20">
+                      <div
+                        className={`w-[90px] h-20 border rounded-lg flex flex-col justify-center items-center cursor-pointer transition-all duration-300
+  ${
+    selectedVariant?._id === item._id
+      ? "border-green-600 bg-green-600/10"
+      : "border-gray-300 bg-white"
+  }`}
+                        onClick={() => setSelectedVariant(item)}
+                      >
+                        <span className="text-sm font-normal">
+                          {item?.attributes?.weight}
+                        </span>
+
+                        <span className="text-xl font-medium">
+                          ₹
+                          {item.discountPercent > 0
+                            ? Math.round(item.discountPrice)
+                            : Math.round(item.price)}
+                        </span>
+                      </div>
+
+                      {item.discountPercent > 0 && (
+                        <div className="absolute -top-1 left-4 w-14">
+                          <img src={Batch} alt="discount" />
+                          <span className="absolute inset-0 text-[10px] text-white flex items-center justify-center">
+                            {item.discountPercent}% off
+                          </span>
+                        </div>
+                      )}
                     </div>
-                    <div className="absolute -top-1 left-4 w-14">
-                      <img src={Batch} />
-                      <span className="absolute inset-0 text-[10px] text-white flex items-center justify-center">
-                        20% off
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
               {/* BRAND + SHARE */}
               <div className="flex justify-between items-center text-sm mt-3.5 ">
@@ -159,25 +217,31 @@ export default function ProductPage() {
               </div>
 
               <p className="text-sm text-[#808080] pr-24 font-light leading-5 mt-1 pb-6 border-b border-gray-300">
-                V DO Naturalss Dia Caare Millet Cookies 70gm are crafted with
-                nutrient-rich millets to offer a light, satisfying snack that
-                supports balanced energy and everyday health. These cookies are
-                positioned as a better alternative to regular refined-flour
-                biscuits, making them ideal for tea-time or on-the-go munching.
+                {product?.description}
               </p>
 
               {/* QTY + ADD */}
               <div className="flex gap-3 flex-wrap pl-8 pt-1.5">
                 <div className="flex items-center justify-center border border-[#E6E6E6] rounded-full w-[124px]  h-[50px] gap-4">
-                  <button className="bg-[#F2F2F2] rounded-full size-[34px]">
+                  <button
+                    className="bg-[#F2F2F2] rounded-full size-[34px] cursor-pointer"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  >
                     -
                   </button>
-                  <span>1</span>
-                  <button className="bg-[#F2F2F2] rounded-full size-[34px]">
+                  <span>{quantity}</span>
+                  <button
+                    className="bg-[#F2F2F2] rounded-full size-[34px] cursor-pointer"
+                    onClick={() => setQuantity((q) => q + 1)}
+                  >
                     +
                   </button>
                 </div>
-                <button className="w-full sm:w-md h-12 border border-[#00B207] bg-[#00b2060a] text-green-600 font-medium rounded">
+                <button
+                  disabled={product.variants?.length > 0 && !selectedVariant}
+                  className="w-full sm:w-md h-12 cursor-pointer border border-[#00B207] bg-[#00b2060a] text-green-600 font-medium rounded disabled:opacity-50"
+                  onClick={handleAddToCart}
+                >
                   ADD
                 </button>
               </div>

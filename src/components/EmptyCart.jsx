@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import EmptyCartImg from "../assets/EmptyCart.png";
 
+
 const EmptyCart = () => {
+  const navigate = useNavigate()
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen text-center py-20 px-4">
@@ -16,7 +19,9 @@ const EmptyCart = () => {
           Add items to it now
         </p>
 
-        <button className="bg-[#00B207] hover:bg-green-600 text-white px-8 py-3 rounded-full text-sm font-medium transition">
+        <button className="bg-[#00B207] hover:bg-green-600 cursor-pointer text-white px-8 py-3 rounded-full text-sm font-medium transition"
+          onClick={()=> navigate('/categories')}
+        >
           Shop now
         </button>
       </div>

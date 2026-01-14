@@ -10,7 +10,7 @@ export default function MainLayout() {
 
       {/* Content offset for fixed navbar */}
       <div className="pt-[104px] lg:pt-[159px]">
-        {/* <Breadcrumb /> */}
+        <Breadcrumb />
         <Outlet />
       </div>
 

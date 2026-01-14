@@ -1,249 +1,244 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext, useCallback } from "react";
 import { FiX } from "react-icons/fi";
-import cookie from "../assets/Cookies.png";
-import HairOil from "../assets/HairOil.png";
 import { useNavigate } from "react-router-dom";
-
-const initialCart = [
-  {
-    id: 1,
-    name: "Dia Caare Millet Cookies",
-    price: 15,
-    qty: 2,
-    image: cookie,
-  },
-  {
-    id: 2,
-    name: "Herbal Hair Oil",
-    price: 42,
-    qty: 1,
-    image: HairOil,
-  },
-];
+import { CartContext } from "../context/CartContext";
+import EmptyCart from "../components/EmptyCart";
+import Cookie from "../assets/Cookies.png";
 
 function ShoppingCart() {
-  const [cart, setCart] = useState(initialCart);
+  const navigate = useNavigate();
+  const { cartData, loading, updateQty, removeFromCart, loadCart } =
+    useContext(CartContext);
   const [coupon, setCoupon] = useState("");
-  const navigate = useNavigate()
 
-  /* ----------------- ACTIONS ----------------- */
-  const updateQty = (id, type) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              qty: type === "inc" ? item.qty + 1 : Math.max(1, item.qty - 1),
-            }
-          : item
-      )
-    );
-  };
+  const cart = cartData?.items || [];
 
-  const removeItem = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
 
-  /* ----------------- TOTALS ----------------- */
-  const subtotal = useMemo(
-    () => cart.reduce((sum, i) => sum + i.price * i.qty, 0),
-    [cart]
+  // Memoized subtotal
+  const subtotal = useMemo(() => {
+    return cart.reduce((sum, i) => {
+      const price =
+        Number(i.discountPrice) < Number(i.price)
+          ? Number(i.discountPrice)
+          : Number(i.price);
+      return sum + price * Number(i.quantity);
+    }, 0);
+  }, [cart]);
+
+  // Handle quantity changes with removal if 0
+  const handleQtyChange = useCallback(
+    (item, newQty) => {
+      if (newQty <= 0) {
+        removeFromCart(item);
+      } else {
+        updateQty(item.productId, newQty, item);
+      }
+    },
+    [removeFromCart, updateQty]
   );
-  /* ----------------- EMPTY CART ----------------- */
-  if (cart.length === 0) {
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-xl font-semibold">
+        Loading Cart...
+      </div>
+    );
+  }
+
+  if (!cart.length) {
     return (
       <div className="min-h-screen px-4 sm:px-8 lg:px-20 pt-24 pb-24">
-        <h1 className="text-2xl sm:text-3xl font-semibold mb-8">
-          My Shopping Cart
-        </h1>
-
         <EmptyCart />
       </div>
     );
   }
 
-  /* ----------------- UI ----------------- */
   return (
-    <div className="min-h-screen px-4 sm:px-8 lg:px-20 pt-24 pb-24">
+    <div className="min-h-screen px-4 sm:px-8 lg:px-20 pt-6 pb-24">
       <h1 className="text-2xl sm:text-3xl font-semibold mb-8">
         My Shopping Cart
       </h1>
 
       <div className="flex flex-col xl:flex-row gap-5">
-        {/* =================================================
-            PRODUCTS SECTION
-        ================================================= */}
-
-        {/* -------- MOBILE & TABLET (CARD VIEW) -------- */}
-        <div className="block lg:hidden w-full space-y-6 ">
+        {/* MOBILE & TABLE VIEW */}
+        <div className="block lg:hidden w-full space-y-6">
           {cart.map((item) => (
             <div
-              key={item.id}
-              className="border text-gray-800 font-light border-gray-200 rounded-xl p-5 shadow-sm"
+              key={item.productId + (item.variantSku || "")}
+              className="border text-gray-800 font-light border-gray-200 rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
             >
-              <div className="flex gap-1 md:gap-4">
+              {/* Image + Name */}
+              <div className="flex items-center gap-3 min-w-0">
                 <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-24 h-24 object-contain"
+                  src={Cookie}
+                  alt={item.productName}
+                  className="w-24 h-24 object-contain shrink-0"
                 />
-
-                <div className="flex-1">
-                  <h3 className="text-gray-800 font-light">{item.name}</h3>
-                  <p className="text-gray-500 mt-1">₹{item.price.toFixed(2)}</p>
-
-                  <div className="flex items-center justify-between mt-4">
-                    <div className="flex items-center gap-3 border border-gray-200 rounded-full px-4 py-1">
-                      <button onClick={() => updateQty(item.id, "dec")}>
-                        −
-                      </button>
-                      <span>{item.qty}</span>
-                      <button onClick={() => updateQty(item.id, "inc")}>
-                        +
-                      </button>
-                    </div>
-
-                    <span className="font-medium pl-2">
-                      ₹{(item.price * item.qty).toFixed(2)}
-                    </span>
-                  </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-gray-800 font-light text-sm sm:text-base wrap-break-word">
+                    {item.productName}{" "}
+                    {item.hasVariants
+                      ? `(${item.variantAttributes?.weight})`
+                      : ""}
+                  </h3>
+                  <p className="text-gray-500 mt-1 text-xs sm:text-sm wrap-break-word sm:truncate">
+                    ₹
+                    {(item.discountPrice < item.price
+                      ? item.discountPrice
+                      : item.price
+                    ).toFixed(2)}
+                  </p>
                 </div>
+              </div>
 
+              {/* Quantity + Subtotal + Remove */}
+              <div className="flex items-center gap-3 mt-4 sm:mt-0 shrink-0">
+              <div className="flex items-center border border-gray-200 rounded-full px-2 w-24 gap-1 h-11">
+                    <button
+                      className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-lg cursor-pointer"
+                      onClick={() => handleQtyChange(item, item.quantity - 1)}
+                    >
+                      −
+                    </button>
+                    <span className="min-w-4 text-center">{item.quantity}</span>
+                    <button
+                      className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-lg cursor-pointer"
+                      onClick={() => handleQtyChange(item, item.quantity + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
+                <span className="font-medium whitespace-nowrap text-sm sm:text-base">
+                  ₹
+                  {(
+                    (item.discountPrice < item.price
+                      ? item.discountPrice
+                      : item.price) * item.quantity
+                  ).toFixed(2)}
+                </span>
                 <FiX
-                  onClick={() => removeItem(item.id)}
-                  className="text-gray-400 cursor-pointer"
+                  onClick={() => removeFromCart(item)}
+                  className="text-gray-400  shrink-0 cursor-pointer text-xl border border-gray-400 p-0.5 rounded-full"
                 />
               </div>
             </div>
           ))}
         </div>
 
-        {/* -------- DESKTOP (TABLE VIEW) -------- */}
-        <div className="hidden lg:block w-full xl:w-[70%] border mt-1 border-gray-200 rounded-lg">
-          {/* TABLE HEADER */}
-          <div className="grid grid-cols-5 px-6 py-4 border-b border-gray-200  text-sm text-gray-500">
+        {/* DESKTOP TABLE VIEW */}
+        <div className="hidden lg:flex flex-col w-full xl:w-[70%] border mt-1 border-gray-200 rounded-lg">
+          <div className="grid grid-cols-5 px-4 py-3  border-b border-gray-200 text-sm text-gray-500">
             <span className="col-span-2 tracking-wider">PRODUCT</span>
-            <span className="tracking-wider">PRICE</span>
+            <span className="tracking-wider lg:ml-12">PRICE</span>
             <span className="tracking-wider">QUANTITY</span>
             <span className="tracking-wider">SUBTOTAL</span>
           </div>
 
-          {/* TABLE ROWS */}
-          {cart.map((item) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-5 px-6 py-6 border-b border-gray-200 items-center"
+          <div className="flex-1">
+            {cart.map((item, index) => (
+              <div key={item.productId + (item.variantSku || "")}>
+                {/* CART ROW */}
+                <div className="grid grid-cols-5 px-6 py-3.5 items-center gap-2">
+                  <div className="flex items-center col-span-2 gap-2">
+                    <img
+                      src={Cookie}
+                      alt={item.productName}
+                      className="w-28 h-24 object-contain shrink-0"
+                    />
+                    <p className="text-gray-800 font-light wrap-break-word">
+                      {item.productName}{" "}
+                      {item.hasVariants ? item.variantAttributes?.weight : null}
+                    </p>
+                  </div>
+
+                  <div className="lg:ml-11">
+                    ₹
+                    {(item.discountPrice < item.price
+                      ? item.discountPrice
+                      : item.price
+                    ).toFixed(2)}
+                  </div>
+
+                  <div className="flex items-center border border-gray-200 rounded-full px-2.5 w-[124px] gap-2 h-[50px]">
+                    <button
+                      className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 text-lg cursor-pointer"
+                      onClick={() => handleQtyChange(item, item.quantity - 1)}
+                    >
+                      −
+                    </button>
+                    <span className="min-w-4 text-center">{item.quantity}</span>
+                    <button
+                      className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 text-lg cursor-pointer"
+                      onClick={() => handleQtyChange(item, item.quantity + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  <div className="flex justify-between items-center ">
+                    <span className="font-normal">
+                      ₹
+                      {(
+                        (item.discountPrice < item.price
+                          ? item.discountPrice
+                          : item.price) * item.quantity
+                      ).toFixed(2)}
+                    </span>
+                    <FiX
+                      onClick={() => removeFromCart(item)}
+                      className="text-gray-500 cursor-pointer text-xl border border-gray-400 p-0.5 rounded-full"
+                    />
+                  </div>
+                </div>
+
+                {/* DIVIDER */}
+                {index !== cart.length - 1 && (
+                  <div className="mx-6 h-px bg-gray-200" />
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-end px-6 py-2 mt-auto border-t  border-gray-200">
+            <button
+              className="bg-transparent  border-2 border-[#00B207] cursor-pointer text-[#00B207] font-medium px-6 py-3 w-36 h-11 rounded-sm text-sm  transition"
+              onClick={() => navigate('/categories')}
             >
-              <div className="flex items-center col-span-2">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-28 h-24 object-contain"
-                />
-                <p className="text-gray-800 font-light">{item.name}</p>
-              </div>
-
-              <div>₹{item.price.toFixed(2)}</div>
-              <div className="flex items-center border border-gray-200 rounded-full px-2 w-28  gap-2 h-12">
-                <button
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-lg"
-                  onClick={() => updateQty(item.id, "dec")}
-                >
-                  −
-                </button>
-
-                <span className="min-w-4 text-center">{item.qty}</span>
-
-                <button
-                  className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-lg"
-                  onClick={() => updateQty(item.id, "inc")}
-                >
-                  +
-                </button>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <span className="font-medium">
-                  ₹{(item.price * item.qty).toFixed(2)}
-                </span>
-                <FiX
-                  onClick={() => removeItem(item.id)}
-                  className="text-gray-400 cursor-pointer"
-                />
-              </div>
-            </div>
-          ))}
-
-          {/* spacing below table  */}
-          {/* UPDATE CART */}
-          <div className="flex justify-end px-6 py-5">
-            <button className="bg-gray-100 text-gray-500 px-6 py-3 w-36  rounded-full text-sm ">
-              Update Cart
+              Add More
             </button>
           </div>
         </div>
 
-        {/* =================================================
-            CART TOTAL + COUPON
-        ================================================= */}
+        {/* CART TOTAL & COUPON */}
         <div className="w-full xl:w-[35%] border border-gray-200 rounded-lg p-6 h-fit">
           <h2 className="text-xl font-normal mb-4">Cart Total</h2>
 
           <div className="flex justify-between py-2 border-b border-gray-200">
-            <span className="text-gray-800 font-light">Subtotal</span>
+            <span className="text-gray-800 text-sm font-light">Subtotal</span>
             <span>₹{subtotal.toFixed(2)}</span>
           </div>
 
           <div className="flex justify-between py-2 border-b border-gray-200">
-            <span className="text-gray-800 font-light">Shipping</span>
+            <span className="text-gray-800 font-light text-sm">Shipping</span>
             <span className="font-medium">Free</span>
           </div>
 
-          <div className="flex justify-between py-4 font-semibold text-lg">
-            <span>Total</span>
+          <div className="flex justify-between py-4  font-light text-lg">
+            <span>Total:</span>
             <span>₹{subtotal.toFixed(2)}</span>
           </div>
 
           {/* COUPON */}
-          {/* COUPON */}
           <div className="mt-5">
             <div className="relative w-full h-14">
-              {/* Input */}
               <input
                 type="text"
                 placeholder="Enter code"
                 value={coupon}
                 onChange={(e) => setCoupon(e.target.value)}
-                className="
-                    lg:w-full w-full h-full lg:h-[52px]
-                    pl-6 pr-[180px]
-                    text-[16px] font-light
-                    border border-gray-200
-                    rounded-full
-                    outline-none
-                    placeholder:text-gray-400
-                "
+                className="lg:w-full w-full h-full lg:h-[55px] pl-6 pr-[180px] text-[16px] font-light border border-gray-200 rounded-full outline-none placeholder:text-gray-400"
               />
-
-              {/* Button */}
-              <button
-                //   disabled={!coupon}
-                className="
-                            absolute -right-1
-                            px-5
-                            md:h-full
-                            w-28
-                            md:w-fit
-                            h-full
-                            lg:w-40
-                            lg:h-[52px]
-                            bg-[#2F2F2F]
-                            text-white
-                            text-[16px] font-medium
-                            rounded-full
-                            disabled:opacity-50
-                          "
-              >
+              <button className="absolute right-1 sm:top-0 lg:top-1.5 px-5 md:h-full w-28 md:w-fit h-full lg:w-[155px] lg:h-11 bg-[#2F2F2F] text-white text-sm font-normal rounded-full disabled:opacity-50">
                 Apply Coupon
               </button>
             </div>
@@ -251,8 +246,8 @@ function ShoppingCart() {
 
           <button
             disabled={cart.length === 0}
-            onClick={()=> navigate('/checkout')}
-            className="mt-6 w-full bg-[#00B207] disabled:opacity-50 text-white py-3 rounded-full text-lg cursor-pointer"
+            onClick={() => navigate("/checkout")}
+            className="mt-6 w-full bg-[#00B207] disabled:opacity-50 text-white py-3 rounded-sm text-lg cursor-pointer"
           >
             Proceed to checkout
           </button>

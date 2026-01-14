@@ -11,7 +11,7 @@ const breadcrumbConfig = {
 
   "/checkout": [
     { label: "Home", path: "/" },
-    { label: "Shopping Cart", path: "/shoppingcart" },
+    { label: "Shopping cart", path: "/shoppingcart" },
     { label: "Checkout", path: "/checkout" },
   ],
 
@@ -45,15 +45,15 @@ function Breadcrumb() {
     <div
       className=" flex items-center"
     >
-      <div className="sm:px-10 px-4 lg:px-20 flex items-center gap-2 text-sm">
+      <div className="sm:px-10 px-4 lg:px-20 flex items-center gap-2 text-sm h-[120px] ">
         {breadcrumbs.map((item, index) => {
           const isLast = index === breadcrumbs.length - 1;
 
           return (
-            <div key={item.path} className="flex items-center gap-2">
+            <div key={item.path} className="flex items-center gap-2 md:mt-16">
               {index === 0 ? (
-                <Link to="/">
-                  <GoHome className="text-gray-400" size={22} />
+                <Link to="/" className="text-[#808080] text-[16px] font-light">
+                  Home
                 </Link>
               ) : (
                 <>

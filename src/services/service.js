@@ -25,3 +25,14 @@ export const verifyOTP = async ({ contact, otp }) => {
   });
 };
 
+ export async function fetchData() {
+    try {
+      const data = await fetchProductById(id);
+      setProduct(data.product);
+      console.log(data.product);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }

@@ -1,9 +1,9 @@
-import productAPI from "./axiosInstance";
+import API from "./axiosInstance";
 
 // Fetch all products
 export const getAllProducts = async () => {
   try {
-    const res = await productAPI.get("/products");
+    const res = await API.get("/products");
     return res.data; 
   } catch (error) {
     console.error("Error fetching all products:", error);
@@ -16,7 +16,7 @@ export const getSingleProduct = async (id) => {
   if (!id) throw new Error("Product ID is required");
 
   try {
-    const res = await productAPI.get(`/products/${id}`);
+    const res = await API.get(`/products/${id}`);
     return res.data;
   } catch (error) {
     console.error(`Error fetching product with ID ${id}:`, error);
