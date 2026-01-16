@@ -78,9 +78,13 @@ function Breadcrumb() {
     breadcrumbs = [...breadcrumbs, { label: productName }];
   }
 
-  const breadcrumbHeight = pathname.startsWith("/product/")
-    ? "h-0 mb-10 -mt-5"
-    : "h-[120px] sm:px-10 px-4 lg:px-20";
+ const isCompactBreadcrumb =
+  pathname.startsWith("/product/") ||
+  pathname.startsWith("/categories");
+
+const breadcrumbHeight = isCompactBreadcrumb
+  ? "h-0 mb-10 -mt-5"
+  : "h-[120px] sm:px-10 px-4 lg:px-20";
 
   return (
     <div className="flex items-center">

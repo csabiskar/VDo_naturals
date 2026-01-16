@@ -1,4 +1,5 @@
 import { useProducts } from "../context/ProductContext";
+import Breadcrumb from "./Breadcrumb";
 import ProductCard from "./ProductCard";
 import { useState } from "react";
 
@@ -16,8 +17,7 @@ export default function ProductGrid() {
     <>
       {/* PRODUCT COUNT */}
       <div className="mt-6 sm:mt-10 md:mt-20 xl:mt-20 text-md text-gray-600">
-        <span className="font-semibold text-black">{totalCount}</span>{" "}
-        <span className="font-light text-md">Results Found</span>
+        <Breadcrumb/>
       </div>
 
       {/* PRODUCT GRID */}

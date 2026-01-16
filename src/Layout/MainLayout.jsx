@@ -8,7 +8,8 @@ export default function MainLayout() {
   const { pathname } = location;
 
   // Hide breadcrumb on product pages
-  const hideBreadcrumb = pathname.startsWith("/product/");
+  const hideBreadcrumb = pathname.startsWith("/product");
+  const isCategories =pathname.startsWith("/categories");
 
   return (
     <div className="min-h-screen bg-[#FFFFFF]">
@@ -16,7 +17,7 @@ export default function MainLayout() {
 
       {/* Content offset for fixed navbar */}
       <div className="pt-[104px] lg:pt-[159px]">
-        {!hideBreadcrumb && <Breadcrumb />}
+        {!isCategories && !hideBreadcrumb && <Breadcrumb />}
         <Outlet />
       </div>
 

@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link, useNavigate, Navigate } from "react-router-dom";
 import OTPInput from "./OTPInput";
 import { detectContactType } from "../../utils/auth";
 import { sendOTP, verifyOTP } from "../../services/service";
 import { useAuth } from "../../context/AuthContext";
+import { BiSolidError } from "react-icons/bi";
+import { showToast } from "../../utils/toast";
+
+
+// ✅ Simulate registered users
+const registeredUsers = new Set(["user@example.com", "9876543210"]);
 
 export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { login } = useAuth(); // ✅ use context
+  const { login, isAuth, loading: authLoading } = useAuth(); // ✅ use context
   const isLogin = location.pathname === "/login";
 
   const [step, setStep] = useState("input");
@@ -36,20 +42,27 @@ export default function Login() {
     return () => clearInterval(interval);
   }, [step, timer]);
 
+  if (!authLoading && isAuth) {
+    return <Navigate to="/" replace />;
+  }
   /* ---------- GET OTP ---------- */
   const handleGetOtp = async (e) => {
     e.preventDefault();
 
     const detected = detectContactType(contact);
     if (!detected) {
-      setError("Enter a valid phone number or email");
+      setError("Please enter a valid email or phone number");
       return;
     }
-
+     if (isLogin && !registeredUsers.has(contact)) {
+      setError("This email/number is not registered");
+      return;
+    }
     try {
       setLoading(true);
       setError("");
       await sendOTP(contact); // API
+     showToast("An OTP has been sent to your number/email", "info");
       setStep("otp");
       setTimer(30);
     } catch (err) {
@@ -68,6 +81,11 @@ export default function Login() {
       return;
     }
 
+    if (timer <= 0) {
+      setError("OTP expired. Please resend to get a new OTP.");
+      return;
+    }
+
     try {
       setLoading(true);
       setError("");
@@ -76,7 +94,7 @@ export default function Login() {
         contact,
         otp,
       });
-
+    showToast("Login successful!", "success");
       login(res.token); // ✅ context handles localStorage
       navigate("/", { replace: true });
     } catch (err) {
@@ -92,6 +110,7 @@ export default function Login() {
       setTimer(30);
       setOtp("");
       await sendOTP(contact);
+      showToast("A new OTP has been sent", "info");
     } catch {
       setError("Failed to resend OTP");
     }
@@ -131,7 +150,7 @@ export default function Login() {
             />
 
             {error && (
-              <p className="text-sm text-red-500 text-center">{error}</p>
+            <p className="text-sm text-red-500 text-start flex justify-start items-start gap-1 px-1 "> <BiSolidError size={16}/> {error}</p>
             )}
 
             <button
@@ -160,14 +179,12 @@ export default function Login() {
 
             <div className="flex justify-between text-sm">
               {timer > 0 ? (
-                <span className="text-gray-400">
-                  Resend OTP in {timer}s
-                </span>
+                <span className="text-gray-400">Resend OTP in {timer}s</span>
               ) : (
                 <button
                   type="button"
                   onClick={handleResendOtp}
-                  className="text-[#00B207] font-medium"
+                  className="text-[#00B207] font-medium cursor-pointer"
                 >
                   Resend OTP
                 </button>
@@ -176,7 +193,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={handleChangeContact}
-                className="underline text-gray-600"
+                className="underline text-gray-600 cursor-pointer"
               >
                 Change number/email
               </button>
