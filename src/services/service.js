@@ -10,12 +10,14 @@ export const sendOTP = async (contact) => {
 
 export const verifyOTP = async ({ contact, otp }) => {
   console.log("Verify OTP:", { contact, otp });
+  const tokenValue="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NGY2M2UzNmFkNWIxNGFiNzhhMGFjMSIsImlhdCI6MTc2NjgxMDU5NSwiZXhwIjoxNzY5NDAyNTk1fQ.nskk22JvgsKIqvEAU3YyDz1b6MMo8xVc2T1EfPN7Hrc"
 
+"  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NGY2M2UzNmFkNWIxNGFiNzhhMGFjMSIsImlhdCI6MTc2NjgxMDU5NSwiZXhwIjoxNzY5NDAyNTk1fQ.nskk22JvgsKIqvEAU3YyDz1b6MMo8xVc2T1EfPN7Hrc"
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (otp === "123456") {
         resolve({
-          token: "mock_token_" + Date.now(),
+          token: tokenValue,
           user: { contact },
         });
       } else {

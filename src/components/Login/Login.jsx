@@ -9,7 +9,7 @@ import { showToast } from "../../utils/toast";
 
 
 // ✅ Simulate registered users
-const registeredUsers = new Set(["user@example.com", "9876543210"]);
+const registeredUsers = new Set(["csabiskar@gmail.com", "9876543210"]);
 
 export default function Login() {
   const location = useLocation();

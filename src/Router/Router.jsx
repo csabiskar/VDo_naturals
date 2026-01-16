@@ -9,7 +9,6 @@ import Auth from "../Pages/Auth";
 import Error from "../components/Error";
 import ProtectedRoute from "./ProtectedRoute";
 import ProductPage from "../Pages/ProductPage";
-import Productsssss from "../components/Sample";
 
 export const appRouter = createBrowserRouter([
   {
@@ -34,5 +33,4 @@ export const appRouter = createBrowserRouter([
 
   { path: "login", element: <Auth /> },
   { path: "signup", element: <Auth /> },
-  { path: "test", element: <Productsssss /> },
 ]);
