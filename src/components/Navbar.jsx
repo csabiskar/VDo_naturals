@@ -97,7 +97,8 @@ export default function Navbar() {
             )}
 
             {/* Wishlist – all screens */}
-            <div
+            { isAuth && (
+                <div
               onClick={() => navigate("/wishlist")}
               className="relative cursor-pointer"
             >
@@ -106,21 +107,25 @@ export default function Navbar() {
               {!isWishlistPage && wishlistCount > 0 && (
                 <span
                   className="
-      absolute -top-1 -right-1
-      min-w-[18px] h-[18px]
-      bg-[#00B207] text-white
-      text-[11px]
-      rounded-full
-      flex items-center justify-center
-    "
+                              absolute -top-1 -right-1
+                              min-w-[18px] h-[18px]
+                              bg-[#00B207] text-white
+                              text-[11px]
+                              rounded-full
+                              flex items-center justify-center
+                            "
                 >
                   {wishlistCount}
                 </span>
               )}
             </div>
+              )
+            }
 
             {/* Cart – all screens */}
-            <div
+            {
+              isAuth &&(
+                <div
               onClick={() => navigate("/shoppingcart")}
               className="relative cursor-pointer"
             >
@@ -134,6 +139,8 @@ export default function Navbar() {
                 </span>
               )}
             </div>
+              )
+            }
 
             {/* Login – desktop unchanged */}
             {!isAuth && (
