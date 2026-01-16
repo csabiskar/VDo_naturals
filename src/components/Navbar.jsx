@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
+import { AiOutlineHeart } from "react-icons/ai";
 
 import {
   FiMenu,
@@ -21,6 +22,7 @@ import {
 } from "react-icons/md";
 
 import logo from "../assets/Newlogo.png";
+import { useWishlist } from "../context/WishlistContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -34,6 +36,7 @@ export default function Navbar() {
 
   const cartCount = cartData?.items?.length || 0;
   const isCartPage = location.pathname === "/shoppingcart";
+    const isWishlistPage = location.pathname === "/wishlist";
 
   useEffect(() => {
     if (cartCount > 0) {
@@ -45,12 +48,16 @@ export default function Navbar() {
 
   const closeMenu = () => setOpen(false);
 
+  // wishlist
+  const { wishlist } = useWishlist();
+
+  const wishlistCount = wishlist?.length || 0;
+
   return (
     <div className="bg-white flex flex-col fixed top-0 left-0 w-full z-50">
       {/* ================= TOP NAVBAR ================= */}
       <header className="w-full border-b border-[#E6E6E6] relative z-50 bg-white">
         <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-20 2xl:px-24 h-auto md:h-[104px] grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 p-3">
-          
           {/* Logo */}
           <Link to="/" aria-label="Go to home">
             <img
@@ -88,6 +95,29 @@ export default function Navbar() {
                 <span className="hidden lg:block h-6 w-px bg-[#D9D9D9]" />
               </>
             )}
+
+            {/* Wishlist – all screens */}
+            <div
+              onClick={() => navigate("/wishlist")}
+              className="relative cursor-pointer"
+            >
+              <AiOutlineHeart className="h-8 w-8" />
+
+              {!isWishlistPage && wishlistCount > 0 && (
+                <span
+                  className="
+      absolute -top-1 -right-1
+      min-w-[18px] h-[18px]
+      bg-[#00B207] text-white
+      text-[11px]
+      rounded-full
+      flex items-center justify-center
+    "
+                >
+                  {wishlistCount}
+                </span>
+              )}
+            </div>
 
             {/* Cart – all screens */}
             <div
@@ -147,16 +177,32 @@ export default function Navbar() {
         {open && (
           <nav className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-[#E6E6E6] z-40">
             <div className="px-6 py-6 flex flex-col gap-6 text-sm">
-              <Link to="/" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiHome /> Home
               </Link>
-              <Link to="/shop" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/shop"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiShoppingCart /> Shop All
               </Link>
-              <Link to="/blog" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/blog"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiBookOpen /> Blog
               </Link>
-              <Link to="/contact" onClick={closeMenu} className="flex items-center gap-3">
+              <Link
+                to="/contact"
+                onClick={closeMenu}
+                className="flex items-center gap-3"
+              >
                 <FiMail /> Contact Us
               </Link>
 
@@ -205,12 +251,18 @@ export default function Navbar() {
       <div className="hidden lg:block w-full bg-[#333333]">
         <nav className="max-w-[1760px] mx-auto px-10 xl:px-20 2xl:px-24 h-[55px] flex items-center justify-between text-sm">
           <div className="flex gap-8 text-[#999999]">
-            <NavLink to="/" className="hover:text-white">Home</NavLink>
+            <NavLink to="/" className="hover:text-white">
+              Home
+            </NavLink>
             <span className="flex items-center gap-1.5 hover:text-white">
               Shop all <IoIosArrowDown size={16} />
             </span>
-            <NavLink to="/blog" className="hover:text-white">Blogs</NavLink>
-            <NavLink to="/contact" className="hover:text-white">Contact Us</NavLink>
+            <NavLink to="/blog" className="hover:text-white">
+              Blogs
+            </NavLink>
+            <NavLink to="/contact" className="hover:text-white">
+              Contact Us
+            </NavLink>
           </div>
 
           <div className="flex items-center gap-2 text-white">

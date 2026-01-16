@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext, useCallback } from "react";
+import { useState, useMemo, useContext, useCallback, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
@@ -13,6 +13,9 @@ function ShoppingCart() {
 
   const cart = cartData?.items || [];
 
+  useEffect(()=>{
+    loadCart()
+  },[])
 
   // Memoized subtotal
   const subtotal = useMemo(() => {

@@ -1,72 +1,113 @@
-import { GoHome } from "react-icons/go";
 import { IoIosArrowForward } from "react-icons/io";
-import { useLocation, Link } from "react-router-dom";
-import BreadcrumbsBg from "../assets/Breadcrumbs.png";
+import { useLocation, Link, useParams } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { useProducts } from "../context/ProductContext";
 
 const breadcrumbConfig = {
-  "/shoppingcart": [
+  shoppingcart: [
     { label: "Home", path: "/" },
     { label: "Shopping Cart", path: "/shoppingcart" },
   ],
-
-  "/checkout": [
+  checkout: [
     { label: "Home", path: "/" },
     { label: "Shopping cart", path: "/shoppingcart" },
     { label: "Checkout", path: "/checkout" },
   ],
-
-  "/wishlist": [
+  wishlist: [
     { label: "Home", path: "/" },
     { label: "Wishlist", path: "/wishlist" },
   ],
-  "/categories":[
+  categories: [
     { label: "Home", path: "/" },
-    { label: "Categories", path: "/categories" }
-  ],
-  "/product":[
-     { label: "Home", path: "/" },
     { label: "Categories", path: "/categories" },
-    {
-      label:"product",path:"/product"
-    }
-  ]
+  ],
+  product: [
+    { label: "Home", path: "/" },
+    { label: "Categories", path: "/categories" },
+    { label: "Product", path: "/product" },
+  ],
 };
 
-
 function Breadcrumb() {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname } = location;
+  const { id } = useParams();
+  const { fetchProductById } = useProducts();
 
-  /* ❌ NO BREADCRUMB ON HOME */
+  const [productName, setProductName] = useState("");
+
+  const baseRoute = useMemo(
+    () => pathname.split("/")[1],
+    [pathname]
+  );
+
+  /* ✅ ALWAYS call useEffect */
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProduct = async () => {
+      if (baseRoute !== "product" || !id) {
+        setProductName("");
+        return;
+      }
+
+      try {
+        const res = await fetchProductById(id);
+        if (mounted && res?.product?.name) {
+          setProductName(res.product.name);
+        }
+      } catch (err) {
+        console.error("Breadcrumb product fetch failed", err);
+      }
+    };
+
+    loadProduct();
+
+    return () => {
+      mounted = false;
+    };
+  }, [baseRoute, id, fetchProductById]);
+
+  /* ✅ AFTER hooks — safe early exits */
   if (pathname === "/") return null;
 
-  const breadcrumbs = breadcrumbConfig[pathname] || [];
+  let breadcrumbs = breadcrumbConfig[baseRoute];
+  if (!breadcrumbs) return null;
+
+  if (baseRoute === "product" && productName) {
+    breadcrumbs = [...breadcrumbs, { label: productName }];
+  }
+
+  const breadcrumbHeight = pathname.startsWith("/product/")
+    ? "h-0 mb-10 -mt-5"
+    : "h-[120px] sm:px-10 px-4 lg:px-20";
 
   return (
-    <div
-      className=" flex items-center"
-    >
-      <div className="sm:px-10 px-4 lg:px-20 flex items-center gap-2 text-sm h-[120px] ">
+    <div className="flex items-center">
+      <div className={`flex items-center gap-2 text-sm ${breadcrumbHeight}`}>
         {breadcrumbs.map((item, index) => {
           const isLast = index === breadcrumbs.length - 1;
 
           return (
-            <div key={item.path} className="flex items-center gap-2 md:mt-16">
+            <div key={index} className="flex items-center gap-2 md:mt-16">
               {index === 0 ? (
-                <Link to="/" className="text-[#808080] text-[16px] font-light">
+                <Link
+                  to="/"
+                  className="text-[#808080] text-[16px] font-light"
+                >
                   Home
                 </Link>
               ) : (
                 <>
                   <IoIosArrowForward className="text-gray-400" />
-
                   {isLast ? (
-                    <span className="text-[#00B207] text-[16px] font-light cursor-pointer">
+                    <span className="text-[#00B207] text-[16px] font-light">
                       {item.label}
                     </span>
                   ) : (
                     <Link
                       to={item.path}
-                      className="text-gray-400 cursor-pointer"
+                      className="text-gray-400 text-[16px] cursor-pointer"
                     >
                       {item.label}
                     </Link>

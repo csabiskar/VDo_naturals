@@ -2,14 +2,13 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useState } from "react";
 import OfferBadge from "../assets/Offerbookmark.png";
-import MilletNoodlesProduct from "../assets/MilletNoodlesProduct.png"
+import MilletNoodlesProduct from "../assets/MilletNoodlesProduct.png";
 import { useNavigate } from "react-router-dom";
-
 
 export default function ProductCard({ product }) {
   const [liked, setLiked] = useState(false);
   const [qty, setQty] = useState(0);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div
@@ -18,7 +17,7 @@ export default function ProductCard({ product }) {
       h-[400px] bg-white border border-gray-200 rounded-[10px] 
       relative font-poppins text-[13.57px] text-dimgray overflow-hidden cursor-pointer
     "
-    onClick={()=> navigate(`/product/${product._id}`)}
+      onClick={() => navigate(`/product/${product._id}`)}
     >
       {/* Offer Badge */}
       {((product.variants?.length > 0 &&

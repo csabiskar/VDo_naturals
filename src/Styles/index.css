@@ -74,3 +74,9 @@ body{
   border-radius: 50%;
   cursor: pointer;
 }
+
+.Toastify__toast {
+  background: black !important;
+  box-shadow: none !important;
+  color: white !important;
+}

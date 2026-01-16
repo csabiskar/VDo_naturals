@@ -6,6 +6,8 @@ import {
   clearCart as clearCartAPI,
   addCartItem,
 } from "../api/cart.api";
+import { showToast } from "../utils/toast";
+
 
 export const CartContext = createContext();
 
@@ -23,6 +25,7 @@ export const CartProvider = ({ children }) => {
         quantity: payload.quantity,
         ...(payload.hasVariants ? { variantSku: payload.variantSku } : {}),
       });
+      showToast("Product added to cart successfully.", "success");
 
       loadCart(); // refresh cart
     } catch (err) {
@@ -54,6 +57,7 @@ export const CartProvider = ({ children }) => {
           : { variantId: item.variantId }),
       });
       loadCart();
+      
     } catch (err) {
       console.error("Update quantity failed", err);
     }
@@ -68,6 +72,7 @@ export const CartProvider = ({ children }) => {
         variantSku: item.variantSku,
         variantId: item.variantId,
       });
+      showToast("Item removed from cart.", "success");
       loadCart();
     } catch (err) {
       console.error("Remove cart item failed", err);

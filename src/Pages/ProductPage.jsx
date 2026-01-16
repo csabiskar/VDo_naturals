@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext,useMemo } from "react";
 import { FaStar, FaFacebookF, FaPinterestP, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart,AiFillHeart } from "react-icons/ai";
 import { IoMdCheckmark } from "react-icons/io";
 import { GoStarFill } from "react-icons/go";
 import { useParams } from "react-router-dom";
@@ -15,11 +15,15 @@ import Avatar from "../assets/product/avtar.png";
 import Audio from "../assets/product/audio.png";
 import cookieReview from "../assets/product/cookiereview.png";
 import VideoReview from "../assets/product/ImgVideo.png";
+import { toast } from "react-toastify";
 
 //product
 
 import { useProducts } from "../context/ProductContext";
 import { CartContext } from "../context/CartContext";
+import { showToast } from "../utils/toast";
+import Breadcrumb from "../components/Breadcrumb";
+import { useWishlist } from "../context/WishlistContext";
 
 export default function ProductPage() {
   const images = [cookies, ccokiesmockup, Cookiesbiscut, pricing];
@@ -61,17 +65,64 @@ export default function ProductPage() {
   const handleAddToCart = () => {
     if (!product) return;
 
-    const hasVariants = product.variants?.length > 0;
+    if (product.variants?.length > 0 && !selectedVariant) {
+      toast.warn("Please select a variant");
+      return;
+    }
 
     addToCart({
       productId: product._id,
       quantity,
-      hasVariants,
-      variantSku: hasVariants ? selectedVariant?.sku : undefined,
+      hasVariants: product.variants?.length > 0,
+      variantSku: selectedVariant?.sku,
     });
+
+    showToast("Item added to cart", "success");
   };
 
   console.log(product);
+
+  // add to wishlist
+
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+
+  const isWishlisted = useMemo(() => {
+    if (!product?._id) return false;
+
+    return wishlist.some((item) => {
+      if (selectedVariant?.sku) {
+        return (
+          item.productId === product._id &&
+          item.variantSku === selectedVariant.sku
+        );
+      }
+      return item.productId === product._id;
+    });
+  }, [wishlist, product?._id, selectedVariant?.sku]);
+
+
+  const handleWishlistToggle = async () => {
+  if (!product?._id) return;
+
+  const payload = {
+    productId: product._id,
+    ...(selectedVariant?.sku && { variantSku: selectedVariant.sku }),
+  };
+
+  try {
+    if (isWishlisted) {
+      await removeFromWishlist(payload);
+      showToast("Removed from wishlist", "info");
+    } else {
+      await addToWishlist(payload);
+      showToast("Added to wishlist", "success");
+    }
+  } catch (err) {
+    console.error("Wishlist toggle failed", err);
+    showToast("Wishlist update failed", "error");
+  }
+};
+
 
   if (loading) return <p>Loading product...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -80,45 +131,95 @@ export default function ProductPage() {
     <div className="bg-white">
       {/* MAIN GRID */}
       <div className="max-w-[1440px] mx-auto px-4 lg:px-10 xl:px-20 lg:pt-[82px] min-h-screen ">
-        <div className="grid grid-cols-1 lg:grid-cols-[540px_648px] xl:grid-cols-[540px_648px] lg:gap-x-0 xl:gap-x-[92px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[540px_648px] xl:grid-cols-[540px_648px] gap-8 lg:gap-x-0 xl:gap-x-[92px]">
+          {" "}
           {/* LEFT COLUMN – IMAGES */}
-          <div className="self-start pt-24 lg:sticky top-12">
-            <div className="flex gap-4 -mt-7">
-              <div className="hidden sm:flex flex-col gap-5 mt-2">
+          <div className="self-start pt-6 lg:pt-24 lg:sticky top-12 w-full">
+            {/* MOBILE / TABLET VIEW */}
+            <div className="flex flex-col gap-3 lg:hidden relative">
+              {/* Main Image */}
+              <div className="relative">
+                <img
+                  src={activeImage}
+                  className="w-full h-80 sm:h-[380px] object-cover rounded"
+                />
+
+                {/* Wishlist Button */}
+                <button className="absolute top-1 right-3 bg-white p-2 rounded-full border shadow">
+                  <AiOutlineHeart size={22} />
+                </button>
+              </div>
+
+              {/* Horizontal Thumbnails */}
+              <div className="flex gap-3 overflow-x-auto scrollbar-hide">
                 {images.map((img, i) => (
                   <img
                     key={i}
                     src={img}
                     onClick={() => setActiveImage(img)}
-                    className={`xl:size-[87px] lg:size-16 md:size-12 rounded cursor-pointer  
-                    `}
+                    className={`w-16 h-16 rounded cursor-pointer object-cover `}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* DESKTOP VIEW */}
+            <div className="hidden lg:flex gap-4 -mt-7 relative">
+              {/* Vertical Thumbnails */}
+              <div className="flex flex-col gap-5 mt-2">
+                {images.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img}
+                    onClick={() => setActiveImage(img)}
+                    className={`xl:size-[87px] lg:size-16 md:size-12 rounded cursor-pointer object-cover `}
                   />
                 ))}
               </div>
 
-              <div className="relative right-1 -mt-0.5">
+              {/* Main Image */}
+              <div className="relative pb-12">
                 <img
                   src={activeImage}
                   className="xl:w-[414px] xl:h-[421px] lg:size-96 md:size-80 object-cover rounded"
                 />
               </div>
-              <button className="absolute lg:left-[433px] lg:-top-0.5 lg:size-12 xl:-top-0.5 xl:left-[490px] xl:size-[50px]  border-gray-300 bg-white p-2 rounded-full border">
-                <AiOutlineHeart size={22} className="size-8" />
+
+              {/* Wishlist Button */}
+              <button
+              onClick={handleWishlistToggle}
+                className="
+                            absolute
+                            top-3
+                            lg:-top-16
+                            xl:-top-16
+                            lg:left-[440px]
+                            xl:left-[490px]
+                            bg-white
+                            p-2
+                            rounded-full
+                            border
+                            border-gray-200/70
+                          "
+              >
+               {isWishlisted ? (
+    <AiFillHeart size={32} className="text-red-500" />
+  ) : (
+    <AiOutlineHeart size={32} className="text-gray-700 hover:text-red-500" />
+  )}
               </button>
             </div>
           </div>
-
           {/* RIGHT COLUMN */}
           <div className="flex flex-col">
             {/* BREADCRUMB */}
             <div className="text-md text-gray-400 font-light mb-10">
-              Home / Category / Healthy Snacks /
-              <span className="text-green-600"> Dia Caare Millet Cookies</span>
+              <Breadcrumb />
             </div>
 
             {/* PRODUCT SUMMARY */}
             <div className="flex flex-col gap-3 pb-4 border-b border-gray-300">
-              <h1 className="text-4xl font-semibold text-zinc-900">
+              <h1 className="text-4xl lg:text-3xl xl:4xl font-semibold text-zinc-900">
                 {product?.name}
               </h1>
 
@@ -162,15 +263,21 @@ export default function ProductPage() {
               {product.variants?.length > 0 && (
                 <div className="flex gap-4 mt-3.5">
                   {product.variants.map((item, i) => (
-                    <div key={i} className="relative h-20">
+                    <div key={item._id} className="relative h-20">
                       <div
                         className={`w-[90px] h-20 border rounded-lg flex flex-col justify-center items-center cursor-pointer transition-all duration-300
-  ${
-    selectedVariant?._id === item._id
-      ? "border-green-600 bg-green-600/10"
-      : "border-gray-300 bg-white"
-  }`}
-                        onClick={() => setSelectedVariant(item)}
+                            ${
+                              selectedVariant?.sku === item.sku
+                                ? "border-green-600 bg-green-600/10"
+                                : "border-gray-300 bg-white"
+                            }`}
+                        onClick={() => {
+                          setSelectedVariant(item);
+                          showToast(
+                            `Selected ${item.attributes.weight}`,
+                            "info"
+                          );
+                        }}
                       >
                         <span className="text-sm font-normal">
                           {item?.attributes?.weight}
@@ -198,7 +305,7 @@ export default function ProductPage() {
               )}
 
               {/* BRAND + SHARE */}
-              <div className="flex justify-between items-center text-sm mt-3.5 ">
+              <div className="flex lg:flex-col xl:flex-row lg:items-start justify-between lg:gap-5 xl:items-center text-sm mt-3.5 ">
                 <div className="flex items-center gap-3">
                   Brand:
                   <img src={logo} className="h-12 w-40" alt="brand" />
@@ -216,13 +323,13 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              <p className="text-sm text-[#808080] pr-24 font-light leading-5 mt-1 pb-6 border-b border-gray-300">
+              <p className="text-sm text-[#808080] pr-0 lg:pr-8 xl:pr-24 font-light leading-5 mt-1 pb-6 border-b border-gray-300">
                 {product?.description}
               </p>
 
               {/* QTY + ADD */}
-              <div className="flex gap-3 flex-wrap pl-8 pt-1.5">
-                <div className="flex items-center justify-center border border-[#E6E6E6] rounded-full w-[124px]  h-[50px] gap-4">
+              <div className="flex gap-3 flex-wrap pl-0 lg:pl-0 xl:pl-8 pt-1.5 lg:flex-col xl:flex-row">
+                <div className="flex items-center justify-center border border-[#E6E6E6] rounded-full w-full md:w-[124px]  h-[50px] lg:w-sm xl:w-[124px] gap-4">
                   <button
                     className="bg-[#F2F2F2] rounded-full size-[34px] cursor-pointer"
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -239,7 +346,7 @@ export default function ProductPage() {
                 </div>
                 <button
                   disabled={product.variants?.length > 0 && !selectedVariant}
-                  className="w-full sm:w-md h-12 cursor-pointer border border-[#00B207] bg-[#00b2060a] text-green-600 font-medium rounded disabled:opacity-50"
+                  className="w-full sm:w-md lg:w-sm xl:w-md h-12 cursor-pointer border border-[#00B207] bg-[#00b2060a] text-green-600 font-medium rounded disabled:opacity-50"
                   onClick={handleAddToCart}
                 >
                   ADD
@@ -249,7 +356,7 @@ export default function ProductPage() {
 
             {/* DESCRIPTIONS */}
             <section className="pt-[35px]">
-              <div className="w-full max-w-[648px] flex flex-col">
+              <div className="max-w-full xl:max-w-[648px] flex flex-col">
                 {/* TAB HEADER */}
                 <div className="bg-white">
                   <div className="w-32 px-4 py-4 shadow-[inset_0px_-2px_0px_0px_rgba(32,181,38,1.00)]">
@@ -275,7 +382,7 @@ export default function ProductPage() {
                   </p>
 
                   {/* FEATURES LIST */}
-                  <div className="flex flex-col gap-3.5">
+                  <div className="flex flex-wrap gap-4 mt-3.5">
                     {[
                       "100% millet-based cookies made with carefully selected grains for better nutrition and sustained energy release",
                       "Suitable for daily snacking for health-conscious and diabetic-friendly lifestyles when consumed in moderation",
@@ -307,7 +414,7 @@ export default function ProductPage() {
 
             {/* ADDITIONAL INFORMATION */}
             <section className="pt-10">
-              <div className="w-full max-w-[648px] flex flex-col">
+              <div className="max-w-full xl:max-w-[648px] flex flex-col">
                 {/* HEADER */}
                 <div className="bg-white">
                   <div className="px-4 py-4 shadow-[inset_0px_-2px_0px_0px_rgba(32,181,38,1.00)] w-fit">
@@ -368,7 +475,7 @@ export default function ProductPage() {
 
             {/* CUSTOMER REVIEWS */}
             <section className="pt-16 pb-32">
-              <div className="w-full max-w-[648px] flex flex-col">
+              <div className="max-w-full xl:max-w-[648px] flex flex-col">
                 {/* HEADER */}
                 <div className="bg-white">
                   <div className="px-4 py-4 -mt-0.5 shadow-[inset_0px_-2px_0px_0px_rgba(32,181,38,1.00)] w-fit">
@@ -412,7 +519,7 @@ export default function ProductPage() {
                     </p>
 
                     {/* REVIEW IMAGES */}
-                    <div className="flex flex-wrap sm:flex-nowrap gap-4">
+                    <div className="flex flex-wrap sm:flex-nowrap lg:flex-col xl:flex-row lg:flex-wrap xl:flex-wrap gap-4">
                       <img className="w-60 h-48 rounded-[5px]" src={cookies} />
                       <img
                         className="w-60 h-48 rounded-[5px]"
