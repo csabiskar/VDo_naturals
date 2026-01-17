@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext,useRef } from "react";
 import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
@@ -7,13 +7,14 @@ import { AiOutlineHeart } from "react-icons/ai";
 import {
   FiMenu,
   FiX,
-  FiChevronDown,
   FiSearch,
   FiHome,
   FiShoppingCart,
   FiBookOpen,
   FiMail,
 } from "react-icons/fi";
+import { FaChevronDown } from "react-icons/fa";
+
 import { IoIosArrowDown } from "react-icons/io";
 import {
   MdOutlineAccountCircle,
@@ -23,9 +24,11 @@ import {
 
 import logo from "../assets/Newlogo.png";
 import { useWishlist } from "../context/WishlistContext";
+import UserMenu from "./UserMenu/UserMenu";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
   const [animate, setAnimate] = useState(false);
 
   const { user, isAuth, logout } = useAuth();
@@ -36,7 +39,7 @@ export default function Navbar() {
 
   const cartCount = cartData?.items?.length || 0;
   const isCartPage = location.pathname === "/shoppingcart";
-    const isWishlistPage = location.pathname === "/wishlist";
+  const isWishlistPage = location.pathname === "/wishlist";
 
   useEffect(() => {
     if (cartCount > 0) {
@@ -52,6 +55,18 @@ export default function Navbar() {
   const { wishlist } = useWishlist();
 
   const wishlistCount = wishlist?.length || 0;
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="bg-white flex flex-col fixed top-0 left-0 w-full z-50">
@@ -85,28 +100,48 @@ export default function Navbar() {
             {/* Profile – desktop unchanged */}
             {isAuth && (
               <>
-                <div className="hidden lg:flex items-center gap-2 cursor-pointer">
+                <div
+                  className="hidden lg:flex items-center gap-2 cursor-pointer"
+                  onClick={() => setDropdown(!dropdown)}
+                  ref={dropdownRef}
+                >
                   <MdOutlineAccountCircle size={33} />
                   <span className="text-sm font-medium max-w-[100px] truncate">
                     {user?.name || "User"}
                   </span>
-                  <FiChevronDown />
+                <FaChevronDown size={18}  />
                 </div>
                 <span className="hidden lg:block h-6 w-px bg-[#D9D9D9]" />
               </>
             )}
 
-            {/* Wishlist – all screens */}
-            { isAuth && (
-                <div
-              onClick={() => navigate("/wishlist")}
-              className="relative cursor-pointer"
-            >
-              <AiOutlineHeart className="h-8 w-8" />
+            {/* dropdown */}
 
-              {!isWishlistPage && wishlistCount > 0 && (
-                <span
-                  className="
+            {dropdown && (
+              <div
+                className="
+            absolute right-14 top-8/12  mt-3 z-50
+            max-sm:fixed max-sm:inset-x-4 max-sm:top-20
+            shadow-2xl
+          "
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+              >
+                <UserMenu />
+              </div>
+            )}
+
+            {/* Wishlist – all screens */}
+            {/* {isAuth && (
+              <div
+                onClick={() => navigate("/wishlist")}
+                className="relative cursor-pointer"
+              >
+                <AiOutlineHeart className="h-8 w-8" />
+
+                {!isWishlistPage && wishlistCount > 0 && (
+                  <span
+                    className="
                               absolute -top-1 -right-1
                               min-w-[18px] h-[18px]
                               bg-[#00B207] text-white
@@ -114,33 +149,30 @@ export default function Navbar() {
                               rounded-full
                               flex items-center justify-center
                             "
-                >
-                  {wishlistCount}
-                </span>
-              )}
-            </div>
-              )
-            }
+                  >
+                    {wishlistCount}
+                  </span>
+                )}
+              </div>
+            )} */}
 
             {/* Cart – all screens */}
-            {
-              isAuth &&(
-                <div
-              onClick={() => navigate("/shoppingcart")}
-              className="relative cursor-pointer"
-            >
-              <MdOutlineShoppingBag className="h-8 w-8" />
-              {!isCartPage && cartCount > 0 && (
-                <span
-                  className={`absolute -top-0.5 -right-1.5 min-w-[18px] h-[18px] bg-[#00B207] text-white text-[11px] rounded-full flex items-center justify-center transition-transform
+            {isAuth && (
+              <div
+                onClick={() => navigate("/shoppingcart")}
+                className="relative cursor-pointer"
+              >
+                <MdOutlineShoppingBag className="h-8 w-8" />
+                {!isCartPage && cartCount > 0 && (
+                  <span
+                    className={`absolute -top-0.5 -right-1.5 min-w-[18px] h-[18px] bg-[#00B207] text-white text-[11px] rounded-full flex items-center justify-center transition-transform
                   ${animate ? "scale-125" : "scale-100"}`}
-                >
-                  {cartCount}
-                </span>
-              )}
-            </div>
-              )
-            }
+                  >
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Login – desktop unchanged */}
             {!isAuth && (
