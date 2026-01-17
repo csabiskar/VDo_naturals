@@ -55,18 +55,26 @@ export default function Navbar() {
   const { wishlist } = useWishlist();
 
   const wishlistCount = wishlist?.length || 0;
-  const dropdownRef = useRef(null);
+const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdown(false);
-      }
-    };
+useEffect(() => {
+  const handleClickOutside = (e) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target)
+    ) {
+      setDropdown(false);
+    }
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // ✅ use click, not mousedown
+  document.addEventListener("click", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("click", handleClickOutside);
+  };
+}, []);
+
 
   return (
     <div className="bg-white flex flex-col fixed top-0 left-0 w-full z-50">
@@ -100,10 +108,9 @@ export default function Navbar() {
             {/* Profile – desktop unchanged */}
             {isAuth && (
               <>
-                <div
+                <div ref={dropdownRef}
                   className="hidden lg:flex items-center gap-2 cursor-pointer"
                   onClick={() => setDropdown(!dropdown)}
-                  ref={dropdownRef}
                 >
                   <MdOutlineAccountCircle size={33} />
                   <span className="text-sm font-medium max-w-[100px] truncate">

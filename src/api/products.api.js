@@ -1,14 +1,14 @@
 import API from "./axiosInstance";
 
 // Fetch all products
-export const getAllProducts = async () => {
+export const getAllProducts = async (params = {}) => {
   try {
-    const res = await API.get("/products");
-    console.log(res.data)
-    return res.data; 
+    const res = await API.get("/products", { params });
+    console.log(res.data);
+    return res.data;
   } catch (error) {
     console.error("Error fetching all products:", error);
-    throw error; 
+    throw error;
   }
 };
 

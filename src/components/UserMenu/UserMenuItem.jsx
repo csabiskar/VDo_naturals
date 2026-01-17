@@ -12,6 +12,7 @@ export default function UserMenuItem({
       className={`
         flex items-center gap-4
         text-left  transition-colors
+        cursor-pointer
 
         /* Figma exact */
         w-[214px] h-[52px]
