@@ -7,6 +7,7 @@ import {
   addCartItem,
 } from "../api/cart.api";
 import { showToast } from "../utils/toast";
+import { useAuth } from "./AuthContext";
 
 
 export const CartContext = createContext();
@@ -15,6 +16,7 @@ export const CartProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null); // API cart data
   const [loading, setLoading] = useState(true);
 
+  const {isAuth} =useAuth()
   // add to cart
 
   // Add item to cart
@@ -35,6 +37,13 @@ export const CartProvider = ({ children }) => {
 
   // Load cart from API
   const loadCart = async () => {
+
+    if(!isAuth){
+      setCartData({ items: [] }); // ✅ reset cart if not logged in
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await getCartItem();
@@ -91,7 +100,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     loadCart();
-  }, []);
+  }, [isAuth]);
 
   return (
     <CartContext.Provider

@@ -9,11 +9,20 @@ import Auth from "../Pages/Auth";
 import Error from "../components/Error";
 import ProtectedRoute from "./ProtectedRoute";
 import ProductPage from "../Pages/ProductPage";
+import { ProductProvider } from "../context/ProductContext";
+import { CategoryProvider } from "../context/CategoryContext";
+
 
 export const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element:
+    <CategoryProvider>
+  <ProductProvider>
+    <MainLayout />
+  </ProductProvider>
+</CategoryProvider>
+,
     errorElement: <Error />,
     children: [
       { index: true, element: <Home /> },

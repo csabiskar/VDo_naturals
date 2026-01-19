@@ -3,12 +3,13 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useState } from "react";
 import OfferBadge from "../assets/Offerbookmark.png";
 import MilletNoodlesProduct from "../assets/MilletNoodlesProduct.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ProductCard({ product }) {
   const [liked, setLiked] = useState(false);
   const [qty, setQty] = useState(0);
   const navigate = useNavigate();
+    const {pathname} = useLocation()
 
   return (
     <div
@@ -23,7 +24,7 @@ export default function ProductCard({ product }) {
       {((product.variants?.length > 0 &&
         product.variants[0]?.discountPercent > 0) ||
         product.discountPercent > 0) && (
-        <div className="absolute top-0 left-4 z-10 w-[33px] h-8">
+        <div className={`absolute top-0 left-4 z-10 w-[34px] ${pathname==='/'?'h-10':'h-8'}`}>
           <img src={OfferBadge} alt="offer" className="w-full h-full" />
           <div className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold text-white leading-[11px] text-center">
             {product.variants?.length > 0 &&

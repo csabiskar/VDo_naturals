@@ -6,12 +6,14 @@ import WhyNaturals from "../components/WhyNaturals";
 import PromoBanners from "../components/PromoBanners";
 import Testimonials from "../components/Testimonials";
 import HeroBanner from "../components/HeroBanner";
+import FeaturedProducts from "../components/FeaturedProducts";
 
 function Home() {
   return (
     <>
       <Hero />
-      <BestSeller />
+      <FeaturedProducts/>
+      {/* <BestSeller /> */}
       <TopCategory />
       <HotDeals />
       <WhyNaturals />

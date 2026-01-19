@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext,useMemo } from "react";
+import { useEffect, useState, useContext, useMemo } from "react";
 import { FaStar, FaFacebookF, FaPinterestP, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { AiOutlineHeart,AiFillHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { IoMdCheckmark } from "react-icons/io";
 import { GoStarFill } from "react-icons/go";
 import { useParams } from "react-router-dom";
@@ -100,29 +100,27 @@ export default function ProductPage() {
     });
   }, [wishlist, product?._id, selectedVariant?.sku]);
 
-
   const handleWishlistToggle = async () => {
-  if (!product?._id) return;
+    if (!product?._id) return;
 
-  const payload = {
-    productId: product._id,
-    ...(selectedVariant?.sku && { variantSku: selectedVariant.sku }),
-  };
+    const payload = {
+      productId: product._id,
+      ...(selectedVariant?.sku && { variantSku: selectedVariant.sku }),
+    };
 
-  try {
-    if (isWishlisted) {
-      await removeFromWishlist(payload);
-      showToast("Removed from wishlist", "info");
-    } else {
-      await addToWishlist(payload);
-      showToast("Added to wishlist", "success");
+    try {
+      if (isWishlisted) {
+        await removeFromWishlist(payload);
+        showToast("Removed from wishlist", "info");
+      } else {
+        await addToWishlist(payload);
+        showToast("Added to wishlist", "success");
+      }
+    } catch (err) {
+      console.error("Wishlist toggle failed", err);
+      showToast("Wishlist update failed", "error");
     }
-  } catch (err) {
-    console.error("Wishlist toggle failed", err);
-    showToast("Wishlist update failed", "error");
-  }
-};
-
+  };
 
   if (loading) return <p>Loading product...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -187,7 +185,7 @@ export default function ProductPage() {
 
               {/* Wishlist Button */}
               <button
-              onClick={handleWishlistToggle}
+                onClick={handleWishlistToggle}
                 className="
                             absolute
                             top-3
@@ -202,11 +200,14 @@ export default function ProductPage() {
                             border-gray-200/70
                           "
               >
-               {isWishlisted ? (
-    <AiFillHeart size={32} className="text-red-500" />
-  ) : (
-    <AiOutlineHeart size={32} className="text-gray-700 hover:text-red-500" />
-  )}
+                {isWishlisted ? (
+                  <AiFillHeart size={32} className="text-red-500" />
+                ) : (
+                  <AiOutlineHeart
+                    size={32}
+                    className="text-gray-700 hover:text-red-500"
+                  />
+                )}
               </button>
             </div>
           </div>
@@ -263,7 +264,7 @@ export default function ProductPage() {
               {product.variants?.length > 0 && (
                 <div className="flex gap-4 mt-3.5">
                   {product.variants.map((item, i) => (
-                    <div key={item._id} className="relative h-20">
+                    <div key={i} className="relative h-20">
                       <div
                         className={`w-[90px] h-20 border rounded-lg flex flex-col justify-center items-center cursor-pointer transition-all duration-300
                             ${

@@ -6,17 +6,21 @@ import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CategoryProvider } from "./context/CategoryContext";
 
 function App() {
   return (
     <AuthProvider>
-      <ProductProvider>
+      
+      {/* <ProductProvider> */}
+      <CategoryProvider>
         <CartProvider>
           <WishlistProvider>
             <RouterProvider router={appRouter} />
           </WishlistProvider>
         </CartProvider>
-      </ProductProvider>
+      </CategoryProvider>
+      {/* </ProductProvider> */}
 
       {/* Toast must be rendered once */}
       <ToastContainer

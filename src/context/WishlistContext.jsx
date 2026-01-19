@@ -5,6 +5,8 @@ import {
   deleteWishlistAPI,
 } from "../api/wishlist.api";
 import { showToast } from "../utils/toast";
+import { useAuth } from "./AuthContext";
+
 
 const WishlistContext = createContext();
 
@@ -12,7 +14,15 @@ export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(false);
 
+    const { isAuth } = useAuth();
+
   const fetchWishlist = async () => {
+
+    if(!isAuth){
+      setWishlist([]); // reset if not logged in
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await getWishlistAPI();
@@ -54,7 +64,7 @@ export const WishlistProvider = ({ children }) => {
 
   useEffect(() => {
     fetchWishlist();
-  }, []);
+  }, [isAuth]);
 
   return (
     <WishlistContext.Provider

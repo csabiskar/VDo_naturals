@@ -1,5 +1,6 @@
 import { useProducts } from "../context/ProductContext";
 import Breadcrumb from "./Breadcrumb";
+import Loader from "./Loader";
 import ProductCard from "./ProductCard";
 import { useState } from "react";
 
@@ -7,7 +8,7 @@ export default function ProductGrid() {
   const { products, totalCount, loading } = useProducts();
   const [currentPage, setCurrentPage] = useState(1);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>
 
   // Calculate total pages dynamically
   const itemsPerPage = 10; // match API limit if needed

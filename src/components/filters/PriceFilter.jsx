@@ -1,10 +1,16 @@
 import { memo, useState, useMemo, useCallback } from "react";
 import { IoIosArrowUp } from "react-icons/io";
+import { useProducts } from "../../context/ProductContext";
+
 
 const MIN_PRICE = 0;
 const MAX_PRICE = 1000;
 
 const PriceFilter = memo(() => {
+
+  //price filter
+  const { priceRange, setPriceFilter } = useProducts();
+
   const [price, setPrice] = useState([MIN_PRICE, MAX_PRICE]);
 
   const minSelected = useMemo(() => Math.min(price[0], price[1]), [price]);

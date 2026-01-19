@@ -1,78 +1,97 @@
 import React from "react";
-import Snacks from '../assets/snacks.png'
+import Noodles from "../assets/AllCategoryImg/Millet Noodles - MORINGA.png";
+import HealthySnacks from "../assets/AllCategoryImg/Millet Cookies_png.png";
+import Pongal from "../assets/AllCategoryImg/Instant Barnyard  Mix.png";
+import Sevai from "../assets/AllCategoryImg/Rice Seval.png";
+import Oil from "../assets/AllCategoryImg/Oil_New_2 2.png";
+import HerbalOil from "../assets/AllCategoryImg/Hair Oil Product image.png";
+import Pasta from "../assets/AllCategoryImg/Little Pasta.png";
 
 const categories = [
-  { id: 1, title: "Noodles", count: 8, img: Snacks },
-  { id: 2, title: "Rice & Flour Balls", count: 3, img: Snacks },
-  { id: 3, title: "Sevai (Vermicelli)", count: 4, img: Snacks },
-  { id: 4, title: "Healthy snacks & Red Rice Laddu", count: 2, img: Snacks },
-  { id: 5, title: "Cold Pressed Edible Oil", count: 4, img: Snacks },
-  { id: 6, title: "Herbal Hair Oil", count: 4, img: Snacks },
+  { id: 1, title: "Noodles", img: Noodles },
+  { id: 2, title: "Healthy snacks", img: HealthySnacks },
+  { id: 3, title: "Pongal", img: Pongal },
+  { id: 4, title: "Sevai", img: Sevai },
+  { id: 5, title: "Pasta", img: Pasta },
+  { id: 6, title: "Cold Pressed Edible Oil", img: Oil },
+  { id: 7, title: "Herbal Hair Oil", img: HerbalOil }
 ];
 
 export default function TopCategory() {
   return (
     <section className="py-12">
-      <div className="mx-20">
-        {/* Section title */}
-        <h2 className="mb-8 text-3xl font-extrabold text-gray-900">
-          Top Category
+      <div className="mx-4 sm:mx-8 lg:mx-20">
+        <h2 className="mb-8 text-[32px] font-semibold text-gray-900">
+          All Category
         </h2>
 
-        {/* Cards Row */}
-        <div className="flex gap-6">
+        {/* RESPONSIVE GRID */}
+        <div
+          className="
+            grid gap-4
+            grid-cols-2
+            sm:grid-cols-3
+            md:grid-cols-4
+            lg:grid-cols-5
+            xl:grid-cols-7
+          "
+        >
           {categories.map((item) => (
             <div
               key={item.id}
               className="
                 group
-                w-[171.81px] h-[247px]
-                flex-shrink-0
-                border border-gray-200
+                mt-2.5
+                w-[172px]
+                h-64
+                mx-auto
+                rounded
+                border border-[#EDEDED]
                 bg-white
                 transition-all duration-300 ease-out
-                hover:border-[#00B207]
+                hover:border-[#2C742F]
                 hover:rounded-sm
                 hover:shadow-[0_12px_30px_rgba(0,178,7,0.18)]
               "
             >
-              {/* Inner scaling wrapper (prevents layout jump) */}
               <div
                 className="
                   h-full
-                  flex flex-col items-center justify-between
+                  flex flex-col items-center
                   px-4 py-5
                   text-center
                   transition-transform duration-300 ease-out
                   group-hover:scale-[1.05]
                 "
               >
-                {/* Image */}
-                <div className="h-[120px] flex items-center justify-center">
+                {/* IMAGE CONTAINER */}
+                <div className="flex items-center justify-center h-[152px]">
                   <img
                     src={item.img}
                     alt={item.title}
-                    className="max-h-fit max-w-[96px] object-contain"
+                    className="
+                      object-cover
+                      w-40 h-[140px]
+                      sm:w-[171px] sm:h-[151px]
+                      lg:w-fit lg:h-[152px]
+                    "
                   />
                 </div>
 
-                {/* Title */}
+                {/* TITLE (MOVED UP) */}
                 <p
                   className="
-                    text-md
+                    mt-2
+                    text-[16px]
                     font-medium
+                    w-fit
                     text-gray-800
                     leading-tight
                     transition-colors duration-300
-                    group-hover:text-[#00B207]
+                    group-hover:text-[#2C742F]
                   "
                 >
                   {item.title}
-                </p>
-
-                {/* Product count */}
-                <p className="text-[13px] text-gray-400">
-                  {item.count} Products
                 </p>
               </div>
             </div>
