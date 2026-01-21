@@ -22,10 +22,11 @@ function Hero() {
           mx-4 sm:mx-8 lg:mx-20
           bg-[#EDF2EE]
           xl:h-[670px]
-          pb-[260px] sm:pb-[300px] lg:pb-[260px] xl:pb-[260px]
+          pb-[260px] sm:pb-[300px]
+          md:pb-[220px] lg:pb-[240px] xl:pb-[260px]
         "
       >
-        {/* DECORATIVE LEAVES (XL ONLY – NO CHANGE) */}
+        {/* XL DECORATIONS – UNTOUCHED */}
         <img
           src={Leaf1}
           alt=""
@@ -46,21 +47,22 @@ function Hero() {
         <div
           className="
             mx-auto max-w-7xl
-            flex flex-col lg:flex-row items-center
-            gap-8 sm:gap-10 lg:gap-12
+            flex flex-col lg:flex-row
+            items-center
+            gap-6 sm:gap-8 md:gap-6 lg:gap-12
             px-4 sm:px-6
-            pt-10 sm:pt-12 lg:pt-16 xl:pt-20
+            pt-10 sm:pt-12 md:pt-10 lg:pt-14 xl:pt-20
             xl:pl-16 xl:pr-9
           "
         >
-          {/* LEFT CONTENT */}
-          <div className="w-full lg:max-w-xl">
+          {/* LEFT */}
+          <div className="w-full lg:max-w-xl text-center lg:text-left xl:pl-2">
             <p
               className="
-                pt-8 xl:pt-11
-                px-1 py-1.5 xl:pl-2
+                pt-6 xl:pt-11
                 text-[11px] uppercase tracking-wider
                 text-[#00B207]
+                lg:text-left
               "
             >
               Welcome to Vdo Naturalss
@@ -68,109 +70,93 @@ function Hero() {
 
             <h1
               className="
-                mt-2 xl:pl-1
-                text-[34px] sm:text-[42px] lg:text-[56px] xl:text-[72px]
-                font-semibold leading-[1.1]
+                mt-2
+                text-[32px] sm:text-[40px]
+                md:text-[44px]
+                lg:text-[54px]
+                xl:text-[72px]
+                font-semibold leading-[1.15]
                 text-gray-900
               "
             >
-              <span className="block pl-2">Fresh, Healthy</span>
-              <span className="block mt-2 pl-2">
-                <span>Natural</span>
-                <span className="ml-4">Foods</span>
-              </span>
+              Fresh, Healthy <br />
+              Natural Foods
             </h1>
 
             <p
               className="
-                mt-6
-                text-[15px] sm:text-[18px] lg:text-[24px] xl:text-[32px]
-                xl:pl-4
+                mt-4
+                text-[15px] sm:text-[17px]
+                md:text-[18px]
+                lg:text-[22px]
+                xl:text-[32px]
                 text-gray-900
               "
             >
               Sale up to{" "}
               <span className="font-semibold text-[#f97416c3]">30% OFF</span>
-              <span className="block mt-2 text-[14px] font-light text-gray-500">
+              <span className="block mt-1 text-[14px] font-light text-gray-500">
                 We deliver, you enjoy!
               </span>
             </p>
           </div>
 
-          {/* RIGHT IMAGE */}
-          <div className="w-full flex justify-center mb-16 sm:mb-20 lg:mb-0">
+          {/* IMAGE – FLIPKART STYLE */}
+          <div className="w-full flex justify-center">
             <img
               src={HeroImg}
               alt="Product basket"
               className="
                 w-full
-                max-w-[320px] sm:max-w-[420px]
-                lg:max-w-[520px] xl:max-w-[560px]
+                max-w-[280px]
+                sm:max-w-[360px]
+                md:max-w-[380px]
+                lg:max-w-[460px]
+                xl:max-w-[560px]
               "
-              loading="eager"
             />
           </div>
         </div>
 
-        {/* FEATURE CARD (CONTROLLED OVERLAP) */}
+        {/* FEATURE CARD – CONTROLLED, ATTACHED */}
         <div
           className="
-            absolute
-            left-1/2 -translate-x-1/2
-            bottom-0
-            translate-y-[40%]
-            sm:translate-y-[45%]
-            lg:translate-y-[50%]
+            absolute left-1/2 -translate-x-1/2 bottom-0
+            translate-y-[42%]
+            sm:translate-y-[46%]
+            md:translate-y-[34%]
+            lg:translate-y-[40%]
+            xl:translate-y-[50%]
             w-full
-            max-w-[92%] sm:max-w-[560px] lg:max-w-[1204px]
+            max-w-[94%]
+            sm:max-w-[560px]
+            lg:max-w-[1204px]
           "
         >
-          <div
-            className="
-              bg-white rounded-lg shadow-lg
-              px-6 sm:px-8 lg:px-10
-              py-6 sm:py-8 lg:py-9
-            "
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              <Feature
-                icon={<MdOutlineMilitaryTech size={38} />}
-                title="Best Quality"
-                desc="Pure ingredients, homemade quality, for a healthier you!"
-              />
-              <Feature
-                icon={<FaTruck size={36} />}
-                title="Fast Delivery"
-                desc="Get the fastest product delivery to your doorstep"
-              />
-              <Feature
-                icon={<MdCreditScore size={32} />}
-                title="100% Secure Payment"
-                desc="We ensure your money is safe"
-              />
-              <Feature
-                icon={<MdOutlineMacroOff size={36} />}
-                title="No Preservative"
-                desc="Made without any added artificial or chemical preservatives."
-              />
+          <div className="bg-white rounded-xl shadow-lg px-6 sm:px-8 lg:px-10 py-6 sm:py-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+              <Feature icon={<MdOutlineMilitaryTech size={36} />} title="Best Quality" desc="Pure ingredients, homemade quality, for a healthier you!" />
+              <Feature icon={<FaTruck size={34} />} title="Fast Delivery" desc="Get the fastest product delivery to your doorstep" />
+              <Feature icon={<MdCreditScore size={30} />} title="100% Secure Payment" desc="We ensure your money is safe" />
+              <Feature icon={<MdOutlineMacroOff size={34} />} title="No Preservative" desc="Made without any added artificial or chemical preservatives." />
             </div>
           </div>
         </div>
       </div>
 
-      {/* OVERLAP SPACER (NO OVERFLOW-HIDDEN) */}
-      <div className="h-[180px] sm:h-[220px] lg:h-[180px]" />
+      {/* SPACER */}
+      <div className="h-[160px] sm:h-[200px] md:h-[180px] lg:h-[170px]" />
     </section>
   );
 }
 
 function Feature({ icon, title, desc }) {
   return (
-    <div className="flex items-start gap-3.5">
-      <div className="text-[#00B207] shrink-0">{icon}</div>
+    <div className="flex items-start gap-3">
+      <div className="text-[#00B207]">{icon}</div>
       <div>
-        <p className="font-semibold text-[16px] text-gray-900">{title}</p>
-        <p className="mt-1 text-sm font-light text-[#999999] max-w-[200px]">
+        <p className="font-semibold text-[15px]">{title}</p>
+        <p className="text-sm text-[#999999] mt-1 font-light leading-snug">
           {desc}
         </p>
       </div>
