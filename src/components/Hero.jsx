@@ -1,152 +1,180 @@
 import React from "react";
 import HeroImg from "../assets/Img.png";
-import Design from "../assets/Vector.png";
 import Leaf1 from "../assets/heroleaf1.png";
-import Leaf2 from "../assets/leaf2.png";
+import Leaf2 from "../assets/Top.png";
 import Leaf3 from "../assets/leaf3.png";
+
 import { FaTruck } from "react-icons/fa";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { MdOutlineMilitaryTech } from "react-icons/md";
-import { MdCreditScore } from "react-icons/md";
-import { MdOutlineMacroOff } from "react-icons/md";
-import { Link } from "react-router-dom";
+import {
+  MdOutlineMilitaryTech,
+  MdCreditScore,
+  MdOutlineMacroOff,
+} from "react-icons/md";
 
 function Hero() {
   return (
-    <section className="bg-white pt-4 pb-16 relative">
-      {/* Pale hero container */}
-      <div className="mx-20 relative h-[620px]  bg-[#EDF2EE] pb-24 overflow-visible">
-        {/* Main content */}
-        <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-10 lg:flex-row lg:items-center lg:py-[102px]">
-          {/* Left section */}
-          <div className="max-w-xl">
-            <p className="inline-block px-1 py-1 text-xs font-semibold leading-8 uppercase tracking text-[#00B207]">
+    <section className="relative bg-white pt-4">
+
+      {/* HERO CONTAINER */}
+      <div
+        className="
+          relative
+          mx-4 sm:mx-8 lg:mx-20
+          bg-[#EDF2EE]
+          xl:h-[670px]
+          pb-[260px] sm:pb-[300px] lg:pb-[260px] xl:pb-[260px]
+        "
+      >
+        {/* DECORATIVE LEAVES (XL ONLY – NO CHANGE) */}
+        <img
+          src={Leaf1}
+          alt=""
+          className="absolute -top-0.5 left-4.5 w-16 xl:w-[65px] hidden xl:block pointer-events-none"
+        />
+        <img
+          src={Leaf2}
+          alt=""
+          className="absolute bottom-20 right-14 w-14 xl:w-28 hidden xl:block pointer-events-none"
+        />
+        <img
+          src={Leaf3}
+          alt=""
+          className="absolute bottom-[104px] left-80 w-16 xl:w-14 hidden xl:block pointer-events-none"
+        />
+
+        {/* MAIN CONTENT */}
+        <div
+          className="
+            mx-auto max-w-7xl
+            flex flex-col lg:flex-row items-center
+            gap-8 sm:gap-10 lg:gap-12
+            px-4 sm:px-6
+            pt-10 sm:pt-12 lg:pt-16 xl:pt-20
+            xl:pl-16 xl:pr-9
+          "
+        >
+          {/* LEFT CONTENT */}
+          <div className="w-full lg:max-w-xl">
+            <p
+              className="
+                pt-8 xl:pt-11
+                px-1 py-1.5 xl:pl-2
+                text-[11px] uppercase tracking-wider
+                text-[#00B207]
+              "
+            >
               Welcome to Vdo Naturalss
             </p>
 
-            {/* Heading */}
-            <h1 className="relative z-10 text-[60px] font-bold leading-14 text-gray-900">
-              Fresh, Healthy
-              <span className="block mt-3">
-                {/* Natural with centered design */}
-                <span className="relative inline-flex items-center">
-                  {/* <img
-                    src={Design}
-                    alt="outline"
-                    className="pointer-events-none absolute left-1/2 -top-8 -translate-x-1/2 z-0 w-[360px] h-[126px] object-contain"
-                    style={{ transform: "skewY(1deg)" }}
-                  /> */}
-                  <span className="relative z-10 inline-block px-2 py-1 -skew-y-1">
-                    Natural
-                  </span>
-                </span>
-
-                <span className="ml-6">Foods</span>
+            <h1
+              className="
+                mt-2 xl:pl-1
+                text-[34px] sm:text-[42px] lg:text-[56px] xl:text-[72px]
+                font-semibold leading-[1.1]
+                text-gray-900
+              "
+            >
+              <span className="block pl-2">Fresh, Healthy</span>
+              <span className="block mt-2 pl-2">
+                <span>Natural</span>
+                <span className="ml-4">Foods</span>
               </span>
             </h1>
 
-            <p className="mt-2 text-sm text-gray-600 lg:text-[26.6px]">
+            <p
+              className="
+                mt-6
+                text-[15px] sm:text-[18px] lg:text-[24px] xl:text-[32px]
+                xl:pl-4
+                text-gray-900
+              "
+            >
               Sale up to{" "}
-              <span className="font-semibold text-[#f97316]">30% OFF</span>
-              <span className="mt-2 block text-xs text-gray-500">
-                Free shipping on all your order. we deliver, you enjoy
+              <span className="font-semibold text-[#f97416c3]">30% OFF</span>
+              <span className="block mt-2 text-[14px] font-light text-gray-500">
+                We deliver, you enjoy!
               </span>
             </p>
-
-            {/* Button */}
-            <div className="pt-3">
-              <Link to='/shoppingcart' className="flex h-[42px] w-40 items-center justify-center gap-2 rounded-full bg-[#00B207] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#0f8a11]">
-                Shop now
-                <IoIosArrowRoundForward size={20} />
-              </Link>
-            </div>
           </div>
 
-          {/* Right image */}
-          <div className="flex flex-1 items-center justify-center">
-            <div className="relative w-full max-w-[779px]">
-              <img
-                src={HeroImg}
-                alt="Product basket"
-                className="h-[400px] w-full object-cover"
+          {/* RIGHT IMAGE */}
+          <div className="w-full flex justify-center mb-16 sm:mb-20 lg:mb-0">
+            <img
+              src={HeroImg}
+              alt="Product basket"
+              className="
+                w-full
+                max-w-[320px] sm:max-w-[420px]
+                lg:max-w-[520px] xl:max-w-[560px]
+              "
+              loading="eager"
+            />
+          </div>
+        </div>
+
+        {/* FEATURE CARD (CONTROLLED OVERLAP) */}
+        <div
+          className="
+            absolute
+            left-1/2 -translate-x-1/2
+            bottom-0
+            translate-y-[40%]
+            sm:translate-y-[45%]
+            lg:translate-y-[50%]
+            w-full
+            max-w-[92%] sm:max-w-[560px] lg:max-w-[1204px]
+          "
+        >
+          <div
+            className="
+              bg-white rounded-lg shadow-lg
+              px-6 sm:px-8 lg:px-10
+              py-6 sm:py-8 lg:py-9
+            "
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <Feature
+                icon={<MdOutlineMilitaryTech size={38} />}
+                title="Best Quality"
+                desc="Pure ingredients, homemade quality, for a healthier you!"
+              />
+              <Feature
+                icon={<FaTruck size={36} />}
+                title="Fast Delivery"
+                desc="Get the fastest product delivery to your doorstep"
+              />
+              <Feature
+                icon={<MdCreditScore size={32} />}
+                title="100% Secure Payment"
+                desc="We ensure your money is safe"
+              />
+              <Feature
+                icon={<MdOutlineMacroOff size={36} />}
+                title="No Preservative"
+                desc="Made without any added artificial or chemical preservatives."
               />
             </div>
           </div>
         </div>
-
-        {/* Floating features container */}
-        <div className="mx-auto max-w-[1204px] relative -mt-14">
-          <div
-            className="mx-auto rounded-[7.53px] bg-white shadow-lg"
-            style={{
-              width: "1204px",
-              height: "140px",
-            }}
-          >
-            {/* Use grid with four columns, vertically centered */}
-            <div className="grid h-full grid-cols-1 items-center gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4">
-              {/* Feature 1 */}
-              <div className="flex items-start gap-4">
-                {/* icon (no background) — set to ~38x38 */}
-                <MdOutlineMilitaryTech
-                  className="text-[#00B207]"
-                  size={37}
-                />
-                <div className="max-w-[340px]">
-                  <p className="font-semibold text-gray-900">Best Quality</p>
-                  <p className="text-sm text-[#999999] mt-1">
-                    Pure ingredients, homemade quality, for a healthier you!
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 2 */}
-              <div className="flex items-start gap-4">
-                <FaTruck
-                  className="text-[#00B207]"
-                  size={37}
-                />
-                <div className="max-w-[340px]">
-                  <p className="font-semibold text-gray-900">Fast Delivery</p>
-                  <p className="text-sm text-[#999999] mt-1">
-                    Get the fastest product delivery to your doorstep
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="flex items-start gap-4">
-                <MdCreditScore size={28}
-                  className="text-[#00B207]"
-                />
-                <div className="max-w-[340px]">
-                  <p className="font-semibold text-gray-900">
-                    100% Secure Payment
-                  </p>
-                  <p className="text-sm text-[#999999] mt-1">
-                    We ensure your money is safe
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 4 */}
-              <div className="flex items-start gap-4">
-                <MdOutlineMacroOff
-                  className="text-[#00B207]"
-                 size={37}
-                />
-                <div className="max-w-[340px]">
-                  <p className="font-semibold text-gray-900">No Preservative</p>
-                  <p className="text-sm text-[#999999] mt-1">
-                    Made without any added artificial or chemical preservatives.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+
+      {/* OVERLAP SPACER (NO OVERFLOW-HIDDEN) */}
+      <div className="h-[180px] sm:h-[220px] lg:h-[180px]" />
     </section>
+  );
+}
+
+function Feature({ icon, title, desc }) {
+  return (
+    <div className="flex items-start gap-3.5">
+      <div className="text-[#00B207] shrink-0">{icon}</div>
+      <div>
+        <p className="font-semibold text-[16px] text-gray-900">{title}</p>
+        <p className="mt-1 text-sm font-light text-[#999999] max-w-[200px]">
+          {desc}
+        </p>
+      </div>
+    </div>
   );
 }
 

@@ -7,7 +7,7 @@ import PromoBanners from "../components/PromoBanners";
 import Testimonials from "../components/Testimonials";
 import HeroBanner from "../components/HeroBanner";
 import FeaturedProducts from "../components/FeaturedProducts";
-
+import Blog from '../components/Blog'
 function Home() {
   return (
     <>
@@ -16,10 +16,11 @@ function Home() {
       {/* <BestSeller /> */}
       <TopCategory />
       <HotDeals />
-      <WhyNaturals />
-      <PromoBanners />
+      {/* <WhyNaturals /> */}
+      {/* <PromoBanners /> */}
       <Testimonials />
       <HeroBanner />
+      <Blog/>
     </>
   );
 }

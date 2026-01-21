@@ -47,7 +47,7 @@ export default function Testimonials() {
       <div className="mx-7 max-w-7xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-[32px] font-semibold text-gray-900">
+          <h2 className="text-[24px] sm:text-[28px] lg:text-[32px] font-semibold text-gray-900">
             Client Testimonials
           </h2>
 

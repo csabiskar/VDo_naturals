@@ -21,7 +21,7 @@ export default function TopCategory() {
   return (
     <section className="py-12">
       <div className="mx-4 sm:mx-8 lg:mx-20">
-        <h2 className="mb-8 text-[32px] font-semibold text-gray-900">
+        <h2 className="mb-8 text-[24px] sm:text-[28px] lg:text-[32px] font-semibold text-gray-900">
           All Category
         </h2>
 
