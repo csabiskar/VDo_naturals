@@ -27,7 +27,7 @@ export const CartProvider = ({ children }) => {
         quantity: payload.quantity,
         ...(payload.hasVariants ? { variantSku: payload.variantSku } : {}),
       });
-      showToast("Product added to cart successfully.", "success");
+      // showToast("Product added to cart successfully.", "success");
 
       loadCart(); // refresh cart
     } catch (err) {

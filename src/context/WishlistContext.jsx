@@ -46,7 +46,9 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  const removeFromWishlist = async ({ productId }) => {
+  const removeFromWishlist = async ( productId ) => {
+
+    console.log(productId)
     try {
       if (!productId || typeof productId !== "string") {
         console.error("Invalid productId for wishlist removal", productId);

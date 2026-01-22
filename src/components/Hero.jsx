@@ -23,7 +23,7 @@ function Hero() {
           bg-[#EDF2EE]
           xl:h-[670px]
           pb-[260px] sm:pb-[300px]
-          md:pb-[220px] lg:pb-[240px] xl:pb-[260px]
+          md:pb-[220px] lg:pb-60 xl:pb-[260px]
         "
       >
         {/* XL DECORATIONS – UNTOUCHED */}
@@ -121,7 +121,7 @@ function Hero() {
         {/* FEATURE CARD – CONTROLLED, ATTACHED */}
         <div
           className="
-            absolute left-1/2 -translate-x-1/2 bottom-0
+            absolute left-1/2 -translate-x-1/2 bottom-2
             translate-y-[42%]
             sm:translate-y-[46%]
             md:translate-y-[34%]
@@ -145,7 +145,7 @@ function Hero() {
       </div>
 
       {/* SPACER */}
-      <div className="h-[160px] sm:h-[200px] md:h-[180px] lg:h-[170px]" />
+      <div className="h-40 sm:h-[200px] md:h-[180px] lg:h-[170px]" />
     </section>
   );
 }
@@ -156,7 +156,7 @@ function Feature({ icon, title, desc }) {
       <div className="text-[#00B207]">{icon}</div>
       <div>
         <p className="font-semibold text-[15px]">{title}</p>
-        <p className="text-sm text-[#999999] mt-1 font-light leading-snug">
+        <p className="text-sm text-[#999999] mt-1 font-light max-w-[200px] leading-snug">
           {desc}
         </p>
       </div>

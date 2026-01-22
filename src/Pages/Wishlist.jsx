@@ -246,6 +246,7 @@ export default function Wishlist() {
         </div>
 
         {wishlist.map((item, index) => {
+          console.log(item)
           const isInStock = item.stock > 0;
           return (
             <div key={index}>

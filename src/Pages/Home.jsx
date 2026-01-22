@@ -16,7 +16,7 @@ function Home() {
       {/* <BestSeller /> */}
       <TopCategory />
       <HotDeals />
-      {/* <WhyNaturals /> */}
+      <WhyNaturals />
       {/* <PromoBanners /> */}
       <Testimonials />
       <HeroBanner />

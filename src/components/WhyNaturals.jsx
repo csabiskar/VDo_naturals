@@ -2,100 +2,80 @@
 import React from "react";
 
 /* Assets — filename must match EXACTLY */
-import whyNaturalsBg from "../assets/WhyNaturalsBg.png";
 import sampleVideo from "../assets/sample-video.mp4";
-
-/* Icons */
-import { FaLeaf, FaShieldAlt } from "react-icons/fa";
-import { HiOutlineCurrencyRupee } from "react-icons/hi";
-import { MdVerified, MdFoodBank } from "react-icons/md";
+import leftImg from "../assets/whynaturalsImg/imageL.png";
+import rightImg from "../assets/whynaturalsImg/imageR.png";
+import Heart from "../assets/whynaturalsImg/heart.png";
+import sweat from "../assets/whynaturalsImg/sweat.png";
+import { IoMdCheckmark } from "react-icons/io";
 
 export default function WhyNaturals() {
   return (
-    <section
-      className="relative bg-[#EDF2EE] font-poppins"
-      style={{
-        width: "1440px",
-        height: "1216px",
-        margin: "0 auto",
-      }}
-    >
-      {/* Background image */}
+    <section className="relative bg-[#EDF2EE] font-poppins min-w-screen min-h-screen xl:h-[993px]">
+      {/* XL DECORATIONS — NO CHANGE */}
       <img
-        src={whyNaturalsBg}
-        alt="Why Vdo Naturals background"
-        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+        src={leftImg}
+        alt=""
+        className="absolute top-0 left-0 w-16 xl:w-72 md:w-40 hidden md:block xl:block pointer-events-none"
       />
-
+      <img
+        src={rightImg}
+        alt=""
+        className="absolute top-0 right-0 w-14 xl:w-72 md:w-40 hidden md:block xl:block pointer-events-none"
+      />
+      <img
+        src={Heart}
+        alt=""
+        className="absolute -bottom-0.5 left-0 w-16 xl:w-[258px]  hidden xl:block pointer-events-none"
+      />
+      <img
+        src={sweat}
+        alt=""
+        className="absolute top-60 right-[450px] w-16 xl:w-36 hidden  xl:block pointer-events-none"
+      />
       {/* Content */}
-      <div className="relative z-10 mx-12 h-full max-w-7xl px-8 pt-12">
+      <div className="relative z-10 h-full px-8 pt-12">
         {/* Title */}
-        <h2 className="text-3xl font-semibold text-[#0f1720]">
-          Why Vdo Naturals?
+        <h2 className="text-[32px] font-semibold text-center text-[#0f1720] xl:mt-7 md:pl-14">
+          <span className="niconne text-[40px]"> Why</span> Vdo Naturalss?
         </h2>
 
-        {/* Video Section */}
-        <div className="mt-48 flex justify-center">
-          <div
-            className="rounded-xl border-2 border-white bg-transparent p-1 shadow-sm"
-            style={{ width: "560px", height: "320px" }}
-          >
-            <video
-              controls
-              className="h-full w-full rounded-lg object-cover"
-            >
-              <source src={sampleVideo} type="video/mp4" />
-            </video>
-          </div>
-        </div>
+        {/* TEXT + VIDEO (MOVED DOWN SAFELY) */}
+        <div className="mt-12 md:mt-24 xl:mt-[300px] flex flex-col-reverse md:flex-row w-full">
+          {/* TEXT LIST */}
+          <div className="flex flex-col items-left gap-6 md:ml-12 md:pr-8 xl:mt-1 mr-4 mt-8">
+            {[
+              "Best Value for Money",
+              "Healthy products in a tasty way",
+              "Finest Quality & Wide range of Cold-Pressed Oils",
+              "100% natural, cold-pressed oils with no chemicals or preservatives",
+              "Carefully sourced ingredients and strict quality checks for every batch",
+            ].map((text, i) => (
+              <div key={i} className="flex items-center gap-5 mb-3">
+                {/* CHECK ICON */}
+                <div className="size-6 bg-[#00B207] rounded-full flex items-center  justify-center shrink-0">
+                  <IoMdCheckmark className="text-white text-sm" />
+                </div>
 
-        {/* Pills */}
-        <div className="mt-48 flex flex-col items-center gap-10">
-          {/* Row 1 */}
-          <div className="flex w-full justify-between px-6">
-            <Pill
-              icon={<HiOutlineCurrencyRupee size={20} />}
-              text="Economical Pricing"
-            />
-            <Pill
-              icon={<MdVerified size={20} />}
-              text="Carefully sourced ingredients and strict quality checks for every batch."
-            />
-            <Pill
-              icon={<FaShieldAlt size={18} />}
-              text="Homemade & Safety Assurance"
-            />
+                {/* TEXT */}
+                <p className="md:text-[20px] text-sm font-light">{text}</p>
+              </div>
+            ))}
           </div>
 
-          {/* Row 2 */}
-          <div className="flex justify-center gap-6">
-            <Pill
-              icon={<MdFoodBank size={20} />}
-              text="Finest Quality & Wide range of Cold-Pressed Oils"
-              wide
-            />
-            <Pill
-              icon={<FaLeaf size={20} />}
-              text="100% natural, cold-pressed oils with no chemicals or preservatives."
-              wide
-            />
+          {/* VIDEO */}
+          <div className="flex justify-center">
+            <div className="rounded-[28px] border-[5px] border-black/20 bg-transparent p-1 shadow-sm xl:w-[540px] xl:h-[360px]">
+              <video
+                controls
+                className="h-full w-full rounded-2xl object-cover xl:w-[540px] xl:h-[340px]"
+              >
+                <source src={sampleVideo} type="video/mp4" />
+              </video>
+            </div>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-/* Pill component */
-function Pill({ icon, text, wide = false }) {
-  return (
-    <div
-      className={`flex items-center gap-4 rounded-lg bg-white px-5 py-4 shadow-sm ${
-        wide ? "w-[420px]" : "w-[360px]"
-      }`}
-    >
-      <span className="text-[#00B207]">{icon}</span>
-      <p className="text-sm font-medium text-[#0f1720]">{text}</p>
-    </div>
   );
 }

@@ -43,7 +43,7 @@ export default function Testimonials() {
   const nextRef = useRef(null);
 
   return (
-    <section className="w-full px-6 lg:px-14 py-14">
+    <section className="w-full px-0.5 md:px-6 lg:px-14 py-14">
       <div className="mx-7 max-w-7xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">

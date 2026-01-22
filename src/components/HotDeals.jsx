@@ -70,7 +70,7 @@ export default function HotDeals() {
   if (loading || !featuredProduct || !featuredVariant) return null;
 
   return (
-    <section className="w-full px-4 sm:px-6 xl:px-8 py-10">
+    <section className="w-full px-4 sm:px-6 xl:px-8 pt-10 pb-28">
       <div className="max-w-full mx-4 sm:mx-8 lg:mx-12">
         {/* TITLE */}
         <h2 className="text-[32px] font-semibold  text-gray-900 mb-8 ">

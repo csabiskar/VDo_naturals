@@ -3,11 +3,12 @@ import { USER_MENU_ITEMS } from "./userMenu.config";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-export default function UserMenu() {
+export default function UserMenu({onClose}) {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
   const handleAction = (action) => {
+    
     switch (action) {
       case "profile":
         navigate("/profile");
@@ -19,7 +20,9 @@ export default function UserMenu() {
         navigate("/wishlist");
         break;
       case "logout":
+        onClose?.(); 
         logout();
+        navigate('/login')
         break;
       default:
         break;
@@ -34,7 +37,7 @@ export default function UserMenu() {
         bg-white shadow-lg rounded-xl
 
         /* Figma exact */
-        w-[214px] h-[228px]
+        w-[214px] h-[228px] 
 
         /* Tablet */
         sm:w-[214px] sm:h-[228px]
