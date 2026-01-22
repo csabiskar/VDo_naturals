@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { AiOutlineHeart } from "react-icons/ai";
 
-
 import {
   FiMenu,
   FiX,
@@ -26,16 +25,17 @@ import {
 import logo from "../assets/Newlogo.png";
 import { useWishlist } from "../context/WishlistContext";
 import UserMenu from "./UserMenu/UserMenu";
+import CategoriesDropdown from "./CategoriesDropdown";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [animate, setAnimate] = useState(false);
+  const [categoriesDropdown, setCategoriesDropdown] = useState(false);
 
   const { user, isAuth, logout } = useAuth();
   const { cartData } = useContext(CartContext);
   const { wishlist } = useWishlist();
-
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -46,6 +46,7 @@ export default function Navbar() {
   const isWishlistPage = location.pathname === "/wishlist";
 
   const dropdownRef = useRef(null);
+  const categoriesRef = useRef(null);
 
   /* ---------------- CART BADGE ANIMATION ---------------- */
   useEffect(() => {
@@ -62,17 +63,21 @@ export default function Navbar() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdown(false);
       }
+
+      if (categoriesRef.current && !categoriesRef.current.contains(e.target)) {
+        setCategoriesDropdown(false);
+      }
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () =>
+      document.removeEventListener("pointerdown", handleClickOutside);
   }, []);
 
   useEffect(() => {
-  // Close dropdown on logout / login / route change
-  setDropdown(false);
-}, [isAuth, location.pathname]);
-
+    // Close dropdown on logout / login / route change
+    setDropdown(false);
+  }, [isAuth, location.pathname]);
 
   const closeMenu = () => setOpen(false);
 
@@ -81,7 +86,6 @@ export default function Navbar() {
       {/* ================= TOP NAVBAR ================= */}
       <header className="w-full border-b border-[#E6E6E6] relative z-50 bg-white">
         <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-20 2xl:px-24 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 p-3 md:h-[104px]">
-          
           {/* Logo */}
           <Link to="/" aria-label="Go to home">
             <img
@@ -106,41 +110,30 @@ export default function Navbar() {
 
           {/* ================= RIGHT ACTIONS ================= */}
           <div className="flex items-center gap-4 justify-self-end z-50">
-
             {/* PROFILE (ALL SCREENS – UI UNCHANGED) */}
             {isAuth && (
               <>
-                <div
-                  ref={dropdownRef}
-                  onClick={() => setDropdown(!dropdown)}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <MdOutlineAccountCircle size={28} className="lg:size-[33px]" />
+                <div ref={dropdownRef} className="relative">
+                  <div
+                    onClick={() => setDropdown((p) => !p)}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <MdOutlineAccountCircle size={28} />
+                    <span className="hidden lg:block text-sm font-medium ">
+                      {user?.contact || "User"}
+                    </span>
+                    <FaChevronDown size={16} className="hidden lg:block" />
+                  </div>
 
-                  {/* Name only on desktop */}
-                  <span className="hidden lg:block text-sm font-medium max-w-[100px] truncate">
-                    {user?.name || "User"}
-                  </span>
-
-                  {/* Arrow only on desktop */}
-                  <FaChevronDown size={16} className="hidden lg:block" />
+                  {dropdown && (
+                    <div className="absolute -right-28 mt-3 z-50 shadow-2xl">
+                      <UserMenu onClose={() => setDropdown(false)} />
+                    </div>
+                  )}
                 </div>
 
                 <span className="hidden lg:block h-6 w-px bg-[#D9D9D9]" />
               </>
-            )}
-
-            {/* PROFILE DROPDOWN */}
-            {dropdown && (
-              <div
-                className="
-                  absolute right-14 top-8/12 mt-3 z-50
-                  max-sm:fixed max-sm:inset-x-4 max-sm:top-20
-                  shadow-2xl
-                "
-              >
-                <UserMenu onClose={() => setDropdown(false)}/>
-              </div>
             )}
 
             {/* CART */}
@@ -171,7 +164,6 @@ export default function Navbar() {
                 Log In
               </Link>
             )}
-
             {/* MOBILE MENU TOGGLE */}
             <button
               className="lg:hidden w-10 h-10"
@@ -221,12 +213,18 @@ export default function Navbar() {
 
               {!isAuth ? (
                 <>
-                  <Link to="/signup" onClick={closeMenu}
-                    className="h-[46px] bg-[#00B207] text-white rounded-md flex items-center justify-center">
+                  <Link
+                    to="/signup"
+                    onClick={closeMenu}
+                    className="h-[46px] bg-[#00B207] text-white rounded-md flex items-center justify-center"
+                  >
                     Sign Up
                   </Link>
-                  <Link to="/login" onClick={closeMenu}
-                    className="h-[46px] border rounded-md flex items-center justify-center">
+                  <Link
+                    to="/login"
+                    onClick={closeMenu}
+                    className="h-[46px] border rounded-md flex items-center justify-center"
+                  >
                     Log In
                   </Link>
                 </>
@@ -250,12 +248,32 @@ export default function Navbar() {
       <div className="hidden lg:block w-full bg-[#333333]">
         <nav className="max-w-[1760px] mx-auto px-10 xl:px-20 h-[55px] flex justify-between items-center text-sm">
           <div className="flex gap-8 text-[#999999]">
-            <NavLink to="/" className="hover:text-white">Home</NavLink>
-            <span className="flex items-center gap-1 hover:text-white">
-              Shop all <IoIosArrowDown size={16} />
-            </span>
-            <NavLink to="/blog" className="hover:text-white">Blogs</NavLink>
-            <NavLink to="/contact" className="hover:text-white">Contact Us</NavLink>
+            <NavLink to="/" className="hover:text-white">
+              Home
+            </NavLink>
+            <div ref={categoriesRef} className="relative">
+              <span
+                className="flex items-center gap-1 hover:text-white cursor-pointer"
+                onClick={() => setCategoriesDropdown((p) => !p)}
+              >
+                Shop all <IoIosArrowDown size={16} />
+              </span>
+
+              {categoriesDropdown && (
+                <div className="absolute left-0 top-full mt-3 z-50 shadow-2xl">
+                  <CategoriesDropdown
+                    onClose={() => setCategoriesDropdown(false)}
+                  />
+                </div>
+              )}
+            </div>
+
+            <NavLink to="/blog" className="hover:text-white">
+              Blogs
+            </NavLink>
+            <NavLink to="/contact" className="hover:text-white">
+              Contact Us
+            </NavLink>
           </div>
 
           <div className="flex items-center gap-2 text-white">

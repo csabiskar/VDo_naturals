@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import InputField from "../components/InputField";
 import SelectInputs from "../components/SelectInputs";
 import cookie from "../assets/Cookies.png";
 import HairOil from "../assets/HairOil.png";
+import { CartContext } from "../context/CartContext";
+import { placeOrder } from "../api/order.api";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Checkout() {
+
+  // cart data 
+
+    const {cartData,loading}=useContext(CartContext)
+
+  console.log(cartData)
+
+
+const navigate = useNavigate()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -20,25 +33,9 @@ export default function Checkout() {
 
   const [errors, setErrors] = useState({});
 
-  const products = [
-    {
-      id: 1,
-      name: "Dia Caare Millet Cookies",
-      qty: 2,
-      price: 15,
-      image: cookie,
-    },
-    {
-      id: 2,
-      name: "Herbal Hair Oil",
-      qty: 1,
-      price: 42,
-      image: HairOil,
-    },
-  ];
 
-  const subtotal = products.reduce(
-    (sum, item) => sum + item.qty * item.price,
+  const subtotal = cartData?.items?.reduce(
+    (sum, item) => sum + item.quantity * item.price,
     0
   );
 
@@ -66,13 +63,40 @@ export default function Checkout() {
     setErrors(temp);
     return Object.keys(temp).length === 0;
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validate()) return;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validate()) return;
-    console.log("ORDER DATA", { formData, products, subtotal });
-    alert("Order placed successfully");
+  const payload = {
+    shippingAddress: {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      streetAddress: formData.address,
+      country: formData.country,
+      state: formData.state,
+      zipCode: "638051", // 🔹 optional / hardcoded for now
+      email: formData.email,
+      phone: formData.phone,
+    },
+    notes: formData.notes,
   };
+
+  try {
+    console.log("ORDER PAYLOAD 👉", payload);
+
+    const res = await placeOrder(payload);
+
+    console.log("ORDER RESPONSE ✅", res);
+    alert("Order placed successfully 🎉");
+
+    // optional redirect
+     navigate("/");
+
+  } catch (err) {
+    console.error(err);
+    alert(err?.response?.data?.message || "Order failed");
+  }
+};
 
   return (
     <form
@@ -207,26 +231,26 @@ export default function Checkout() {
 
             {/* Products */}
             <div className="space-y-5  mb-6">
-              {products.map((item) => (
+              {cartData?.items?.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.productId}
                   className="flex items-center justify-between text-sm"
                 >
                   <div className="flex items-center gap-3">
                     <img
-                      src={item.image}
-                      alt={item.name}
+                      src={cookie}
+                      alt={item.productName}
                       className="w-20 h-16 object-contain"
                     />
                     <div>
-                      <p className="font-normal text-[16px] text-gray-600 xl:w-40">{item.name}</p>
+                      <p className="font-normal text-[16px] text-gray-600 xl:w-40">{item.productName}</p>
                     </div>
                     <div className="pr-2.5 lg:pr-12">
-                         <p className="text-gray-900">x{item.qty}</p>
+                         <p className="text-gray-900">x{item.quantity}</p>
                     </div>
                   </div>
                   <span className="font-medium">
-                    ₹{item.qty * item.price}.00
+                    ₹{item.quantity * item.price}.00
                   </span>
                 </div>
               ))}

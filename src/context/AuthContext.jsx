@@ -6,24 +6,41 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // 🔁 Restore auth on refresh
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) setUser({ name: "User" });
+    const contact = localStorage.getItem("contact");
+
+    if (token && contact) {
+      setUser({ token, contact });
+    }
+
     setLoading(false);
   }, []);
 
-  const login = (token) => {
+  const login = (token, contact) => {
     localStorage.setItem("token", token);
-    setUser({ name: "User" });
+    localStorage.setItem("contact", contact);
+
+    setUser({ token, contact });
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("contact");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuth: !!user, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuth: !!user,
+        login,
+        logout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

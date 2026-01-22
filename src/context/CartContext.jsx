@@ -102,6 +102,8 @@ export const CartProvider = ({ children }) => {
     loadCart();
   }, [isAuth]);
 
+  console.log(cartData)
+
   return (
     <CartContext.Provider
       value={{

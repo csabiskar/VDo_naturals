@@ -1,28 +1,24 @@
-const mockDB = new Map();
+import API from "./api";
 
-const delay = (ms = 800) =>
-  new Promise((res) => setTimeout(res, ms));
+/* SEND OTP */
+export const sendOTP = async (contact) => {
+  console.log("SEND OTP CLICKED:", contact); // ✅ DEBUG
 
-export const sendOtpAPI = async ({ contact }) => {
-  await delay();
+  const response = await API.post("/auth/easy-login", {
+    emailOrPhone: contact,
+  });
 
-  const otp = "123456"; // dev only
-  console.log("OTP SENT:", otp);
-
-  mockDB.set(contact, { otp });
-
-  return { success: true };
+  return response.data;
 };
 
-export const verifyOtpAPI = async ({ contact, otp }) => {
-  await delay();
+/* VERIFY OTP */
+export const verifyOTP = async ({ contact, otp }) => {
+  console.log("VERIFY OTP:", contact, otp);
 
-  const record = mockDB.get(contact);
+  const response = await API.post("/auth/verify-otp", {
+    emailOrPhone: contact,
+    otp,
+  });
 
-  if (!record) throw new Error("User not found");
-  if (record.otp !== otp) throw new Error("Invalid OTP");
-
-  return {
-    token: "mock_token_" + Date.now(),
-  };
+  return response.data; // { token, user }
 };

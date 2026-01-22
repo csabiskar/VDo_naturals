@@ -95,7 +95,7 @@ export default function Login() {
         otp,
       });
     showToast("Login successful!", "success");
-      login(res.token); // ✅ context handles localStorage
+      login(res.token,contact); // ✅ context handles localStorage
       navigate("/", { replace: true });
     } catch (err) {
       setError(err.message || "Invalid OTP");

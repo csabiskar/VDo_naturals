@@ -11,18 +11,18 @@ import ProtectedRoute from "./ProtectedRoute";
 import ProductPage from "../Pages/ProductPage";
 import { ProductProvider } from "../context/ProductContext";
 import { CategoryProvider } from "../context/CategoryContext";
-
+import CategoriesDropdown from "../components/CategoriesDropdown";
 
 export const appRouter = createBrowserRouter([
   {
     path: "/",
-    element:
-    <CategoryProvider>
-  <ProductProvider>
-    <MainLayout />
-  </ProductProvider>
-</CategoryProvider>
-,
+    element: (
+      <ProductProvider>
+        <CategoryProvider>
+          <MainLayout />
+        </CategoryProvider>
+      </ProductProvider>
+    ),
     errorElement: <Error />,
     children: [
       { index: true, element: <Home /> },
@@ -42,4 +42,11 @@ export const appRouter = createBrowserRouter([
 
   { path: "login", element: <Auth /> },
   { path: "signup", element: <Auth /> },
+  { path: "test", element: 
+  
+  <ProductProvider>
+    <CategoryProvider>
+      <CategoriesDropdown />
+    </CategoryProvider>
+    </ProductProvider> },
 ]);
