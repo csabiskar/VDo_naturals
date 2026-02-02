@@ -3,7 +3,7 @@ import LoaderGif from '../assets/loader.gif'
 
 export default function Loader({ text = "Loading categories..." }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16">
+    <div className="flex flex-col items-center justify-center py-16 min-h-screen">
       <img
         src={LoaderGif}
         alt="Loading"

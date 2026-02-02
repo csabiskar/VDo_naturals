@@ -68,10 +68,10 @@ export default function ProductGrid() {
 
       {/* PAGINATION */}
       {totalPages >= 1 && (
-        <div className="flex justify-start items-center mt-10 mb-12 gap-2 flex-wrap">
+        <div className="flex justify-start items-center mt-10 mb-[70px] gap-3 flex-wrap ml-40">
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-            className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition"
+            className="w-9 h-9 flex items-center bg-gray-50 justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition"
           >
             &lt;
           </button>
@@ -101,7 +101,7 @@ export default function ProductGrid() {
             onClick={() =>
               setCurrentPage(Math.min(totalPages, currentPage + 1))
             }
-            className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition"
+            className="w-9 h-9 flex items-center bg-gray-50 justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition"
           >
             &gt;
           </button>

@@ -157,18 +157,18 @@ function Breadcrumb() {
           const isLast = index === breadcrumbs.length - 1;
 
           return (
-            <div key={index} className="flex items-center gap-2 md:mt-16">
+            <div key={index} className="flex items-center gap-2 mt-16 md:mt-16 ">
               {index !== 0 && <IoIosArrowForward className="text-gray-400" />}
 
               {item.path && !isLast ? (
                 <Link
                   to={item.path}
-                  className="text-gray-400 text-[16px] font-light"
+                  className="text-gray-400 sm:text-[16px] font-light text-[12px]"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-[#00B207] text-[16px] font-light">
+                <span className="text-[#00B207] sm:text-[16px] font-light text-[12px] truncate">
                   {item.label}
                 </span>
               )}

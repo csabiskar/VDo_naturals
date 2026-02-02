@@ -24,6 +24,7 @@ import { CartContext } from "../context/CartContext";
 import { showToast } from "../utils/toast";
 import Breadcrumb from "../components/Breadcrumb";
 import { useWishlist } from "../context/WishlistContext";
+import Loader from "../components/Loader";
 
 export default function ProductPage() {
   // const images = [cookies, ccokiesmockup, Cookiesbiscut, pricing];
@@ -157,6 +158,7 @@ export default function ProductPage() {
   }, [product, selectedVariant]);
 
   if (error) return <p>Error: {error}</p>;
+  if (loading) return <Loader/>
 
   return (
     <div className="bg-white">
@@ -176,8 +178,20 @@ export default function ProductPage() {
                 />
 
                 {/* Wishlist Button */}
-                <button className="absolute top-1 right-3 bg-white p-2 rounded-full border shadow">
-                  <AiOutlineHeart size={22} />
+                <button className="absolute top-1 right-3 bg-white p-2 rounded-full border border-gray-200 shadow"
+                 onClick={handleWishlistToggle}
+                >
+                  {isWishlisted ? (
+                  <AiFillHeart
+                    size={22}
+                    className="text-red-500 cursor-pointer"
+                  />
+                ) : (
+                  <AiOutlineHeart
+                    size={22}
+                    className="text-gray-700 hover:text-red-500 cursor-pointer"
+                  />
+                )}
                 </button>
               </div>
 
@@ -347,16 +361,16 @@ export default function ProductPage() {
               )}
 
               {/* BRAND + SHARE */}
-              <div className="flex lg:flex-col xl:flex-row lg:items-start justify-between lg:gap-5 xl:items-center text-sm mt-3.5 ">
+              <div className="flex flex-col gap-5 lg:flex-col xl:flex-row lg:items-start justify-between lg:gap-5 xl:items-center text-sm mt-3.5 ">
                 <div className="flex items-center gap-3">
                   Brand:
                   <img src={logo} className="h-12 w-40" alt="brand" />
                 </div>
-                <div className="flex flex-row items-center xl:gap-5 lg:gap-3">
+                <div className="flex flex-row  items-center xl:gap-5 lg:gap-3">
                   <span className="text-sm text-gray-900 font-light">
                     Share item:
                   </span>
-                  <div className="flex xl:gap-7 xl:pr-2 lg:gap-4 lg:pr-16">
+                  <div className="flex xl:gap-7 xl:pr-2 lg:gap-4 lg:pr-16 gap-3">
                     <FaFacebookF size={18} className="text-[#4D4D4D]" />
                     <FaXTwitter size={18} className="text-[#4D4D4D]" />
                     <FaPinterestP size={18} className="text-[#4D4D4D]" />
