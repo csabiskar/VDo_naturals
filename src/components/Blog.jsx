@@ -34,7 +34,7 @@ const blogs = [
 
 export default function Blog() {
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-20 py-12">
+    <section className="w-full px-4 sm:px-6 lg:px-20 py-12 xl:pb-44 max-w-[1440px] 2xl:mx-auto">
       <h2 className="text-[24px] sm:text-[28px] lg:text-[32px] font-semibold text-gray-900 mb-8">
         Blogs
       </h2>

@@ -13,11 +13,13 @@ import {
 
 function Hero() {
   return (
-    <section className="relative bg-white pt-4">
+    <section className="relative bg-white pt-4 ">
 
       {/* HERO CONTAINER */}
       <div
         className="
+        max-w-[1440px]
+        2xl:mx-auto
           relative
           mx-4 sm:mx-8 lg:mx-20
           bg-[#EDF2EE]
@@ -46,6 +48,7 @@ function Hero() {
         {/* MAIN CONTENT */}
         <div
           className="
+          
             mx-auto max-w-7xl
             flex flex-col lg:flex-row
             items-center

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useRef, useMemo } from "react";
 import { Link, useLocation, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
@@ -26,6 +26,7 @@ import logo from "../assets/Newlogo.png";
 import { useWishlist } from "../context/WishlistContext";
 import UserMenu from "./UserMenu/UserMenu";
 import CategoriesDropdown from "./CategoriesDropdown";
+import { useProducts } from "../context/ProductContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -47,6 +48,18 @@ export default function Navbar() {
 
   const dropdownRef = useRef(null);
   const categoriesRef = useRef(null);
+
+  //search
+  const { searchTerm = "", setSearchTerm, allProducts = [] } = useProducts();
+  const [showSuggest, setShowSuggest] = useState(false);
+
+  const suggestions = useMemo(() => {
+    if (!searchTerm) return [];
+
+    return allProducts
+      .filter((p) => p.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+      .slice(0, 6);
+  }, [searchTerm, allProducts]);
 
   /* ---------------- CART BADGE ANIMATION ---------------- */
   useEffect(() => {
@@ -100,12 +113,39 @@ export default function Navbar() {
             <FiSearch size={20} className="absolute left-4 text-black" />
             <input
               type="search"
+              disabled={!isAuth}
+              value={searchTerm}
               placeholder="Search"
+              onChange={(e) => {
+                if (!isAuth) return;
+                setSearchTerm(e.target.value);
+                setShowSuggest(true);
+              }}
+              onFocus={() => setShowSuggest(true)}
+              onBlur={() => setTimeout(() => setShowSuggest(false), 150)}
               className="w-full h-[45px] pl-12 pr-4 border border-[#E6E6E6] rounded-l-md placeholder:font-light xl:max-w-[300px]"
             />
+
             <button className="h-[45px] px-5 bg-[#00B207] text-white rounded-r-md">
               Search
             </button>
+            {isAuth && showSuggest && suggestions.length > 0 && (
+              <div className="absolute top-full left-0 mt-1 w-sm bg-white shadow-xl rounded-md z-50">
+                {suggestions.map((p) => (
+                  <div
+                    key={p._id}
+                    onMouseDown={() => {
+                      setSearchTerm("");
+                      setShowSuggest(false);
+                      navigate(`/product/${p._id}`);
+                    }}
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 text-sm"
+                  >
+                    {p.name}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* ================= RIGHT ACTIONS ================= */}
@@ -120,13 +160,13 @@ export default function Navbar() {
                   >
                     <MdOutlineAccountCircle size={28} />
                     <span className="hidden lg:block text-sm font-medium ">
-                      {user?.contact || "User"}
+                      {/* {user?.contact || "User"} */} Account
                     </span>
                     <FaChevronDown size={16} className="hidden lg:block" />
                   </div>
 
                   {dropdown && (
-                    <div className="absolute -right-28 mt-3 z-50 shadow-2xl">
+                    <div className="absolute sm:-right-28  mt-3 z-50 shadow-2xl">
                       <UserMenu onClose={() => setDropdown(false)} />
                     </div>
                   )}
@@ -181,6 +221,7 @@ export default function Navbar() {
             <input
               type="search"
               placeholder="Search"
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full h-11 pl-12 pr-4  rounded-md border border-[#E6E6E6]"
             />
           </div>

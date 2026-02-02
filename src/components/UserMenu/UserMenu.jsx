@@ -14,15 +14,15 @@ export default function UserMenu({onClose}) {
         navigate("/profile");
         break;
       case "orders":
-        navigate("/orders");
+        navigate("/profile/orders");
         break;
       case "wishlist":
         navigate("/wishlist");
         break;
       case "logout":
-        onClose?.(); 
-        logout();
-        navigate('/login')
+        // onClose?.(); 
+        // logout();
+        navigate('/profile')
         break;
       default:
         break;

@@ -2,7 +2,7 @@
 import React from "react";
 
 /* Assets — filename must match EXACTLY */
-import sampleVideo from "../assets/sample-video.mp4";
+import sampleVideo from "../assets/VdoNaturalss.mp4";
 import leftImg from "../assets/whynaturalsImg/imageL.png";
 import rightImg from "../assets/whynaturalsImg/imageR.png";
 import Heart from "../assets/whynaturalsImg/heart.png";
@@ -11,7 +11,10 @@ import { IoMdCheckmark } from "react-icons/io";
 
 export default function WhyNaturals() {
   return (
-    <section className="relative bg-[#EDF2EE] font-poppins min-w-screen min-h-screen xl:h-[993px]">
+ <section
+  className="relative bg-[#EDF2EE] font-poppins w-full xl:h-[993px]"
+>
+
       {/* XL DECORATIONS — NO CHANGE */}
       <img
         src={leftImg}
@@ -34,7 +37,8 @@ export default function WhyNaturals() {
         className="absolute top-60 right-[450px] w-16 xl:w-36 hidden  xl:block pointer-events-none"
       />
       {/* Content */}
-      <div className="relative z-10 h-full px-8 pt-12">
+      <div className="relative z-10 h-full px-8 pt-12 max-w-[1440px]
+        2xl:mx-auto ">
         {/* Title */}
         <h2 className="text-[32px] font-semibold text-center text-[#0f1720] xl:mt-7 md:pl-14">
           <span className="niconne text-[40px]"> Why</span> Vdo Naturalss?

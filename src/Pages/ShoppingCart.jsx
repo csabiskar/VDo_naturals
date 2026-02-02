@@ -13,9 +13,9 @@ function ShoppingCart() {
 
   const cart = cartData?.items || [];
 
-  useEffect(()=>{
-    loadCart()
-  },[])
+  // useEffect(()=>{
+  //   loadCart()
+  // },[])
 
   // Memoized subtotal
   const subtotal = useMemo(() => {
@@ -40,13 +40,14 @@ function ShoppingCart() {
     [removeFromCart, updateQty]
   );
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center text-xl font-semibold">
-        Loading Cart...
-      </div>
-    );
-  }
+if (loading && !cart.length) {
+  return (
+    <div className="min-h-screen flex justify-center items-center">
+      Loading Cart...
+    </div>
+  );
+}
+
 
   if (!cart.length) {
     return (
@@ -56,8 +57,9 @@ function ShoppingCart() {
     );
   }
 
+  console.log(cart)
   return (
-    <div className="min-h-screen px-4 sm:px-8 lg:px-20 pt-6 pb-24">
+    <div className="min-h-screen px-4 sm:px-8 lg:px-20 pt-6 pb-24 max-w-[1440px] 2xl:mx-auto">
       <h1 className="text-2xl sm:text-3xl font-semibold mb-8">
         My Shopping Cart
       </h1>

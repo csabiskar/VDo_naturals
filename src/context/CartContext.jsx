@@ -29,7 +29,7 @@ export const CartProvider = ({ children }) => {
       });
       // showToast("Product added to cart successfully.", "success");
 
-      loadCart(); // refresh cart
+      await loadCart(); // refresh cart
     } catch (err) {
       console.error("Add to cart failed", err);
     }
@@ -102,7 +102,6 @@ export const CartProvider = ({ children }) => {
     loadCart();
   }, [isAuth]);
 
-  console.log(cartData)
 
   return (
     <CartContext.Provider

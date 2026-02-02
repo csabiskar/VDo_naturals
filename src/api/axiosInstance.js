@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080/api", // your backend URL
+  baseURL: "https://vdo-naturals-production.up.railway.app/api", // your backend URL
   headers: { "Content-Type": "application/json" },
 });
 

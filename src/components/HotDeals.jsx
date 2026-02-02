@@ -1,34 +1,43 @@
 // src/components/HotDeals.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useProducts } from "../context/ProductContext";
 import OfferBadge from "../assets/Offerbookmark.png";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { FaStar } from "react-icons/fa";
+import { FaRegStar, FaStar } from "react-icons/fa";
 import IMG from "../assets/AllCategoryImg/Rice Seval.png";
+import { useWishlist } from "../context/WishlistContext";
+import { showToast } from "../utils/toast";
 
 export default function HotDeals() {
-  const { products, loading } = useProducts();
+  const { hotDeals, loading } = useProducts();
+
   const { pathname } = useLocation();
 
-  const [likedIds, setLikedIds] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(24 * 60 * 60);
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
-  /* ---------------- FILTER HOT DEALS ---------------- */
-  const hotDeals = useMemo(() => {
-    if (!products?.length) return [];
-    return products.filter(
-      (p) => p.hasVariants && p.variants?.some((v) => v.discountPercent > 0)
-    );
-  }, [products]);
+  //navigate
+  const navigate = useNavigate();
 
   const featuredProduct = hotDeals[activeIndex];
 
-  const getBestVariant = (product) =>
-    [...product.variants].sort(
-      (a, b) => b.discountPercent - a.discountPercent
-    )[0];
+  // pick variant with max discount
+  const getBestVariant = (product) => {
+    if (product?.hasVariants && product?.variants?.length) {
+      return [...product.variants].sort(
+        (a, b) => b.discountPercent - a.discountPercent,
+      )[0];
+    }
+
+    // fallback for NON-variant product
+    return {
+      discountPercent: product?.discountPercent || 0,
+      price: product?.price || 0,
+      discountPrice: product?.discountPrice || product?.price || 0,
+    };
+  };
 
   const featuredVariant = featuredProduct
     ? getBestVariant(featuredProduct)
@@ -39,39 +48,78 @@ export default function HotDeals() {
     .slice(0, 6);
 
   /* ---------------- COUNTDOWN ---------------- */
-  useEffect(() => {
-    if (!featuredProduct) return;
+  // useEffect(() => {
+  //   if (!featuredProduct) return;
 
-    setTimeLeft(24 * 60 * 60);
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setActiveIndex((i) => (i + 1) % hotDeals.length);
-          return 24 * 60 * 60;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  //   setTimeLeft(24 * 60 * 60);
+  //   const timer = setInterval(() => {
+  //     setTimeLeft((prev) => {
+  //       if (prev <= 1) {
+  //         setActiveIndex((i) => (i + 1) % hotDeals.length);
+  //         return 24 * 60 * 60;
+  //       }
+  //       return prev - 1;
+  //     });
+  //   }, 1000);
 
-    return () => clearInterval(timer);
-  }, [featuredProduct, hotDeals.length]);
+  //   return () => clearInterval(timer);
+  // }, [featuredProduct, hotDeals.length]);
 
-  const days = Math.floor(timeLeft / 86400);
-  const hours = Math.floor((timeLeft % 86400) / 3600);
-  const mins = Math.floor((timeLeft % 3600) / 60);
-  const secs = timeLeft % 60;
+  // const days = Math.floor(timeLeft / 86400);
+  // const hours = Math.floor((timeLeft % 86400) / 3600);
+  // const mins = Math.floor((timeLeft % 3600) / 60);
+  // const secs = timeLeft % 60;
 
-  const toggleLike = (id) => {
-    setLikedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+  // const toggleLike = (id) => {
+  //   setLikedIds((prev) =>
+  //     prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+  //   );
+  // };
+
+  //add to whishlist
+
+  const isInWishlist = (productId, sku) => {
+    return wishlist.some(
+      (item) =>
+        item.productId === productId &&
+        (sku ? item.variantSku === sku : !item.variantSku),
     );
   };
+  const handleWishlistToggle = (product) => {
+    const bestVariant = getBestVariant(product);
+
+    const payload = {
+      productId: product._id,
+      ...(bestVariant?.sku && { variantSku: bestVariant.sku }),
+    };
+
+    const exists = isInWishlist(product._id, bestVariant?.sku);
+
+    if (exists) {
+      removeFromWishlist(payload.productId);
+      // showToast("Removed from Wishlist", "success");
+    } else {
+      addToWishlist(payload);
+      // showToast("Added to Wishlist", "success");
+    }
+  };
+
+  console.log(featuredProduct);
 
   if (loading || !featuredProduct || !featuredVariant) return null;
 
   return (
-    <section className="w-full px-4 sm:px-6 xl:px-8 pt-10 pb-28">
-      <div className="max-w-full mx-4 sm:mx-8 lg:mx-12">
+    <section
+      className="w-full px-4 sm:px-6 xl:px-8 pt-10 pb-28       max-w-[1440px]
+        2xl:mx-auto"
+    >
+      <div
+        className="max-w-full mx-4 sm:mx-8 lg:mx-12"
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/product/${featuredProduct?._id}`);
+        }}
+      >
         {/* TITLE */}
         <h2 className="text-[32px] font-semibold  text-gray-900 mb-8 ">
           Hot Deals
@@ -104,25 +152,27 @@ export default function HotDeals() {
 
               {/* HEART */}
               <button
-                onClick={() => toggleLike(featuredProduct._id)}
-                className="absolute top-2 right-2 w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleWishlistToggle(featuredProduct);
+                }}
+                className="absolute top-2 right-2 w-12 h-12 rounded-full cursor-pointer bg-white border border-gray-200 flex items-center justify-center"
               >
-                {likedIds.includes(featuredProduct._id) ? (
-                  <AiFillHeart size={22} className="text-red-500" />
+                {isInWishlist(featuredProduct._id, featuredVariant?.sku) ? (
+                  <AiFillHeart size={22} className="text-red-500 " />
                 ) : (
                   <AiOutlineHeart size={28} />
                 )}
               </button>
 
               {/* COUNTDOWN */}
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 text-center">
+              {/* <div className="absolute top-6 left-1/2 -translate-x-1/2 text-center">
                 <p className="text-sm font-light text-gray-400">
                   Hurry up! Offer ends In:
                 </p>
                 <div className="flex justify-center items-center gap-9 mt-2">
                   {[days, hours, mins, secs].map((v, i) => (
                     <div key={i} className="flex items-center">
-                      {/* TIME BLOCK */}
                       <div className="text-center">
                         <p className="text-lg font-medium leading-none">
                           {String(v).padStart(2, "0")}
@@ -132,7 +182,6 @@ export default function HotDeals() {
                         </span>
                       </div>
 
-                      {/* COLON AFTER HOURS ONLY */}
                       {i === 1 && (
                         <span className="mx-3 absolute right-[90px] bottom-6 text-xl font-medium text-gray-800 leading-none">
                           :
@@ -141,12 +190,18 @@ export default function HotDeals() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               {/* IMAGE */}
               <div className="flex justify-center items-center xl:mt-12 h-[420px]">
                 <img
-                  src={IMG}
+                  loading="lazy"
+                  decoding="async"
+                  src={
+                    featuredVariant?.images?.[1] ||
+                    featuredProduct?.images?.[1] ||
+                    ""
+                  }
                   alt={featuredProduct.name}
                   className="object-cover w-[360px] h-[360px]"
                 />
@@ -204,6 +259,10 @@ export default function HotDeals() {
                     hover:border-[#00B207]
                     w-full xl:w-[256px] xl:h-[370px]
                   "
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/product/${product?._id}`);
+                  }}
                 >
                   {/* OFFER BADGE */}
                   <div className="absolute top-0 left-4 w-[34px] h-10 z-10">
@@ -219,10 +278,13 @@ export default function HotDeals() {
 
                   {/* HEART */}
                   <button
-                    onClick={() => toggleLike(product._id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleWishlistToggle(product);
+                    }}
                     className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white border border-gray-200 flex items-center justify-center"
                   >
-                    {likedIds.includes(product._id) ? (
+                    {isInWishlist(product._id, getBestVariant(product)?.sku) ? (
                       <AiFillHeart size={20} className="text-red-500" />
                     ) : (
                       <AiOutlineHeart size={20} />
@@ -230,11 +292,13 @@ export default function HotDeals() {
                   </button>
 
                   {/* IMAGE */}
-                  <div className="flex justify-center mt-10 mb-3">
+                  <div className="flex justify-center mt-10 mb-3 h-[210px]">
                     <img
-                      src={IMG}
+                      loading="lazy"
+                      decoding="async"
+                      src={variant?.images?.[1] || product?.images?.[1] || ""}
                       alt={product.name}
-                      className="object-cover"
+                      className="h-full w-full object-cover"
                     />
                   </div>
 
@@ -253,6 +317,9 @@ export default function HotDeals() {
                         }
                       />
                     ))}
+                    <span className="text-xs text-stone-500 font-light">
+                      ({product.totalRatings || 0} Reviews)
+                    </span>
                   </div>
 
                   <div className="flex gap-1 mt-1.5">

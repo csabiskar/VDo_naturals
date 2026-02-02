@@ -5,20 +5,18 @@ import Breadcrumbs from "../assets/Breadcrumbs.png";
 import { IoIosArrowForward } from "react-icons/io";
 import ErrorImg from "../assets/Error.png";
 import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
 
 function Error() {
+  const navigate =useNavigate()
   return (
     <>
       <Navbar />
 
       {/* Breadcrumbs */}
-      <div
+      {/* <div
         className="h-[120px] flex items-center"
-        style={{
-          backgroundImage: `url(${Breadcrumbs})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+
       >
         <div className="px-20 flex items-center gap-2 text-sm">
           <GoHome className="text-gray-400" size={22} />
@@ -27,7 +25,7 @@ function Error() {
             404 Error Page 
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* Error Page */}
       <div className="flex flex-col items-center justify-center h-screen text-center py-20 px-4">
@@ -46,12 +44,12 @@ function Error() {
           Please check the URL or use the button below to continue.
         </p>
 
-        <button className="bg-[#00B207] hover:bg-green-600 text-white px-8 py-3 rounded-full text-sm font-medium transition">
+        <button className="bg-[#00B207] hover:bg-green-600 text-white px-8 py-3 rounded-full text-sm font-medium transition cursor-pointer"
+        onClick={()=>navigate('/')}
+        >
           Shop now
         </button>
       </div>
-
-      <Footer />
     </>
   );
 }

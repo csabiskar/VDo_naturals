@@ -13,12 +13,8 @@ export default function UserMenuItem({
         flex items-center gap-4
         text-left  transition-colors
         cursor-pointer
-
-        /* Figma exact */
         w-[214px] h-[52px]
         pt-2.5 pr-2.5 pb-2.5 pl-4
-
-        /* Mobile safety */
         max-sm:w-full
         max-sm:h-14
 
@@ -29,8 +25,8 @@ export default function UserMenuItem({
         }
       `}
     >
-      <Icon size={32} />
-      <span className="text-[14px] font-medium">
+      <Icon size={32} className="size-6 sm:size-8" />
+      <span className="sm:text-[14px] text-xs font-medium">
         {label}
       </span>
     </button>

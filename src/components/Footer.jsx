@@ -1,7 +1,12 @@
 // src/components/Footer.jsx
 import React from "react";
-import { FaFacebookF, FaTwitter, FaPinterestP, FaInstagram } from "react-icons/fa";
-import Logo from "../assets/logo.png";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaPinterestP,
+  FaInstagram,
+} from "react-icons/fa";
+import Logo from "../assets/Newlogo.png";
 import ApplePay from "../assets/ApplePay.png";
 import Visa from "../assets/visa.png";
 import Discover from "../assets/discover.png";
@@ -14,12 +19,16 @@ export default function Footer() {
       className="w-full bg-black text-white"
       style={{ fontFamily: "Poppins, system-ui, sans-serif", fontWeight: 400 }}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 py-10 sm:py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-1 py-10 sm:py-[52px]">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           {/* Left block */}
           <div className="space-y-6 text-center md:text-left">
             <div className="flex justify-center md:justify-start">
-              <img src={Logo} alt="VDO Naturals logo" className="h-10 object-contain" />
+              <img
+                src={Logo}
+                alt="VDO Naturals logo"
+                className="h-16 object-cover"
+              />
             </div>
 
             <p className="text-sm text-[#999999] leading-relaxed">
@@ -46,11 +55,17 @@ export default function Footer() {
           {/* Right block */}
           <div className="flex flex-col sm:flex-row md:justify-end gap-10 sm:gap-12 text-center sm:text-left">
             <div>
-              <h4 className="text-white text-lg font-medium mb-4">My Account</h4>
+              <h4 className="text-white text-lg font-medium mb-4">
+                My Account
+              </h4>
               <ul className="space-y-3 text-[#999999] text-sm">
                 <li className="hover:text-white cursor-pointer">My Account</li>
-                <li className="hover:text-white cursor-pointer">Order History</li>
-                <li className="hover:text-white cursor-pointer">Shoping Cart</li>
+                <li className="hover:text-white cursor-pointer">
+                  Order History
+                </li>
+                <li className="hover:text-white cursor-pointer">
+                  Shoping Cart
+                </li>
                 <li className="hover:text-white cursor-pointer">Wishlist</li>
               </ul>
             </div>
@@ -60,26 +75,36 @@ export default function Footer() {
               <ul className="space-y-3 text-[#999999] text-sm">
                 <li className="hover:text-white cursor-pointer">Contact</li>
                 <li className="hover:text-white cursor-pointer">Faqs</li>
-                <li className="hover:text-white cursor-pointer">Terms & Condition</li>
-                <li className="hover:text-white cursor-pointer">Privacy Policy</li>
+                <li className="hover:text-white cursor-pointer">
+                  Terms & Condition
+                </li>
+                <li className="hover:text-white cursor-pointer">
+                  Privacy Policy
+                </li>
               </ul>
             </div>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="mt-10 border-t border-gray-800 pt-8" />
+        {/* <div className="mt-10 border-t border-gray-800 pt-8" /> */}
 
         {/* Bottom row */}
         <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           {/* Social */}
-          <div className="flex justify-center md:justify-start items-center gap-5">
-            <div className="rounded-full bg-[#00B207] p-3 text-white">
-              <FaFacebookF />
+          <div className="flex justify-center md:justify-start items-center gap-2">
+            <div className="rounded-full text-[#999999] hover:bg-[#00B207] transition p-3  hover:text-white">
+              <FaFacebookF size={24} />
             </div>
-            <FaTwitter className="text-[#999999] hover:text-white cursor-pointer" />
-            <FaPinterestP className="text-[#999999] hover:text-white cursor-pointer" />
-            <FaInstagram className="text-[#999999] hover:text-white cursor-pointer" />
+            <div className="rounded-full hover:bg-[#00B207] transition p-3 text-white">
+              <FaTwitter className="text-[#999999] hover:text-white  cursor-pointer" size={24} />
+            </div>
+            <div className="rounded-full hover:bg-[#00B207] transition p-3 text-white">
+              <FaPinterestP className="text-[#999999] hover:text-white cursor-pointer" size={24} />
+            </div>
+            <div className="rounded-full hover:bg-[#00B207] transition p-3 text-white">
+              <FaInstagram className="text-[#999999] hover:text-white cursor-pointer" size={24} />
+            </div>
           </div>
 
           {/* Copyright */}
@@ -89,11 +114,23 @@ export default function Footer() {
 
           {/* Payments */}
           <div className="flex flex-wrap justify-center md:justify-end items-center gap-3">
-            <img src={ApplePay} alt="Apple Pay" className="h-8 object-contain" />
+            <img
+              src={ApplePay}
+              alt="Apple Pay"
+              className="h-8 object-contain"
+            />
             <img src={Visa} alt="Visa" className="h-8 object-contain" />
             <img src={Discover} alt="Discover" className="h-8 object-contain" />
-            <img src={Mastercard} alt="Mastercard" className="h-8 object-contain" />
-            <img src={Secure} alt="Secure payment" className="h-8 object-contain" />
+            <img
+              src={Mastercard}
+              alt="Mastercard"
+              className="h-8 object-contain"
+            />
+            <img
+              src={Secure}
+              alt="Secure payment"
+              className="h-8 object-contain"
+            />
           </div>
         </div>
       </div>

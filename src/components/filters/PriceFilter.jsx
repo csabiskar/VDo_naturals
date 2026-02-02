@@ -1,20 +1,24 @@
-import { memo, useState, useMemo, useCallback } from "react";
+import { memo, useState, useEffect,useMemo,useCallback } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { useProducts } from "../../context/ProductContext";
-
 
 const MIN_PRICE = 0;
 const MAX_PRICE = 1000;
 
 const PriceFilter = memo(() => {
 
-  //price filter
-  const { priceRange, setPriceFilter } = useProducts();
+const { setPriceFilter } = useProducts();
+
+
 
   const [price, setPrice] = useState([MIN_PRICE, MAX_PRICE]);
 
   const minSelected = useMemo(() => Math.min(price[0], price[1]), [price]);
   const maxSelected = useMemo(() => Math.max(price[0], price[1]), [price]);
+
+  useEffect(() => {
+  setPriceFilter([minSelected, maxSelected]);
+}, [minSelected, maxSelected]);
 
   const leftPercent =
     ((minSelected - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;

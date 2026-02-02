@@ -19,7 +19,7 @@ function Home() {
       <WhyNaturals />
       {/* <PromoBanners /> */}
       <Testimonials />
-      <HeroBanner />
+      {/* <HeroBanner /> */}
       <Blog/>
     </>
   );

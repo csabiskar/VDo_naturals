@@ -26,8 +26,8 @@ import Breadcrumb from "../components/Breadcrumb";
 import { useWishlist } from "../context/WishlistContext";
 
 export default function ProductPage() {
-  const images = [cookies, ccokiesmockup, Cookiesbiscut, pricing];
-  const [activeImage, setActiveImage] = useState(images[0]);
+  // const images = [cookies, ccokiesmockup, Cookiesbiscut, pricing];
+  const [activeImage, setActiveImage] = useState(null);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -110,11 +110,10 @@ export default function ProductPage() {
 
     try {
       if (isWishlisted) {
-        await removeFromWishlist(payload);
-        showToast("Removed from wishlist", "info");
+        await removeFromWishlist(payload.productId);
+        // showToast("Removed from wishlist", "info");
       } else {
         await addToWishlist(payload);
-        showToast("Added to wishlist", "success");
       }
     } catch (err) {
       console.error("Wishlist toggle failed", err);
@@ -122,9 +121,43 @@ export default function ProductPage() {
     }
   };
 
-  if (loading) return <p>Loading product...</p>;
+  // image
+  const galleryImages = useMemo(() => {
+    if (!product) return [];
+
+    // If variant selected → show variant images first
+    if (selectedVariant?.images?.length) return selectedVariant.images;
+
+    // Else product images
+    return product.images || [];
+  }, [product, selectedVariant]);
+
+  useEffect(() => {
+    if (galleryImages.length) {
+      setActiveImage(galleryImages[0]);
+    }
+  }, [galleryImages]);
+
+  const priceData = useMemo(() => {
+    if (!product) return {};
+
+    if (selectedVariant) {
+      return {
+        price: selectedVariant.price,
+        discountPrice: selectedVariant.discountPrice,
+        discountPercent: selectedVariant.discountPercent,
+      };
+    }
+
+    return {
+      price: product.price,
+      discountPrice: product.discountPrice,
+      discountPercent: product.discountPercent,
+    };
+  }, [product, selectedVariant]);
+
   if (error) return <p>Error: {error}</p>;
-  if (!product) return <p>No product found</p>;
+
   return (
     <div className="bg-white">
       {/* MAIN GRID */}
@@ -150,12 +183,12 @@ export default function ProductPage() {
 
               {/* Horizontal Thumbnails */}
               <div className="flex gap-3 overflow-x-auto scrollbar-hide">
-                {images.map((img, i) => (
+                {galleryImages.map((img, i) => (
                   <img
                     key={i}
                     src={img}
                     onClick={() => setActiveImage(img)}
-                    className={`w-16 h-16 rounded cursor-pointer object-cover `}
+                    className="w-16 h-16 rounded cursor-pointer object-cover"
                   />
                 ))}
               </div>
@@ -165,12 +198,12 @@ export default function ProductPage() {
             <div className="hidden lg:flex gap-4 -mt-7 relative">
               {/* Vertical Thumbnails */}
               <div className="flex flex-col gap-5 mt-2">
-                {images.map((img, i) => (
+                {galleryImages.map((img, i) => (
                   <img
                     key={i}
                     src={img}
                     onClick={() => setActiveImage(img)}
-                    className={`xl:size-[87px] lg:size-16 md:size-12 rounded cursor-pointer object-cover `}
+                    className="xl:size-[87px] lg:size-16 md:size-12 rounded cursor-pointer object-cover"
                   />
                 ))}
               </div>
@@ -193,6 +226,7 @@ export default function ProductPage() {
                             xl:-top-16
                             lg:left-[440px]
                             xl:left-[490px]
+                            cursor-pointer
                             bg-white
                             p-2
                             rounded-full
@@ -201,11 +235,14 @@ export default function ProductPage() {
                           "
               >
                 {isWishlisted ? (
-                  <AiFillHeart size={32} className="text-red-500" />
+                  <AiFillHeart
+                    size={32}
+                    className="text-red-500 cursor-pointer"
+                  />
                 ) : (
                   <AiOutlineHeart
                     size={32}
-                    className="text-gray-700 hover:text-red-500"
+                    className="text-gray-700 hover:text-red-500 cursor-pointer"
                   />
                 )}
               </button>
@@ -225,43 +262,42 @@ export default function ProductPage() {
               </h1>
 
               <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <FaStar key={i} className="text-orange-400" />
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <FaStar
+                    key={i}
+                    className={
+                      i <= Math.round(product?.averageRating || 0)
+                        ? "text-orange-400"
+                        : "text-gray-300"
+                    }
+                  />
                 ))}
+
                 <span className="text-sm text-stone-500 font-light">
-                  133 Reviews
+                  ({product?.totalRatings || 0} Reviews)
                 </span>
               </div>
+
               {/* price */}
               <div className="flex gap-3 items-center">
                 <span className="text-2xl text-[#2C742F] font-normal">
                   ₹
-                  {selectedVariant
-                    ? selectedVariant.discountPercent > 0
-                      ? Math.round(selectedVariant.discountPrice)
-                      : Math.round(selectedVariant.price)
-                    : product.discountPercent > 0
-                    ? Math.round(product.discountPrice)
-                    : Math.round(product.price)}
+                  {priceData.discountPercent > 0
+                    ? Math.round(priceData.discountPrice)
+                    : Math.round(priceData.price)}
                   .00
                 </span>
 
-                {(product.variants?.length > 0 &&
-                  product.variants[0]?.discountPercent > 0) ||
-                product.discountPercent > 0 ? (
+                {priceData.discountPercent > 0 && (
                   <span className="line-through font-light text-zinc-400 text-xl">
-                    {selectedVariant?.discountPercent > 0 && (
-                      <span className="line-through font-light text-zinc-400 text-xl">
-                        ₹{Math.round(selectedVariant.price)}.00
-                      </span>
-                    )}
+                    ₹{Math.round(priceData.price)}.00
                   </span>
-                ) : null}
+                )}
               </div>
 
               {/* VARIANTS */}
 
-              {product.variants?.length > 0 && (
+              {product?.variants?.length > 0 && (
                 <div className="flex gap-4 mt-3.5">
                   {product.variants.map((item, i) => (
                     <div key={i} className="relative h-20">
@@ -274,9 +310,14 @@ export default function ProductPage() {
                             }`}
                         onClick={() => {
                           setSelectedVariant(item);
+
+                          if (item?.images?.length) {
+                            setActiveImage(item.images[0]);
+                          }
+
                           showToast(
-                            `Selected ${item.attributes.weight}`,
-                            "info"
+                            `Selected ${item?.attributes.weight}`,
+                            "info",
                           );
                         }}
                       >
@@ -287,12 +328,12 @@ export default function ProductPage() {
                         <span className="text-xl font-medium">
                           ₹
                           {item.discountPercent > 0
-                            ? Math.round(item.discountPrice)
-                            : Math.round(item.price)}
+                            ? Math.round(item?.discountPrice)
+                            : Math.round(item?.price)}
                         </span>
                       </div>
 
-                      {item.discountPercent > 0 && (
+                      {item?.discountPercent > 0 && (
                         <div className="absolute -top-1 left-4 w-14">
                           <img src={Batch} alt="discount" />
                           <span className="absolute inset-0 text-[10px] text-white flex items-center justify-center">
@@ -346,7 +387,7 @@ export default function ProductPage() {
                   </button>
                 </div>
                 <button
-                  disabled={product.variants?.length > 0 && !selectedVariant}
+                  disabled={product?.variants?.length > 0 && !selectedVariant}
                   className="w-full sm:w-md lg:w-sm xl:w-md h-12 cursor-pointer border border-[#00B207] bg-[#00b2060a] text-green-600 font-medium rounded disabled:opacity-50"
                   onClick={handleAddToCart}
                 >

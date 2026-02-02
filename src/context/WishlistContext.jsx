@@ -41,6 +41,7 @@ export const WishlistProvider = ({ children }) => {
         variantSku ? { productId, variantSku } : { productId }
       );
       fetchWishlist();
+      showToast("Item Added to wishlist")
     } catch (error) {
       console.error("Add wishlist failed", error);
     }

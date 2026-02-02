@@ -1,9 +1,15 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
+import { useProducts } from "../../context/ProductContext";
 
 const RatingFilter = memo(() => {
+   const { setRatingFilter } = useProducts();
   const [rating, setRating] = useState(null);
+
+  useEffect(() => {
+    setRatingFilter(rating);
+  }, [rating]);
 
   return (
     <section className="w-full">
@@ -50,7 +56,7 @@ const RatingFilter = memo(() => {
             <input
               type="checkbox"
               checked={rating === value}
-              onChange={() => setRating(value)}
+              onChange={() => setRating(prev => (prev === value ? null : value))}
               className="
                rounded-[2.91px]! h-[19px]! border-[0.97px]! border-solid! left-[unset]! w-[19px]! top-[unset]! accent-[#00B207]
               "
