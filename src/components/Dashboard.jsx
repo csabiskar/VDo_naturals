@@ -57,8 +57,12 @@ export default function Dashboard() {
     );
   }
 
-  const primaryAddress = address?.[0];
+  const primaryAddress = address?.[0] || null;
 
+  const user = {
+    firstName: primaryAddress?.firstName || "User",
+    lastName: primaryAddress?.lastName || "",
+  };
 
   console.log(address);
   return (
@@ -67,39 +71,38 @@ export default function Dashboard() {
       <div className="bg-white rounded-xl border border-gray-200 py-12 px-4 sm:px-4 md:px-8 lg:px-12 xl:px-40">
         <div className="flex flex-col lg:flex-row items-start gap-8 md:gap-12 xl:gap-40 xl:mt-2">
           {/* PROFILE */}
-          {primaryAddress && (
-            <div
-              key={primaryAddress._id}
-              className="flex flex-col items-center gap-4 shrink-0"
-            >
-              <img
-                src={avatarPlaceholder}
-                alt={primaryAddress.firstName}
-                className="w-[116px] h-[116px] rounded-full object-cover"
-              />
+          {/* PROFILE */}
+          <div className="flex flex-col items-center gap-4 shrink-0">
+            <img
+              src={avatarPlaceholder}
+              alt={user.firstName}
+              className="w-[116px] h-[116px] rounded-full object-cover"
+            />
 
-              <div className="text-center">
-                <h3 className="text-[19px] font-normal text-gray-900">
-                   {primaryAddress.firstName} {primaryAddress.lastName}
-                </h3>
+            <div className="text-center">
+              <h3 className="text-[19px] font-normal text-gray-900">
+                {user.firstName} {user.lastName}
+              </h3>
 
-                <button
-                  className="text-green-600 text-md mt-1 hover:underline cursor-pointer"
-                  onClick={() =>
-                    navigate("/profile/settings", {
-                      state: { address: primaryAddress },
-                    })
-                  }
-                >
-                  Edit
-                </button>
-              </div>
+              <button
+                className="text-green-600 text-md mt-1 hover:underline cursor-pointer"
+                onClick={() =>
+                  navigate("/profile/settings", {
+                    state: { address: primaryAddress },
+                  })
+                }
+              >
+                {primaryAddress ? "Edit" : "Add Details"}
+              </button>
             </div>
-          )}
+          </div>
 
           {/* ADDRESS */}
-          {primaryAddress &&(
-            <div key={primaryAddress.userId._id} className="w-full lg:max-w-[360px]">
+          {primaryAddress && (
+            <div
+              key={primaryAddress.userId._id}
+              className="w-full lg:max-w-[360px]"
+            >
               <p className="uppercase text-sm font-normal text-gray-400 mb-3 tracking-wide">
                 Shipping Address
               </p>

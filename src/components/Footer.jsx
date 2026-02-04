@@ -12,8 +12,10 @@ import Visa from "../assets/visa.png";
 import Discover from "../assets/discover.png";
 import Mastercard from "../assets/mastercard.png";
 import Secure from "../assets/secure-payment.png";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate()
   return (
     <footer
       className="w-full bg-black text-white"
@@ -73,8 +75,8 @@ export default function Footer() {
             <div>
               <h4 className="text-white text-lg font-normal mb-4">Helps</h4>
               <ul className="space-y-3 text-[#999999] text-sm">
-                <li className="hover:text-white cursor-pointer">Contact</li>
-                <li className="hover:text-white cursor-pointer">Faqs</li>
+                <li className="hover:text-white cursor-pointer " onClick={()=> navigate('/aboutus')} >About us</li>
+                <li className="hover:text-white cursor-pointer">Contact us</li>
                 <li className="hover:text-white cursor-pointer">
                   Terms & Condition
                 </li>

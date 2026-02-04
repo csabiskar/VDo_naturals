@@ -7,6 +7,7 @@ import { useEffect, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { showToast } from "../utils/toast";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 
 /* ===== SHIFT CONTROL ===== */
 const PRICE_SHIFT = "lg:pl-[26px]";
@@ -42,7 +43,7 @@ export default function Wishlist() {
 
   console.log(wishlist)
 
-  if (loading) return <p className="text-center py-10">Loading wishlist...</p>;
+  if (loading) return <Loader/>;
   if (!loading && wishlist.length === 0) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
@@ -254,8 +255,8 @@ export default function Wishlist() {
                 {/* PRODUCT */}
                 <div className="flex items-center gap-6">
                   <img
-                    src={item.image}
-                    alt={item.name}
+                    src={item?.images[1]}
+                    alt={item?.name}
                     className="w-28 h-24 object-contain"
                   />
                   <span className="text-gray-800 font-light">

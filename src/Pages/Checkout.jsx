@@ -232,7 +232,7 @@ export default function Checkout() {
                 >
                   <div className="flex items-center gap-3">
                     <img
-                      src={item.variantImages?.[0]}
+                      src={item.variantImages?.[1]}
                       alt={item.productName}
                       className="w-20 h-16 object-contain"
                     />

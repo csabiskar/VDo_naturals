@@ -298,7 +298,7 @@ export default function OrderDetails() {
                 <td className="px-4 py-6">
                   <div className="flex items-center gap-4">
                     <img
-                      src={item.productImages[0] || placeholderImg}
+                      src={item.productImages[1] || placeholderImg}
                       alt={item.productName}
                       loading="lazy"
                       className="size-16 rounded-md object-cover shrink-0"

@@ -20,9 +20,9 @@ export default function UserMenu({onClose}) {
         navigate("/wishlist");
         break;
       case "logout":
-        // onClose?.(); 
-        // logout();
-        navigate('/profile')
+        onClose?.(); 
+        logout();
+        // navigate('/profile')
         break;
       default:
         break;

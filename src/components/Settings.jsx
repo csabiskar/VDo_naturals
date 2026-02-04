@@ -1,18 +1,36 @@
 import { useState, useEffect, useCallback } from "react";
 import avatarPlaceholder from "../assets/avatar-placeholder.png";
-import { editAddress } from "../api/address.api";
+import { editAddress, createAddress, getAddress } from "../api/address.api";
 import { showToast } from "../utils/toast";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const address = state?.address;
+  const [address, setAddress] = useState(state?.address || null);
+
+  const isEdit = Boolean(address?._id);
   useEffect(() => {
-    if (!address) {
-      navigate("/profile");
-    }
-  }, [address, navigate]);
+    if (address) return;
+
+    const load = async () => {
+      try {
+        const res = await getAddress();
+        const primary = res?.addresses?.[0];
+        if (primary) setAddress(primary);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    load();
+  }, [address]);
+
+  // useEffect(() => {
+  //   if (!address) {
+  //     navigate("/profile");
+  //   }
+  // }, [address, navigate]);
 
   const [account, setAccount] = useState({
     firstName: "",
@@ -64,15 +82,13 @@ export default function Settings() {
   // =========================
   // HANDLERS
   // =========================
-const handleAccountChange = useCallback((e) => {
-  setAccount((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-}, []);
+  const handleAccountChange = useCallback((e) => {
+    setAccount((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []);
 
-
-const handleBillingChange = useCallback((e) => {
-  setBilling((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-}, []);
-
+  const handleBillingChange = useCallback((e) => {
+    setBilling((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []);
 
   const handleAccountSubmit = async () => {
     const err = validateAccount();
@@ -83,15 +99,21 @@ const handleBillingChange = useCallback((e) => {
     try {
       setSaving(true);
 
-      await editAddress(address._id, {
+      const payload = {
         ...billing,
         firstName: account.firstName,
         lastName: account.lastName,
         email: account.email,
         phone: account.phone,
-      });
+      };
 
-      showToast("Profile updated ✅");
+      if (isEdit) {
+        await editAddress(address._id, payload);
+      } else {
+        await createAddress(payload);
+      }
+
+      showToast(isEdit ? "Profile updated ✅" : "Profile created ✅");
       navigate("/profile");
     } catch (e) {
       showToast("Update failed ❌");
@@ -101,12 +123,10 @@ const handleBillingChange = useCallback((e) => {
   };
 
   const handleBillingSubmit = async () => {
-    if (!address?._id) return;
-
     try {
       setSaving(true);
 
-      await editAddress(address._id, {
+      const payload = {
         firstName: billing.firstName,
         lastName: billing.lastName,
         companyName: billing.company,
@@ -116,13 +136,17 @@ const handleBillingChange = useCallback((e) => {
         zipCode: billing.zip,
         email: billing.email,
         phone: billing.phone,
-      });
+      };
 
-      showToast("Address updated successfully ✅");
+      if (isEdit) {
+        await editAddress(address._id, payload);
+      } else {
+        await createAddress(payload);
+      }
 
+      showToast(isEdit ? "Address updated ✅" : "Address added ✅");
       navigate("/profile");
     } catch (err) {
-      console.error(err);
       showToast("Update failed ❌");
     } finally {
       setSaving(false);
@@ -152,29 +176,24 @@ const handleBillingChange = useCallback((e) => {
   // =========================
   // INPUT COMPONENT
   // =========================
-  const Input = useCallback(({
-    label,
-    name,
-    value,
-    onChange,
-    error,
-    large,
-    type = "text",
-  }) => (
-    <div className="w-full">
-      <label className="block text-[13.57px] font-light mb-1">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className={`rounded-md px-4 border border-gray-200 focus:outline-none focus:border-[#00B207] transition
+  const Input = useCallback(
+    ({ label, name, value, onChange, error, large, type = "text" }) => (
+      <div className="w-full">
+        <label className="block text-[13.57px] font-light mb-1">{label}</label>
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={`rounded-md px-4 border border-gray-200 focus:outline-none focus:border-[#00B207] transition
           ${large ? "w-full lg:w-[496.39px] h-[47.51px]" : "w-full h-11"}
         `}
-      />
-      {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
-    </div>
-  ),[])
+        />
+        {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+      </div>
+    ),
+    [],
+  );
 
   return (
     <div className="space-y-10">
@@ -224,10 +243,11 @@ const handleBillingChange = useCallback((e) => {
             />
 
             <button
+              disabled={saving}
               onClick={handleAccountSubmit}
-              className="mt-3 bg-[#00B207] text-white px-6 py-2 rounded-md w-full sm:w-fit cursor-pointer"
+              className="mt-3 bg-[#00B207] text-white px-6 py-2 rounded-md w-full sm:w-fit cursor-pointer disabled:opacity-50"
             >
-              Save Changes
+              {saving ? "Saving..." : "Save Changes"}
             </button>
           </div>
 

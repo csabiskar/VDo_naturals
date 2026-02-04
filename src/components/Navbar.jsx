@@ -95,9 +95,9 @@ export default function Navbar() {
   const closeMenu = () => setOpen(false);
 
   return (
-    <div className="bg-white flex flex-col fixed top-0 left-0 w-full z-50">
+    <div className="bg-white flex flex-col fixed top-0 left-0 w-full z-50 ">
       {/* ================= TOP NAVBAR ================= */}
-      <header className="w-full border-b border-[#E6E6E6] relative z-50 bg-white">
+      <header className="w-full border-b border-[#E6E6E6] relative z-50 bg-white max-w-[1440px] 2xl:mx-auto">
         <div className="max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-20 2xl:px-24 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 p-3 md:h-[104px]">
           {/* Logo */}
           <Link to="/" aria-label="Go to home">
@@ -286,8 +286,8 @@ export default function Navbar() {
       </header>
 
       {/* ================= DESKTOP GRAY NAV ================= */}
-      <div className="hidden lg:block w-full bg-[#333333]">
-        <nav className="max-w-[1760px] mx-auto px-10 xl:px-20 h-[55px] flex justify-between items-center text-sm">
+      <div className="hidden lg:block w-full bg-[#333333] ">
+        <nav className=" mx-auto px-10 xl:px-20 h-[55px] flex justify-between items-center text-sm max-w-[1440px] 2xl:mx-auto">
           <div className="flex gap-8 text-[#999999]">
             <NavLink to="/" className="hover:text-white">
               Home

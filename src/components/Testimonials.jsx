@@ -10,6 +10,7 @@ import QuoteImg from "../assets/quote.png";
 import Avatar1 from "../assets/avatar.png";
 import Avatar2 from "../assets/avatar.png";
 import Avatar3 from "../assets/avatar.png";
+import { useLocation } from "react-router-dom";
 
 const testimonials = [
   {
@@ -42,8 +43,11 @@ export default function Testimonials() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
+   const location= useLocation()
+   console.log(location.pathname === '/aboutus')
+
   return (
-    <section className="w-full px-0.5 md:px-6 lg:px-14 py-14 xl:pt-28 2xl:mx-auto max-w-[1440px]">
+    <section className={`w-full px-0.5 md:px-6 lg:px-14 py-14 2xl:mx-auto max-w-[1440px] ${location.pathname==='/aboutus' ? "bg-[#F2F2F2] xl:pt-12":" xl:pt-28 "}`}>
       <div className="mx-7 max-w-7xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">

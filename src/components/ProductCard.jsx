@@ -72,6 +72,7 @@ function ProductCard({ product }) {
       w-full sm:w-full md:w-full lg:w-[283px] xl:w-[303px]
       h-[400px] bg-white border border-gray-200 rounded-[10px] 
       relative font-poppins text-[13.57px] text-dimgray overflow-hidden cursor-pointer
+      hover:shadow-[0_12px_30px_rgba(0,178,7,0.18)] hover:border-[#00B207] hover:text-[#2C742F]
     "
       onClick={handleNavigate}
     >

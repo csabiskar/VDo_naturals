@@ -37,6 +37,10 @@ const breadcrumbConfig = {
     { label: "Home", path: "/" },
     { label: "Contact us", path: "/contact" },
   ],
+  aboutus:[
+    {label:"Home",path:"/",},
+    {label:"About us", path:"/aboutus"}
+  ]
 };
 
 function Breadcrumb() {

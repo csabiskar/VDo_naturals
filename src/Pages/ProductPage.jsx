@@ -16,7 +16,7 @@ import Audio from "../assets/product/audio.png";
 import cookieReview from "../assets/product/cookiereview.png";
 import VideoReview from "../assets/product/ImgVideo.png";
 import { toast } from "react-toastify";
-
+import vdovideo from "../assets/vdo.mp4";
 //product
 
 import { useProducts } from "../context/ProductContext";
@@ -81,7 +81,7 @@ export default function ProductPage() {
     showToast("Item added to cart", "success");
   };
 
-  console.log(product);
+  console.log(selectedVariant);
 
   // add to wishlist
 
@@ -158,7 +158,7 @@ export default function ProductPage() {
   }, [product, selectedVariant]);
 
   if (error) return <p>Error: {error}</p>;
-  if (loading) return <Loader/>
+  if (loading) return <Loader />;
 
   return (
     <div className="bg-white">
@@ -167,7 +167,7 @@ export default function ProductPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[540px_648px] xl:grid-cols-[540px_648px] gap-8 lg:gap-x-0 xl:gap-x-[92px]">
           {" "}
           {/* LEFT COLUMN – IMAGES */}
-          <div className="self-start pt-6 lg:pt-24 lg:sticky top-12 w-full">
+          <div className="self-start pt-6 lg:pt-24 lg:sticky top-[180px] w-full">
             {/* MOBILE / TABLET VIEW */}
             <div className="flex flex-col gap-3 lg:hidden relative">
               {/* Main Image */}
@@ -178,20 +178,21 @@ export default function ProductPage() {
                 />
 
                 {/* Wishlist Button */}
-                <button className="absolute top-1 right-3 bg-white p-2 rounded-full border border-gray-200 shadow"
-                 onClick={handleWishlistToggle}
+                <button
+                  className="absolute top-1 md:top-10 right-3 bg-white p-2 rounded-full border border-gray-200 shadow"
+                  onClick={handleWishlistToggle}
                 >
                   {isWishlisted ? (
-                  <AiFillHeart
-                    size={22}
-                    className="text-red-500 cursor-pointer"
-                  />
-                ) : (
-                  <AiOutlineHeart
-                    size={22}
-                    className="text-gray-700 hover:text-red-500 cursor-pointer"
-                  />
-                )}
+                    <AiFillHeart
+                      size={22}
+                      className="text-red-500 cursor-pointer"
+                    />
+                  ) : (
+                    <AiOutlineHeart
+                      size={22}
+                      className="text-gray-700 hover:text-red-500 cursor-pointer"
+                    />
+                  )}
                 </button>
               </div>
 
@@ -211,7 +212,7 @@ export default function ProductPage() {
             {/* DESKTOP VIEW */}
             <div className="hidden lg:flex gap-4 -mt-7 relative">
               {/* Vertical Thumbnails */}
-              <div className="flex flex-col gap-5 mt-2">
+              <div className="flex flex-col gap-5 mt-2 overflow-y-scroll h-[425px]">
                 {galleryImages.map((img, i) => (
                   <img
                     key={i}
@@ -220,15 +221,37 @@ export default function ProductPage() {
                     className="xl:size-[87px] lg:size-16 md:size-12 rounded cursor-pointer object-cover"
                   />
                 ))}
+                <video
+                  control
+                  className="xl:size-[87px] lg:size-16 aspect-square md:size-12 rounded cursor-pointer object-cover"
+                  onClick={() => setActiveImage(vdovideo)}
+                >
+                  <source src={vdovideo} type="video/mp4" className="xl:size-[87px] lg:size-16 md:size-12 rounded cursor-pointer object-cover" />
+                </video>
               </div>
 
               {/* Main Image */}
-              <div className="relative pb-12">
-                <img
-                  src={activeImage}
-                  className="xl:w-[414px] xl:h-[421px] lg:size-96 md:size-80 object-cover rounded"
-                />
-              </div>
+
+              {activeImage && activeImage.split(".")[1] === "mp4" ? (
+                <div className="relative pb-12">
+                  <video
+                    controls autoPlay
+                    className="xl:w-[414px] xl:h-[421px] lg:size-96 md:size-80 object-cover rounded"
+                  >
+                    <source
+                      src={activeImage}
+                      className="xl:w-[414px] xl:h-[421px] lg:size-96 md:size-80 object-cover rounded"
+                    />
+                  </video>
+                </div>
+              ) : (
+                <div className="relative pb-12">
+                  <img
+                    src={activeImage}
+                    className="xl:w-[414px] xl:h-[421px] lg:size-96 md:size-80 object-cover rounded"
+                  />
+                </div>
+              )}
 
               {/* Wishlist Button */}
               <button
@@ -426,25 +449,15 @@ export default function ProductPage() {
                 <div className="pt-6 flex flex-col gap-8 font-light pr-1.5 text-sm text-[#808080] leading-5">
                   {/* INTRO */}
                   <p>
-                    V DO Naturalss Dia Caare Millet Cookies 70gm are wholesome
-                    millet-based cookies designed as a healthier snack choice,
-                    especially suitable for people mindful of sugar and overall
-                    wellness.
+                    {product?.detailedDescription[0]?.para1}
                     <br />
                     <br />
-                    Available in multiple sizes, it’s a premium choice for
-                    families seeking authentic, chemical-free Cookies for daily
-                    use.
+                    {product?.detailedDescription[0]?.para2}
                   </p>
 
                   {/* FEATURES LIST */}
                   <div className="flex flex-wrap gap-4 mt-3.5">
-                    {[
-                      "100% millet-based cookies made with carefully selected grains for better nutrition and sustained energy release",
-                      "Suitable for daily snacking for health-conscious and diabetic-friendly lifestyles when consumed in moderation",
-                      "Free from artificial colors and harsh preservatives, offering a cleaner label snack option for families.",
-                      "Light, crunchy texture and mildly sweet taste that pairs well with tea, coffee, or milk without feeling heavy.",
-                    ].map((text, i) => (
+                    {product?.detailedDescription[0]?.points.map((text, i) => (
                       <div key={i} className="flex gap-2 items-start">
                         {/* CHECK ICON */}
                         <div className="size-5 bg-green-600 rounded-full flex items-center justify-center shrink-0 mt-0.5">
@@ -458,12 +471,12 @@ export default function ProductPage() {
                   </div>
 
                   {/* OUTRO */}
-                  <p>
+                  {/* <p>
                     Choose V DO Naturalss Dia Caare Millet Cookies 70gm for a
                     light, wholesome snack made with nutrient-rich millets.
                     Enjoy a tasty, health-conscious cookie that supports
                     everyday wellness with every bite.
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </section>
@@ -487,13 +500,15 @@ export default function ProductPage() {
                     <span className="w-28 font-light text-zinc-900 leading-5">
                       Weight:
                     </span>
-                    <span className="text-stone-500 leading-5">70gm</span>
+                    <span className="text-stone-500 leading-5">
+                      {selectedVariant?.attributes?.weight}
+                    </span>
                   </div>
 
                   <div className="flex items-start">
                     <span className="w-28 text-zinc-900 leading-5">Color:</span>
                     <span className="text-stone-500 font-light leading-5">
-                      Light brown (baked cookie color)
+                      {product?.color}
                     </span>
                   </div>
 
@@ -501,10 +516,8 @@ export default function ProductPage() {
                     <span className="w-28 text-zinc-900 leading-5 font-light">
                       Type:
                     </span>
-                    <span className="text-stone-500 leading-5 font-light">
-                      Millet-based cookies, suitable for <br />
-                      health-conscious and diabetic-friendly <br />
-                      diets when consumed in moderation.
+                    <span className="text-stone-500 leading-5 font-light max-w-xs block">
+                      {product?.productType}
                     </span>
                   </div>
 
@@ -513,7 +526,7 @@ export default function ProductPage() {
                       Category:
                     </span>
                     <span className="text-stone-500 leading-5 font-light">
-                      Cookies
+                      {product?.categoryId?.categoryName}
                     </span>
                   </div>
 
@@ -522,7 +535,9 @@ export default function ProductPage() {
                       Stock Status:
                     </span>
                     <span className="text-stone-500 font-light leading-5">
-                      Available
+                      {selectedVariant?.stock > 0
+                        ? "Available"
+                        : "Out of Stock"}
                     </span>
                   </div>
                 </div>

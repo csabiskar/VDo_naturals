@@ -75,7 +75,7 @@ if (loading && !cart.length) {
               {/* Image + Name */}
               <div className="flex items-center gap-3 min-w-0">
                 <img
-                  src={Cookie}
+                  src={item?.variantImages[1]}
                   alt={item.productName}
                   className="w-24 h-24 object-contain shrink-0"
                 />
@@ -146,7 +146,7 @@ if (loading && !cart.length) {
                 <div className="grid grid-cols-5 px-6 py-3.5 items-center gap-2">
                   <div className="flex items-center col-span-2 gap-2">
                     <img
-                      src={Cookie}
+                      src={item?.variantImages[1]}
                       alt={item.productName}
                       className="w-28 h-24 object-contain shrink-0"
                     />

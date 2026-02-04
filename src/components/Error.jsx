@@ -28,7 +28,7 @@ function Error() {
       </div> */}
 
       {/* Error Page */}
-      <div className="flex flex-col items-center justify-center h-screen text-center py-20 px-4">
+      <div className="flex flex-col items-center justify-center min-h-screen text-center py-20 px-4">
         <img
           src={ErrorImg}
           alt="404 Error"

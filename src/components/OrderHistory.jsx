@@ -36,7 +36,7 @@ export default function OrderHistory() {
     }));
   }, [orders]);
 
-  console.log(tableRows);
+  // console.log(tableRows);
 
   if (loading) {
     return <div className="p-6 text-sm text-gray-500">Loading orders...</div>;

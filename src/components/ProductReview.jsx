@@ -77,7 +77,7 @@ console.log(product)
 
       <div className="flex items-center gap-4 mb-6">
         <img
-          src={product?.productImage || "/placeholder.png"}
+          src={product?.productImages[1] || "/placeholder.png"}
           alt={product?.productName}
           className="w-14 h-14 object-contain rounded-md"
         />

@@ -146,7 +146,7 @@ export function ProductProvider({ children }) {
     return await getSingleProduct(id);
   };
 
-   console.log(products)
+  //  console.log(products)
 
 
   return (

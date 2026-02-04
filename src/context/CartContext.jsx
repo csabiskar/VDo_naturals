@@ -9,14 +9,13 @@ import {
 import { showToast } from "../utils/toast";
 import { useAuth } from "./AuthContext";
 
-
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null); // API cart data
   const [loading, setLoading] = useState(true);
 
-  const {isAuth} =useAuth()
+  const { isAuth } = useAuth();
   // add to cart
 
   // Add item to cart
@@ -29,7 +28,7 @@ export const CartProvider = ({ children }) => {
       });
       // showToast("Product added to cart successfully.", "success");
 
-      await loadCart(); // refresh cart
+      loadCart(); // refresh cart
     } catch (err) {
       console.error("Add to cart failed", err);
     }
@@ -37,8 +36,7 @@ export const CartProvider = ({ children }) => {
 
   // Load cart from API
   const loadCart = async () => {
-
-    if(!isAuth){
+    if (!isAuth) {
       setCartData({ items: [] }); // ✅ reset cart if not logged in
       setLoading(false);
       return;
@@ -58,6 +56,16 @@ export const CartProvider = ({ children }) => {
 
   // Update quantity of a single item
   const updateQty = async (itemId, newQty, item) => {
+    // optimistic update
+    setCartData((prev) => ({
+      ...prev,
+      items: prev.items.map((i) =>
+        i.productId === itemId && i.variantSku === item.variantSku
+          ? { ...i, quantity: newQty }
+          : i,
+      ),
+    }));
+
     try {
       await updateCartItem(itemId, {
         quantity: newQty,
@@ -65,15 +73,23 @@ export const CartProvider = ({ children }) => {
           ? { variantSku: item.variantSku }
           : { variantId: item.variantId }),
       });
-      loadCart();
-      
     } catch (err) {
       console.error("Update quantity failed", err);
+      loadCart(); // rollback
     }
   };
 
   // Remove an item
   const removeFromCart = async (item) => {
+    // optimistic remove
+    setCartData((prev) => ({
+      ...prev,
+      items: prev.items.filter(
+        (i) =>
+          !(i.productId === item.productId && i.variantSku === item.variantSku),
+      ),
+    }));
+
     try {
       await deleteCartItem({
         productId: item.productId,
@@ -81,10 +97,9 @@ export const CartProvider = ({ children }) => {
         variantSku: item.variantSku,
         variantId: item.variantId,
       });
-      showToast("Item removed from cart.", "success");
-      loadCart();
     } catch (err) {
       console.error("Remove cart item failed", err);
+      loadCart();
     }
   };
 
@@ -101,7 +116,6 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     loadCart();
   }, [isAuth]);
-
 
   return (
     <CartContext.Provider

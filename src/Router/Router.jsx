@@ -21,6 +21,7 @@ import OrderDetails from "../components/OrderDetails";
 import LogoutDialog from "../components/LogoutDialog";
 import ProductReview from "../components/ProductReview";
 import Contact from "../components/Contact";
+import Aboutpage from "../Pages/Aboutpage";
 
 export const appRouter = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ export const appRouter = createBrowserRouter([
           { path: "checkout", element: <Checkout /> },
           { path: "product/:id", element: <ProductPage /> },
           { path: "contact", element: <Contact /> },
+          {path:"aboutus",element:<Aboutpage/>},
 
           /* ✅ PROFILE ROUTES */
           {
