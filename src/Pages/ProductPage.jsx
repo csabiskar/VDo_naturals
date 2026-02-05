@@ -36,6 +36,8 @@ export default function ProductPage() {
   const { id } = useParams();
   const { fetchProductById } = useProducts();
 
+  console.log(fetchProductById,"kjkj")
+
   useEffect(() => {
     fetchData(id);
   }, [id, fetchProductById]);
@@ -58,6 +60,8 @@ export default function ProductPage() {
   }, [product]);
 
   // add to cart
+
+  console.log("ki")
 
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);

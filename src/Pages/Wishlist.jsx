@@ -6,7 +6,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useEffect, useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { showToast } from "../utils/toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 
 /* ===== SHIFT CONTROL ===== */
@@ -15,6 +15,7 @@ const STOCK_SHIFT = "lg:pl-[82px]";
 const ACTION_SHIFT = "lg:pr-[0px]";
 
 export default function Wishlist() {
+  const { pathname } = useLocation();
   const { wishlist, loading, fetchWishlist, removeFromWishlist } =
     useWishlist();
   const { addToCart } = useContext(CartContext);
@@ -41,9 +42,8 @@ export default function Wishlist() {
     }
   };
 
-  console.log(wishlist)
 
-  if (loading) return <Loader/>;
+  if (loading) return <Loader />;
   if (!loading && wishlist.length === 0) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
@@ -64,24 +64,28 @@ export default function Wishlist() {
   }
 
   return (
-    <div className="min-w-screen min-h-screen mx-auto lg:px-20 px-4 pt-5 pb-23">
-      <h1 className="text-[32px] font-semibold text-gray-900 mb-7">
-        My Wishlist
-      </h1>
+    <div
+      className={`min-w-screen min-h-screen mx-auto ${pathname === "/profile/wishlist" ? "" : "lg:px-20 pt-5"} px-4  pb-23`}
+    >
+      {pathname === "/profile/wishlist" ? null : (
+        <h1 className="text-[32px] font-semibold text-gray-900 mb-7">
+          My Wishlist
+        </h1>
+      )}
 
       {/* SMALL SCREEN */}
       <div className="space-y-4 sm:block md:hidden">
-        {wishlist.map((item,i) => {
-          const isInStock = item.stock > 0;
+        {wishlist.map((item, i) => {
+             const isInStock = item?.variant[0]?.stock > 0;
           return (
             <div
               key={i}
               className="bg-white border border-gray-200 rounded-lg p-4 flex gap-4"
             >
               <img
-                src={item.image}
+                src={item.images[1]}
                 alt={item.name}
-                className="w-20 h-20 object-contain"
+                className="w-22 object-cover"
               />
               <div className="flex-1 space-y-2">
                 <h3 className="text-gray-900 font-medium">
@@ -151,14 +155,14 @@ export default function Wishlist() {
       {/* MEDIUM SCREEN */}
       <div className="hidden md:block lg:hidden border border-gray-200 rounded-md bg-white">
         {wishlist.map((item, index) => {
-          const isInStock = item.stock > 0;
+          const isInStock = item?.variant[0]?.stock > 0;
           return (
             <div key={index}>
               <div className="grid grid-cols-[2fr_1fr_1fr_1.2fr] px-6 py-6 items-center">
                 {/* PRODUCT */}
                 <div className="flex items-center gap-4">
                   <img
-                    src={item.image}
+                    src={item.images[1]}
                     alt={item.name}
                     className="w-20 h-20 object-contain"
                   />
@@ -248,7 +252,7 @@ export default function Wishlist() {
 
         {wishlist.map((item, index) => {
           console.log(item)
-          const isInStock = item.stock > 0;
+          const isInStock = item?.variant[0]?.stock > 0;
           return (
             <div key={index}>
               <div className="grid grid-cols-[2.5fr_1.5fr_1.5fr_2fr] px-12 h-[124px] items-center">
@@ -291,7 +295,7 @@ export default function Wishlist() {
 
                 {/* STOCK */}
                 <div className={STOCK_SHIFT}>
-                  {isInStock ? (
+                  {isInStock  ? (
                     <span className="bg-[#21bb2643] text-green-700 px-2 py-1.5 rounded-sm text-sm">
                       In Stock
                     </span>

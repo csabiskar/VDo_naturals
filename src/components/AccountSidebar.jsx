@@ -41,6 +41,23 @@ export default function AccountSidebar() {
             )}
           </NavLink>
 
+          {/* wishlist */}
+               <NavLink to="/profile/wishlist">
+            {({ isActive }) => (
+              <div
+                className={`flex items-center gap-3 px-5 py-4 text-[16px] font-light transition
+                ${
+                  isActive
+                    ? "bg-[#eef6f0] text-gray-900 border-l-[3px] border-[#00B207]"
+                    : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                <TfiReload size={16} />
+                <span>wishlist</span>
+              </div>
+            )}
+          </NavLink>
+
           {/* ORDER HISTORY */}
           <NavLink to="/profile/orders">
             {({ isActive }) => (

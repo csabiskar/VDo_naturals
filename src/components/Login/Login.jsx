@@ -9,7 +9,7 @@ import { showToast } from "../../utils/toast";
 
 
 // ✅ Simulate registered users
-const registeredUsers = new Set(["csabiskar@gmail.com", "9876543210"]);
+// const registeredUsers = new Set(["csabiskar@gmail.com", "9876543210"]);
 
 export default function Login() {
   const location = useLocation();
@@ -50,14 +50,15 @@ export default function Login() {
     e.preventDefault();
 
     const detected = detectContactType(contact);
+    console.log(detected,isLogin)
     if (!detected) {
       setError("Please enter a valid email or phone number");
       return;
     }
-     if (isLogin && !registeredUsers.has(contact)) {
-      setError("This email/number is not registered");
-      return;
-    }
+    //  if (isLogin && !registeredUsers.has(contact)) {
+    //   setError("This email/number is not registered");
+    //   return;
+    // }
     try {
       setLoading(true);
       setError("");

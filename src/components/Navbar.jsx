@@ -113,11 +113,11 @@ export default function Navbar() {
             <FiSearch size={20} className="absolute left-4 text-black" />
             <input
               type="search"
-              disabled={!isAuth}
+              
               value={searchTerm}
               placeholder="Search"
               onChange={(e) => {
-                if (!isAuth) return;
+                // if (!isAuth) return;
                 setSearchTerm(e.target.value);
                 setShowSuggest(true);
               }}
@@ -129,7 +129,7 @@ export default function Navbar() {
             <button className="h-[45px] px-5 bg-[#00B207] text-white rounded-r-md">
               Search
             </button>
-            {isAuth && showSuggest && suggestions.length > 0 && (
+            { showSuggest && suggestions.length > 0 && (
               <div className="absolute top-full left-0 mt-1 w-sm bg-white shadow-xl rounded-md z-50">
                 {suggestions.map((p) => (
                   <div

@@ -11,7 +11,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import ProductPage from "../Pages/ProductPage";
 import { ProductProvider } from "../context/ProductContext";
 import { CategoryProvider } from "../context/CategoryContext";
-import CategoriesDropdown from "../components/CategoriesDropdown";
 
 import UserDashBoard from "../Pages/UserDashBoard";
 import Dashboard from "../components/Dashboard";
@@ -35,20 +34,21 @@ export const appRouter = createBrowserRouter([
     ),
     errorElement: <Error />,
     children: [
+      /* ---------------- PUBLIC ROUTES ---------------- */
       { index: true, element: <Home /> },
+      { path: "categories", element: <CategoryPage /> },
+      { path: "product/:id", element: <ProductPage /> },
+      { path: "contact", element: <Contact /> },
+      { path: "aboutus", element: <Aboutpage /> },
 
+      /* ---------------- PROTECTED ROUTES ---------------- */
       {
         element: <ProtectedRoute />,
         children: [
-          { path: "categories", element: <CategoryPage /> },
           { path: "wishlist", element: <Wishlist /> },
           { path: "shoppingcart", element: <ShoppingCart /> },
           { path: "checkout", element: <Checkout /> },
-          { path: "product/:id", element: <ProductPage /> },
-          { path: "contact", element: <Contact /> },
-          {path:"aboutus",element:<Aboutpage/>},
 
-          /* ✅ PROFILE ROUTES */
           {
             path: "profile",
             element: <UserDashBoard />,
@@ -59,25 +59,17 @@ export const appRouter = createBrowserRouter([
               { path: "settings", element: <Settings /> },
               { path: "logout", element: <LogoutDialog /> },
               { path: "review/:productId", element: <ProductReview /> },
+              { path: "wishlist", element: <Wishlist /> },
             ],
           },
         ],
       },
+
       { path: "*", element: <Error /> },
     ],
   },
 
-  { path: "login", element: <Auth /> },
-  { path: "signup", element: <Auth /> },
-
-  {
-    path: "test",
-    element: (
-      <ProductProvider>
-        <CategoryProvider>
-          <CategoriesDropdown />
-        </CategoryProvider>
-      </ProductProvider>
-    ),
-  },
+  /* ---------------- AUTH ROUTES ---------------- */
+  { path: "/login", element: <Auth /> },
+  { path: "/signup", element: <Auth /> },
 ]);

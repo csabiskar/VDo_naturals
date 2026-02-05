@@ -9,3 +9,13 @@ export const addRating = async (productId, data) => {
     throw error;
   }
 };
+
+export const editRating = async (productId, userId) => {
+  try {
+    const res = await API.put(`/products/${productId}/ratings/${userId}`)
+    return res.data
+  } catch (error) {
+    console.error("Error editing ratings:", error);
+    throw error;
+  }
+};

@@ -14,7 +14,7 @@ export default function UserDashBoard() {
           </div>
 
           {/* CONTENT */}
-          <div className="flex-1 min-h-[600px]">
+          <div className="flex-1 min-h-[600px] max-w-full overflow-x-scroll">
             <Outlet />
           </div>
 
